@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const nreInput = document.getElementById("nreInput");
   const cfInput = document.getElementById("cfInput");
+  const regionSelect = document.getElementById("regionSelect");
   const provinceSelect = document.getElementById("provinceSelect");
   const intervalSelect = document.getElementById("intervalSelect");
   const toggleBtn = document.getElementById("toggleBtn");
@@ -19,6 +20,64 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let countdownIntervalId = null;
 
+  const REGIONAL_PORTALS_MAP = {
+    "Abruzzo": "https://sanita.regione.abruzzo.it",
+    "Basilicata": "https://portale.aslbasilicata.it",
+    "Calabria": "https://rcup.regione.calabria.it",
+    "Campania": "https://sinfonia.regione.campania.it",
+    "Emilia-Romagna": "https://www.cupweb.it",
+    "Friuli-Venezia Giulia": "https://sesamo.sanita.fvg.it",
+    "Lazio": "https://prenotasanita.regione.lazio.it",
+    "Liguria": "https://prenotosanita.regione.liguria.it",
+    "Lombardia": "https://prenotasalute.regione.lombardia.it",
+    "Marche": "https://mycupmarche.it/prenotazionecittadino/web/search/nre",
+    "Molise": "https://www.asrem.gov.it",
+    "Piemonte": "https://www.salutepiemonte.it",
+    "Puglia": "https://www.sanita.puglia.it",
+    "Sardegna": "https://cupweb.sardegnasalute.it",
+    "Sicilia": "https://siciliainsalute.it",
+    "Toscana": "https://prenota.sanita.toscana.it",
+    "Trentino-Alto Adige": "https://www.apss.tn.it",
+    "Umbria": "https://cupumbria.it",
+    "Valle d'Aosta": "https://www.ausl.vda.it",
+    "Veneto": "https://www.azero.veneto.it"
+  };
+
+  const REGIONAL_PROVINCES_MAP = {
+    "Abruzzo": ["L'Aquila", "Chieti", "Pescara", "Teramo"],
+    "Basilicata": ["Potenza", "Matera"],
+    "Calabria": ["Catanzaro", "Cosenza", "Crotone", "Reggio Calabria", "Vibo Valentia"],
+    "Campania": ["Napoli", "Salerno", "Caserta", "Avellino", "Benevento"],
+    "Emilia-Romagna": ["Bologna", "Modena", "Reggio Emilia", "Parma", "Ferrara", "Forlì-Cesena", "Ravenna", "Rimini", "Piacenza"],
+    "Friuli-Venezia Giulia": ["Trieste", "Udine", "Pordenone", "Gorizia"],
+    "Lazio": ["Roma", "Latina", "Frosinone", "Viterbo", "Rieti"],
+    "Liguria": ["Genova", "La Spezia", "Savona", "Imperia"],
+    "Lombardia": ["Milano", "Brescia", "Bergamo", "Monza e Brianza", "Como", "Varese", "Pavia", "Cremona", "Mantova", "Lecco", "Lodi", "Sondrio"],
+    "Marche": ["Ancona", "Pesaro e Urbino", "Macerata", "Fermo", "Ascoli Piceno"],
+    "Molise": ["Campobasso", "Isernia"],
+    "Piemonte": ["Torino", "Cuneo", "Alessandria", "Novara", "Asti", "Biella", "Vercelli", "Verbano-Cusio-Ossola"],
+    "Puglia": ["Bari", "Lecce", "Taranto", "Foggia", "Brindisi", "Barletta-Andria-Trani"],
+    "Sardegna": ["Cagliari", "Sassari", "Nuoro", "Oristano", "Sud Sardegna"],
+    "Sicilia": ["Palermo", "Catania", "Messina", "Agrigento", "Trapani", "Siracusa", "Ragusa", "Caltanissetta", "Enna"],
+    "Toscana": ["Firenze", "Pisa", "Livorno", "Arezzo", "Pistoia", "Lucca", "Prato", "Grosseto", "Siena", "Massa-Carrara"],
+    "Trentino-Alto Adige": ["Trento", "Bolzano"],
+    "Umbria": ["Perugia", "Terni"],
+    "Valle d'Aosta": ["Aosta"],
+    "Veneto": ["Venezia", "Verona", "Padova", "Vicenza", "Treviso", "Rovigo", "Belluno"]
+  };
+
+  function updateProvinceOptions(selectedRegion, selectedProvince) {
+    const provs = REGIONAL_PROVINCES_MAP[selectedRegion] || [];
+    provinceSelect.innerHTML = '<option value="Tutte">Tutte le province</option>';
+    provs.forEach(p => {
+      const opt = document.createElement("option");
+      opt.value = p;
+      opt.textContent = p;
+      if (p === selectedProvince) opt.selected = true;
+      provinceSelect.appendChild(opt);
+    });
+  }
+
   // Rimuovi eventuale badge notifica
   chrome.action.setBadgeText({ text: "" });
 
@@ -26,6 +85,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const data = await chrome.storage.local.get([
     "nre",
     "cf",
+    "region",
     "province",
     "interval",
     "isActive",
@@ -37,8 +97,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (data.nre) nreInput.value = data.nre;
   if (data.cf) cfInput.value = data.cf;
-  if (data.province) provinceSelect.value = data.province;
+  if (data.region) regionSelect.value = data.region;
+  updateProvinceOptions(regionSelect.value, data.province);
   if (data.interval) intervalSelect.value = data.interval;
+
+  regionSelect.addEventListener("change", () => {
+    updateProvinceOptions(regionSelect.value, "Tutte");
+  });
 
   updateUI(data.isActive);
   if (data.lastStatus) {
@@ -87,6 +152,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       await chrome.storage.local.set({
         nre: nre,
         cf: cf,
+        region: regionSelect.value,
         province: provinceSelect.value,
         interval: intVal,
         isActive: true,
@@ -117,10 +183,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    // Salva i dati prima del controllo
     await chrome.storage.local.set({
       nre: nre,
       cf: cf,
+      region: regionSelect.value,
       province: provinceSelect.value,
       interval: parseInt(intervalSelect.value, 10)
     });
@@ -129,7 +195,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const originalText = checkNowBtn.innerHTML;
     checkNowBtn.innerHTML = "<span>⏳</span> Controllo...";
 
-    displayResult("CHECKING", "Connessione al portale CUP Marche in corso...", "Adesso");
+    displayResult("CHECKING", `Connessione al portale CUP ${regionSelect.value} in corso...`, "Adesso");
 
     chrome.runtime.sendMessage({ action: "CHECK_NOW" }, (response) => {
       checkNowBtn.disabled = false;
@@ -143,9 +209,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 
-  // Apri pagina CUP per login SPID
+  // Apri pagina CUP per login SPID per la regione selezionata
   loginCUPBtn.addEventListener("click", () => {
-    chrome.tabs.create({ url: "https://mycupmarche.it/prenotazionecittadino/web/search/nre" });
+    const reg = regionSelect.value;
+    const url = REGIONAL_PORTALS_MAP[reg] || "https://mycupmarche.it/prenotazionecittadino/web/search/nre";
+    chrome.tabs.create({ url: url });
   });
 
   function updateUI(isActive) {

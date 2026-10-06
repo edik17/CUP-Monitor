@@ -13,10 +13,9 @@ cup:
   nre: "INSERIRE_NRE"
 
 filter:
-  # Regione di riferimento (default: Marche)
+  # Regione di riferimento (Supporta tutte le 20 Regioni Italiane, es: Lazio, Lombardia, Marche, Campania, Veneto, ecc.)
   regione: "Marche"
-  # Province accettate per la ricerca (seleziona una o più province)
-  # Opzioni Marche: ["Ancona", "Pesaro e Urbino", "Macerata", "Fermo", "Ascoli Piceno", "Tutte"]
+  # Province accettate per la ricerca (seleziona una o più province della tua regione, oppure 'Tutte')
   province:
     - "Ancona"
   # Keywords comunali o di presidio monitorate (generate in automatico o personalizzate)

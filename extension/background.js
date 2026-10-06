@@ -59,10 +59,35 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   }
 });
 
+const REGIONAL_PORTALS_CONFIG = {
+  "Abruzzo": { domain: "sanita.regione.abruzzo.it", searchUrl: "https://sanita.regione.abruzzo.it" },
+  "Basilicata": { domain: "portale.aslbasilicata.it", searchUrl: "https://portale.aslbasilicata.it" },
+  "Calabria": { domain: "rcup.regione.calabria.it", searchUrl: "https://rcup.regione.calabria.it" },
+  "Campania": { domain: "sinfonia.regione.campania.it", searchUrl: "https://sinfonia.regione.campania.it" },
+  "Emilia-Romagna": { domain: "cupweb.it", searchUrl: "https://www.cupweb.it" },
+  "Friuli-Venezia Giulia": { domain: "sesamo.sanita.fvg.it", searchUrl: "https://sesamo.sanita.fvg.it" },
+  "Lazio": { domain: "prenotasanita.regione.lazio.it", searchUrl: "https://prenotasanita.regione.lazio.it" },
+  "Liguria": { domain: "prenotosanita.regione.liguria.it", searchUrl: "https://prenotosanita.regione.liguria.it" },
+  "Lombardia": { domain: "prenotasalute.regione.lombardia.it", searchUrl: "https://prenotasalute.regione.lombardia.it" },
+  "Marche": { domain: "mycupmarche.it", searchUrl: "https://mycupmarche.it/prenotazionecittadino/web/search/nre", postUrl: "https://mycupmarche.it/prenotazionecittadino/web/search/nre/result/" },
+  "Molise": { domain: "asrem.gov.it", searchUrl: "https://www.asrem.gov.it" },
+  "Piemonte": { domain: "salutepiemonte.it", searchUrl: "https://www.salutepiemonte.it" },
+  "Puglia": { domain: "sanita.puglia.it", searchUrl: "https://www.sanita.puglia.it" },
+  "Sardegna": { domain: "cupweb.sardegnasalute.it", searchUrl: "https://cupweb.sardegnasalute.it" },
+  "Sicilia": { domain: "siciliainsalute.it", searchUrl: "https://siciliainsalute.it" },
+  "Toscana": { domain: "prenota.sanita.toscana.it", searchUrl: "https://prenota.sanita.toscana.it" },
+  "Trentino-Alto Adige": { domain: "apss.tn.it", searchUrl: "https://www.apss.tn.it" },
+  "Umbria": { domain: "cupumbria.it", searchUrl: "https://cupumbria.it" },
+  "Valle d'Aosta": { domain: "ausl.vda.it", searchUrl: "https://www.ausl.vda.it" },
+  "Veneto": { domain: "azero.veneto.it", searchUrl: "https://www.azero.veneto.it" }
+};
+
 async function performCUPCheck() {
-  const data = await chrome.storage.local.get(["nre", "cf", "province", "isActive"]);
+  const data = await chrome.storage.local.get(["nre", "cf", "region", "province", "isActive"]);
   const nre = (data.nre || "").trim();
   const cf = (data.cf || "").trim().toUpperCase();
+  const region = data.region || "Marche";
+  const portalCfg = REGIONAL_PORTALS_CONFIG[region] || REGIONAL_PORTALS_CONFIG["Marche"];
 
   if (!nre || !cf) {
     const res = {
@@ -74,24 +99,24 @@ async function performCUPCheck() {
     return res;
   }
 
-  console.log("CUP Monitor: avvio verifica disponibilità per NRE:", nre);
+  console.log(`CUP Monitor: avvio verifica disponibilità per ${region} (NRE: ${nre})`);
 
   try {
-    // 1. Verifica presenza cookie per mycupmarche.it
-    const cookies = await chrome.cookies.getAll({ domain: "mycupmarche.it" });
+    // 1. Verifica presenza cookie per il dominio regionale
+    const cookies = await chrome.cookies.getAll({ domain: portalCfg.domain });
     if (!cookies || cookies.length === 0) {
       const res = {
         status: "NOT_LOGGED_IN",
-        message: "Nessuna sessione trovata. Clicca su 'Apri Portale CUP' ed effettua il login SPID.",
+        message: `Nessuna sessione trovata per CUP ${region}. Clicca su 'Apri Portale CUP' ed effettua il login SPID.`,
         time: new Date().toLocaleTimeString()
       };
-      notifyUser("Accesso SPID Richiesto 🔑", res.message);
+      notifyUser(`Accesso SPID Richiesto (${region}) 🔑`, res.message);
       await saveStatus(res);
       return res;
     }
 
     // 2. Verifica se la sessione è valida tramite GET sulla pagina di ricerca
-    const checkRes = await fetch("https://mycupmarche.it/prenotazionecittadino/web/search/nre", {
+    const checkRes = await fetch(portalCfg.searchUrl, {
       method: "GET",
       credentials: "include"
     });
@@ -101,16 +126,15 @@ async function performCUPCheck() {
     if (checkText.includes("WAYF.aspx") || checkText.includes("cohesion") || checkRes.url.includes("WAYF.aspx") || checkText.includes("Autenticazione")) {
       const res = {
         status: "SESSION_EXPIRED",
-        message: "Sessione SPID scaduta. Clicca su 'Apri Portale CUP' per rientrare.",
+        message: `Sessione SPID scaduta per CUP ${region}. Clicca su 'Apri Portale CUP' per rientrare.`,
         time: new Date().toLocaleTimeString()
       };
-      notifyUser("Sessione SPID Scaduta ☕", res.message);
+      notifyUser(`Sessione SPID Scaduta (${region}) ☕`, res.message);
       await saveStatus(res);
       return res;
     }
 
     // 3. Prepariamo la richiesta POST per cercare le disponibilità
-    // L'NRE viene solitamente diviso: primi caratteri (max 5-7, es 1100A) e restante (max 12 cifre)
     let matrice1 = "1100A";
     let matrice2 = nre;
     if (nre.length > 12) {
@@ -124,9 +148,10 @@ async function performCUPCheck() {
     formData.append("matrice2", matrice2);
     formData.append("c.cntr0", "1");
 
-    console.log(`CUP Monitor: invio richiesta POST (matrice1: ${matrice1}, matrice2: ${matrice2})`);
+    const postEndpoint = portalCfg.postUrl || portalCfg.searchUrl;
+    console.log(`CUP Monitor (${region}): invio richiesta POST a ${postEndpoint}`);
 
-    const searchRes = await fetch("https://mycupmarche.it/prenotazionecittadino/web/search/nre/result/", {
+    const searchRes = await fetch(postEndpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"

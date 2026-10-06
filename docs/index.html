@@ -245,11 +245,30 @@
           <div class="sm:col-span-1">
             <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Regione</label>
             <select id="selected_region" onchange="renderProvinces()" class="w-full px-3 py-2 text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 font-medium">
-              <option value="Marche" selected>Marche (mycupmarche.it)</option>
-              <option value="Lazio" disabled>Lazio (In arrivo)</option>
-              <option value="Lombardia" disabled>Lombardia (In arrivo)</option>
+              <option value="Abruzzo">Abruzzo</option>
+              <option value="Basilicata">Basilicata</option>
+              <option value="Calabria">Calabria</option>
+              <option value="Campania">Campania</option>
+              <option value="Emilia-Romagna">Emilia-Romagna</option>
+              <option value="Friuli-Venezia Giulia">Friuli-Venezia Giulia</option>
+              <option value="Lazio">Lazio</option>
+              <option value="Liguria">Liguria</option>
+              <option value="Lombardia">Lombardia</option>
+              <option value="Marche" selected>Marche</option>
+              <option value="Molise">Molise</option>
+              <option value="Piemonte">Piemonte</option>
+              <option value="Puglia">Puglia</option>
+              <option value="Sardegna">Sardegna</option>
+              <option value="Sicilia">Sicilia</option>
+              <option value="Toscana">Toscana</option>
+              <option value="Trentino-Alto Adige">Trentino-Alto Adige</option>
+              <option value="Umbria">Umbria</option>
+              <option value="Valle d'Aosta">Valle d'Aosta</option>
+              <option value="Veneto">Veneto</option>
             </select>
-            <p class="text-[11px] text-slate-400 mt-1">Architettura predisposta per moduli multi-regione.</p>
+            <div id="regionPortalHint" class="text-[11px] text-indigo-700 dark:text-indigo-400 font-semibold mt-1.5 flex items-center gap-1">
+              <span>🌐</span> <span id="portalLinkText">Portale: MyCup Marche</span>
+            </div>
           </div>
 
           <div class="sm:col-span-2">
@@ -523,13 +542,176 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
 
   <!-- LOGICA JAVASCRIPT DEL WIZARD & TEMA -->
   <script>
+    const REGIONAL_PORTALS = {
+      "Abruzzo": { name: "Sanità Regione Abruzzo", url: "https://sanita.regione.abruzzo.it" },
+      "Basilicata": { name: "CUP Basilicata", url: "https://portale.aslbasilicata.it" },
+      "Calabria": { name: "RCUP Calabria", url: "https://rcup.regione.calabria.it" },
+      "Campania": { name: "Sinfonia Campania", url: "https://sinfonia.regione.campania.it" },
+      "Emilia-Romagna": { name: "CUPWeb Emilia-Romagna", url: "https://www.cupweb.it" },
+      "Friuli-Venezia Giulia": { name: "Sesamo FVG", url: "https://sesamo.sanita.fvg.it" },
+      "Lazio": { name: "ReCUP Lazio", url: "https://prenotasanita.regione.lazio.it" },
+      "Liguria": { name: "Prenoto Sanità Liguria", url: "https://prenotosanita.regione.liguria.it" },
+      "Lombardia": { name: "Prenota Salute Lombardia", url: "https://prenotasalute.regione.lombardia.it" },
+      "Marche": { name: "MyCup Marche", url: "https://mycupmarche.it/prenotazionecittadino/web/search/nre" },
+      "Molise": { name: "CUP Molise ASReM", url: "https://www.asrem.gov.it" },
+      "Piemonte": { name: "Salute Piemonte CUP", url: "https://www.salutepiemonte.it" },
+      "Puglia": { name: "Puglia Salute", url: "https://www.sanita.puglia.it" },
+      "Sardegna": { name: "CUPWeb Sardegna", url: "https://cupweb.sardegnasalute.it" },
+      "Sicilia": { name: "Sicilia in Salute SovraCUP", url: "https://siciliainsalute.it" },
+      "Toscana": { name: "Prenota Sanità Toscana", url: "https://prenota.sanita.toscana.it" },
+      "Trentino-Alto Adige": { name: "CUP Trentino / Alto Adige", url: "https://www.apss.tn.it" },
+      "Umbria": { name: "CUP Umbria", url: "https://cupumbria.it" },
+      "Valle d'Aosta": { name: "CUP Valle d'Aosta", url: "https://www.ausl.vda.it" },
+      "Veneto": { name: "Sanità Regione Veneto", url: "https://www.azero.veneto.it" }
+    };
+
     const TERRITORIAL_DATA = {
+      "Abruzzo": {
+        "L'Aquila": ["L'Aquila", "Avezzano", "Sulmona", "Castel di Sangro"],
+        "Chieti": ["Chieti", "Vasto", "Lanciano", "Ortona", "Atessa"],
+        "Pescara": ["Pescara", "Penne", "Popoli", "Montesilvano"],
+        "Teramo": ["Teramo", "Giulianova", "Atri", "Sant'Omero"]
+      },
+      "Basilicata": {
+        "Potenza": ["Potenza", "Melfi", "Venosa", "Villa d'Agri", "Lagonegro"],
+        "Matera": ["Matera", "Policoro", "Tinchi", "Stigliano", "Pisticci"]
+      },
+      "Calabria": {
+        "Catanzaro": ["Catanzaro", "Lamezia Terme", "Soverato", "Chiaravalle"],
+        "Cosenza": ["Cosenza", "Rende", "Rossano", "Corigliano", "Castrovillari", "Paola"],
+        "Crotone": ["Crotone", "Cirò Marina", "Mesoraca"],
+        "Reggio Calabria": ["Reggio Calabria", "Gioia Tauro", "Locri", "Polistena"],
+        "Vibo Valentia": ["Vibo Valentia", "Tropea", "Serra San Bruno"]
+      },
+      "Campania": {
+        "Napoli": ["Napoli", "Cardarelli", "Policlinico", "Pozzuoli", "Giugliano", "Castellammare", "Nola"],
+        "Salerno": ["Salerno", "Ruggi", "Battipaglia", "Nocera Inferiore", "Cava de' Tirreni", "Eboli"],
+        "Caserta": ["Caserta", "Aversa", "Marcianise", "Santa Maria Capua Vetere"],
+        "Avellino": ["Avellino", "Moscati", "Ariano Irpino", "Solofra"],
+        "Benevento": ["Benevento", "San Pio", "Rummo", "Sant'Agata"]
+      },
+      "Emilia-Romagna": {
+        "Bologna": ["Bologna", "Sant'Orsola", "Maggiore", "Rizzoli", "Bellaria", "Imola"],
+        "Modena": ["Modena", "Policlinico", "Baggiovara", "Carpi", "Sassuolo", "Mirandola"],
+        "Reggio Emilia": ["Reggio Emilia", "Santa Maria Nuova", "Guastalla", "Montecchio"],
+        "Parma": ["Parma", "Maggiore", "Fidenza", "Vaio"],
+        "Ferrara": ["Ferrara", "Cona", "Cento", "Lagosanto"],
+        "Forlì-Cesena": ["Forlì", "Cesena", "Bufalini", "Morgagni"],
+        "Ravenna": ["Ravenna", "Faenza", "Lugo"],
+        "Rimini": ["Rimini", "Riccione", "Santarcangelo"],
+        "Piacenza": ["Piacenza", "Castel San Giovanni", "Fiorenzuola"]
+      },
+      "Friuli-Venezia Giulia": {
+        "Trieste": ["Trieste", "Cattinara", "Maggiore", "Burlo"],
+        "Udine": ["Udine", "Misericordia", "Tolmezzo", "San Daniele", "Palmanova"],
+        "Pordenone": ["Pordenone", "Angeli", "San Vito", "Spilimbergo"],
+        "Gorizia": ["Gorizia", "Monfalcone"]
+      },
+      "Lazio": {
+        "Roma": ["Roma", "Umberto I", "Gemelli", "Sant'Andrea", "San Camillo", "Tor Vergata", "Tivoli", "Civitavecchia", "Frascati"],
+        "Latina": ["Latina", "Goretti", "Aprilia", "Terracina", "Formia"],
+        "Frosinone": ["Frosinone", "Spaziani", "Cassino", "Sora"],
+        "Viterbo": ["Viterbo", "Belcolle", "Tarquinia"],
+        "Rieti": ["Rieti", "De Lellis"]
+      },
+      "Liguria": {
+        "Genova": ["Genova", "San Martino", "Galliera", "Gaslini", "Villa Scassi", "Rapallo"],
+        "La Spezia": ["La Spezia", "Sant'Andrea", "Sarzana"],
+        "Savona": ["Savona", "San Paolo", "Santa Corona", "Albenga"],
+        "Imperia": ["Imperia", "Sanremo", "Bordighera"]
+      },
+      "Lombardia": {
+        "Milano": ["Milano", "Niguarda", "Policlinico", "San Raffaele", "Humanitas", "San Carlo", "Legnano", "Rho"],
+        "Brescia": ["Brescia", "Spedali Civili", "Poliambulanza", "Desenzano", "Chiari"],
+        "Bergamo": ["Bergamo", "Papa Giovanni", "Treviglio", "Seriate"],
+        "Monza e Brianza": ["Monza", "San Gerardo", "Desio", "Vimercate"],
+        "Como": ["Como", "Sant'Anna", "Cantù", "Erba"],
+        "Varese": ["Varese", "Circolo", "Busto Arsizio", "Gallarate", "Saronno"],
+        "Pavia": ["Pavia", "San Matteo", "Vigevano", "Voghera"],
+        "Cremona": ["Cremona", "Crema", "Casalmaggiore"],
+        "Mantova": ["Mantova", "Carlo Poma", "Castiglione"],
+        "Lecco": ["Lecco", "Manzoni", "Merate"],
+        "Lodi": ["Lodi", "Maggiore", "Codogno"],
+        "Sondrio": ["Sondrio", "Morbegno", "Chiavenna"]
+      },
       "Marche": {
         "Ancona": ["Ancona", "Torrette", "INRCA", "Jesi", "Fabriano", "Senigallia", "Osimo", "Chiaravalle", "Loreto", "Falconara"],
         "Pesaro e Urbino": ["Pesaro", "Fano", "Urbino", "Fossombrone", "Cagli", "Pergola", "Mondolfo"],
         "Macerata": ["Macerata", "Civitanova Marche", "Recanati", "Tolentino", "San Severino", "Matelica"],
         "Fermo": ["Fermo", "Porto San Giorgio", "Sant'Elpidio a Mare", "Amandola"],
         "Ascoli Piceno": ["Ascoli Piceno", "San Benedetto del Tronto", "Grottammare", "Offida"]
+      },
+      "Molise": {
+        "Campobasso": ["Campobasso", "Cardarelli", "Termoli", "Larino"],
+        "Isernia": ["Isernia", "Veneziale", "Venafro", "Agnone"]
+      },
+      "Piemonte": {
+        "Torino": ["Torino", "Molinette", "Cto", "Mauriziano", "San Luigi", "Rivoli", "Moncalieri", "Ivrea"],
+        "Cuneo": ["Cuneo", "Santa Croce", "Alba", "Bra", "Mondovì"],
+        "Alessandria": ["Alessandria", "Casale Monferrato", "Novi Ligure", "Tortona"],
+        "Novara": ["Novara", "Maggiore", "Borgomanero"],
+        "Asti": ["Asti", "Massaia", "Nizza Monferrato"],
+        "Biella": ["Biella", "Infermi"],
+        "Vercelli": ["Vercelli", "Sant'Andrea", "Borgosesia"],
+        "Verbano-Cusio-Ossola": ["Verbania", "Domodossola", "Omegna"]
+      },
+      "Puglia": {
+        "Bari": ["Bari", "Policlinico", "Di Venere", "San Paolo", "Altamura", "Monopoli"],
+        "Lecce": ["Lecce", "Fazzi", "Gallipoli", "Casarano", "Copertino"],
+        "Taranto": ["Taranto", "Annunziata", "Castellaneta", "Manduria", "Martina Franca"],
+        "Foggia": ["Foggia", "Riuniti", "San Severo", "Cerignola", "Manfredonia"],
+        "Brindisi": ["Brindisi", "Perrino", "Francavilla", "Ostuni"],
+        "Barletta-Andria-Trani": ["Barletta", "Andria", "Trani", "Bisceglie"]
+      },
+      "Sardegna": {
+        "Cagliari": ["Cagliari", "Brotzu", "Policlinico", "Trinità", "Quartu"],
+        "Sassari": ["Sassari", "Annunziata", "Alghero", "Ozieri"],
+        "Nuoro": ["Nuoro", "San Francesco", "Sorgono"],
+        "Oristano": ["Oristano", "San Martino", "Bosa"],
+        "Sud Sardegna": ["Carbonia", "Sirai", "Iglesias", "San Gavino"]
+      },
+      "Sicilia": {
+        "Palermo": ["Palermo", "Civico", "Policlinico", "Villa Sofia", "Cervello", "Termini Imerese", "Cefalù"],
+        "Catania": ["Catania", "Garibaldi", "Cannizzaro", "Policlinico", "Acireale", "Caltagirone"],
+        "Messina": ["Messina", "Policlinico", "Papardo", "Taormina", "Milazzo"],
+        "Agrigento": ["Agrigento", "San Giovanni di Dio", "Sciacca", "Canicattì"],
+        "Trapani": ["Trapani", "Sant'Antonio Abate", "Marsala", "Mazara del Vallo"],
+        "Siracusa": ["Siracusa", "Umberto I", "Avola", "Noto", "Lentini"],
+        "Ragusa": ["Ragusa", "Giovanni Paolo II", "Modica", "Vittoria"],
+        "Caltanissetta": ["Caltanissetta", "Sant'Elia", "Gela"],
+        "Enna": ["Enna", "Umberto I", "Piazza Armerina"]
+      },
+      "Toscana": {
+        "Firenze": ["Firenze", "Careggi", "Meyer", "Santa Maria Nuova", "Torregalli", "Empoli"],
+        "Pisa": ["Pisa", "Cisanello", "Santa Chiara", "Pontedera"],
+        "Livorno": ["Livorno", "Spedali Riuniti", "Cecina", "Piombino"],
+        "Arezzo": ["Arezzo", "San Donato", "Montevarchi"],
+        "Pistoia": ["Pistoia", "San Jacopo", "Pescia"],
+        "Lucca": ["Lucca", "San Luca", "Viareggio", "Versilia"],
+        "Prato": ["Prato", "Santo Stefano"],
+        "Grosseto": ["Grosseto", "Misericordia", "Orbetello"],
+        "Siena": ["Siena", "Le Scotte", "Poggibonsi", "Montepulciano"],
+        "Massa-Carrara": ["Massa", "Carrara", "Pontremoli"]
+      },
+      "Trentino-Alto Adige": {
+        "Trento": ["Trento", "Santa Chiara", "Rovereto", "Cles", "Borgo Valsugana"],
+        "Bolzano": ["Bolzano", "Merano", "Bressanone", "Brunico", "Vipiteno"]
+      },
+      "Umbria": {
+        "Perugia": ["Perugia", "Misericordia", "Foligno", "Città di Castello", "Gubbio", "Spoleto"],
+        "Terni": ["Terni", "Santa Maria", "Orvieto", "Narni"]
+      },
+      "Valle d'Aosta": {
+        "Aosta": ["Aosta", "Parini", "Beauregard"]
+      },
+      "Veneto": {
+        "Venezia": ["Venezia", "Dell'Angelo", "Dolo", "Mirano", "Chioggia", "San Donà di Piave"],
+        "Verona": ["Verona", "Borgo Trento", "Borgo Roma", "San Bonifacio", "Legnago", "Villafranca"],
+        "Padova": ["Padova", "Azienda Ospedaliera", "Sant'Antonio", "Schiavonia", "Camposampiero"],
+        "Vicenza": ["Vicenza", "San Bortolo", "Bassano del Grappa", "Arzignano", "Santorso"],
+        "Treviso": ["Treviso", "Ca' Foncello", "Conegliano", "Montebelluna", "Castelfranco"],
+        "Rovigo": ["Rovigo", "Santa Maria", "Adria"],
+        "Belluno": ["Belluno", "San Martino", "Feltre", "Pieve di Cadore"]
       }
     };
 
@@ -672,12 +854,18 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
       const container = document.getElementById('provincesContainer');
       container.innerHTML = '';
 
+      // Aggiorna indicatore portale regionale
+      const portalInfo = REGIONAL_PORTALS[reg];
+      const portalHint = document.getElementById('portalLinkText');
+      if (portalHint && portalInfo) {
+        portalHint.innerHTML = `Portale: <a href="${portalInfo.url}" target="_blank" class="underline hover:text-indigo-400 font-bold">${portalInfo.name}</a>`;
+      }
+
       Object.keys(provs).forEach((provName, idx) => {
-        const isDefaultChecked = provName === 'Ancona';
         const label = document.createElement('label');
         label.className = "flex items-center text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer p-1.5 hover:bg-white dark:hover:bg-slate-800 rounded transition";
         label.innerHTML = `
-          <input type="checkbox" name="selected_provinces" value="${provName}" ${isDefaultChecked ? 'checked' : ''} onchange="updatePreviewKeywords()" class="mr-2 w-4 h-4 text-indigo-600 rounded">
+          <input type="checkbox" name="selected_provinces" value="${provName}" checked onchange="updatePreviewKeywords()" class="mr-2 w-4 h-4 text-indigo-600 rounded">
           <span>${provName}</span>
         `;
         container.appendChild(label);
@@ -714,15 +902,17 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
       const nre = (document.getElementById('user_nre').value || 'INSERIRE_NRE').trim();
       const sendNoMatch = document.getElementById('send_no_match_toggle').checked;
       const region = document.getElementById('selected_region').value;
+      const portalUrl = (REGIONAL_PORTALS[region] && REGIONAL_PORTALS[region].url) || "https://mycupmarche.it/prenotazionecittadino/web/search/nre";
       
       const selectedProvs = Array.from(document.querySelectorAll('input[name="selected_provinces"]:checked')).map(cb => cb.value);
 
       let yaml = `# ==============================================================================\n`;
-      yaml += `# CONFIGURAZIONE CUP MONITOR (Generata dal configuratore web)\n`;
+      yaml += `# CONFIGURAZIONE CUP MONITOR (Generata dal configuratore web per tutta Italia)\n`;
       yaml += `# ==============================================================================\n\n`;
       
       yaml += `cup:\n`;
-      yaml += `  base_url: "https://mycupmarche.it/prenotazionecittadino/web/search/nre"\n`;
+      yaml += `  regione: "${region}"\n`;
+      yaml += `  base_url: "${portalUrl}"\n`;
       yaml += `  codice_fiscale: "${cf}"\n`;
       yaml += `  nre: "${nre}"\n\n`;
 
