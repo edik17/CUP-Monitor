@@ -464,33 +464,38 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
       <!-- 3 Semplici Passaggi -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
-          <span class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">1</span>
-          <h3 class="font-bold text-sm text-slate-900 dark:text-white">Scarica l'Estensione</h3>
-          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Scarica o clona la cartella <code class="font-mono bg-white dark:bg-slate-700 px-1 rounded border dark:border-slate-600 text-slate-800 dark:text-slate-200">extension/</code> dal repository GitHub sul tuo computer.</p>
+          <span class="w-7 h-7 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center">1</span>
+          <h3 class="font-bold text-sm text-slate-900 dark:text-white">1. Scarica l'Estensione</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Scarica il file ZIP col pulsante qui sotto ed <strong>estrailo</strong> in una cartella a tua scelta sul tuo PC.</p>
         </div>
 
         <div class="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
           <span class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">2</span>
-          <h3 class="font-bold text-sm text-slate-900 dark:text-white">Carica in Chrome/Edge</h3>
-          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Apri <code class="font-mono bg-white dark:bg-slate-700 px-1 rounded border dark:border-slate-600 text-slate-800 dark:text-slate-200">chrome://extensions</code>, attiva la <strong>"Modalità sviluppatore"</strong> e clicca su <strong>"Carica estensione non pacchettizzata"</strong>.</p>
+          <h3 class="font-bold text-sm text-slate-900 dark:text-white">2. Carica in Chrome/Edge</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Apri <code class="font-mono bg-white dark:bg-slate-700 px-1 rounded border dark:border-slate-600 text-slate-800 dark:text-slate-200">chrome://extensions</code>, attiva la <strong>"Modalità sviluppatore"</strong> e clicca su <strong>"Carica estensione non pacchettizzata"</strong> selezionando la cartella estratta.</p>
         </div>
 
         <div class="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
           <span class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">3</span>
-          <h3 class="font-bold text-sm text-slate-900 dark:text-white">Avvia il Monitoraggio</h3>
-          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Clicca sull'icona 🏥 in alto a destra, inserisci NRE e Codice Fiscale, ed effettua il login SPID normalmente nel browser.</p>
+          <h3 class="font-bold text-sm text-slate-900 dark:text-white">3. Avvia il Monitoraggio</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Clicca sull'icona dell'estensione in alto a destra, inserisci NRE e Codice Fiscale, ed effettua il login SPID normalmente nel browser.</p>
         </div>
       </div>
 
       <!-- Download & Repository Links -->
-      <div class="p-5 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/60 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="p-5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
-          <h4 class="font-bold text-sm text-indigo-950 dark:text-indigo-200">Pronta all'uso nel repository</h4>
-          <p class="text-xs text-indigo-700 dark:text-indigo-400 mt-0.5">Tutti i file dell'estensione sono già presenti nella cartella <code class="font-mono bg-white/70 dark:bg-slate-800 px-1 rounded">extension/</code> del repo.</p>
+          <h4 class="font-bold text-sm text-emerald-950 dark:text-emerald-200">Scarica l'estensione con 1 click</h4>
+          <p class="text-xs text-emerald-700 dark:text-emerald-400 mt-0.5">Pacchetto pronto: scarica lo ZIP, estrailo e caricalo direttamente nel tuo browser.</p>
         </div>
-        <a href="https://github.com/edik17/CUP-Monitor/tree/main/extension" target="_blank" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow transition whitespace-nowrap">
-          📂 Apri Cartella Estensione su GitHub →
-        </a>
+        <div class="flex flex-wrap gap-2.5">
+          <a href="cup-monitor-extension.zip" download="cup-monitor-extension.zip" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition whitespace-nowrap flex items-center">
+            <span class="mr-1.5 text-sm">📥</span> Scarica Estensione (.zip)
+          </a>
+          <a href="https://github.com/edik17/CUP-Monitor/tree/main/extension" target="_blank" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl shadow transition whitespace-nowrap">
+            📂 Codice su GitHub
+          </a>
+        </div>
       </div>
 
       <!-- Didascalia Come Annullare nell'Estensione -->
