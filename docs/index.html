@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CUP Monitor — Configurazione & Assistente Intelligente</title>
   <meta name="description" content="Assistente intelligente e protetto per il monitoraggio automatico delle disponibilità sanitarie CUP con notifiche Telegram e WhatsApp.">
-  <!-- Content Security Policy & Privacy Shield: Nessuna trasmissione dati esterna permessa -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com; connect-src 'self' http://localhost:5000 http://127.0.0.1:5000; frame-ancestors 'none'; form-action 'none';">
+  <!-- Content Security Policy & Privacy Shield: Protezione e compatibilità worker/estensioni -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; worker-src 'self' blob:; child-src 'self' blob:; connect-src 'self' http://localhost:5000 http://127.0.0.1:5000; form-action 'none';">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
   <!-- Tailwind CSS CDN -->
@@ -1526,15 +1526,23 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
 
     // Rilevamento server locale (se aperto su localhost:5000)
     async function checkLocalServer() {
+      // Se ospitato su GitHub Pages o dominio remoto, il backend locale non risponde su questo dominio
+      if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        return;
+      }
       try {
         const res = await fetch('/api/status');
         if (res.ok) {
-          document.getElementById('localServerBadge').classList.remove('hidden');
-          document.getElementById('localServerBadge').classList.add('inline-flex');
-          document.getElementById('localActionsBox').classList.remove('hidden');
+          const badge = document.getElementById('localServerBadge');
+          const box = document.getElementById('localActionsBox');
+          if (badge) {
+            badge.classList.remove('hidden');
+            badge.classList.add('inline-flex');
+          }
+          if (box) box.classList.remove('hidden');
         }
       } catch (e) {
-        // Static GitHub Pages mode
+        // Server locale non avviato
       }
     }
 
