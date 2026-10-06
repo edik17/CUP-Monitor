@@ -1,0 +1,29 @@
+# Credenziali e configurazione personale (NON caricare mai su GitHub!)
+config.yaml
+
+# Cookie di sessione SPID e stati di navigazione
+session/
+*.json
+
+# Log applicativi e screenshot (possono contenere NRE e Codici Fiscali)
+logs/
+logs/*.log
+logs/*.png
+logs/*.html
+
+# Python cache & virtual environment
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+env/
+ENV/
+
+# File di sistema e IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,78 @@
+# ==============================================================================
+# CONFIGURAZIONE CUP MONITOR (TEMPLATE PUBBLICO)
+# Copia questo file in 'config.yaml' e inserisci i tuoi parametri.
+# NON committare mai 'config.yaml' su repository pubblici!
+# ==============================================================================
+
+cup:
+  # Portale regionale di riferimento (default: Marche)
+  base_url: "https://mycupmarche.it/prenotazionecittadino/web/search/nre"
+  # Inserisci il tuo Codice Fiscale
+  codice_fiscale: "INSERIRE_CODICE_FISCALE"
+  # Inserisci il Numero di Ricetta Elettronica (NRE)
+  nre: "INSERIRE_NRE"
+
+filter:
+  # Regione di riferimento (default: Marche)
+  regione: "Marche"
+  # Province accettate per la ricerca (seleziona una o più province)
+  # Opzioni Marche: ["Ancona", "Pesaro e Urbino", "Macerata", "Fermo", "Ascoli Piceno", "Tutte"]
+  province:
+    - "Ancona"
+  # Keywords comunali o di presidio monitorate (generate in automatico o personalizzate)
+  keywords:
+    - "Ancona"
+    - "Jesi"
+    - "Fabriano"
+    - "Senigallia"
+    - "Osimo"
+    - "Chiaravalle"
+    - "Loreto"
+    - "Castelfidardo"
+    - "Falconara"
+    - "Camerano"
+
+notifications:
+  # Canale preferito: 'telegram' | 'whatsapp' | 'sms' | 'both'
+  channel: "telegram"
+  # Invia notifica anche se non ci sono disponibilità al termine del controllo
+  send_no_match: true
+
+  # --- CONFIGURAZIONE TELEGRAM ---
+  telegram:
+    # Token del bot creato con @BotFather (es. 123456789:ABCdef...)
+    bot_token: "INSERIRE_BOT_TOKEN"
+    # ID della tua chat personale (es. 123456789)
+    chat_id: "INSERIRE_CHAT_ID"
+
+  # --- CONFIGURAZIONE TELEFONO (WHATSAPP GRATUITO VIA CALLMEBOT) ---
+  whatsapp:
+    enabled: false
+    # Numero di telefono con prefisso internazionale senza spazi o '+' (es. 393331234567)
+    phone_number: "39XXXXXXXXXX"
+    # API Key ottenuta gratuitamente dal bot WhatsApp CallMeBot
+    api_key: "INSERIRE_API_KEY_CALLMEBOT"
+
+  # --- CONFIGURAZIONE TELEFONO (SMS VIA TWILIO - OPZIONALE) ---
+  sms:
+    enabled: false
+    account_sid: "INSERIRE_TWILIO_ACCOUNT_SID"
+    auth_token: "INSERIRE_TWILIO_AUTH_TOKEN"
+    from_number: "+1XXXXXXXXXX"
+    to_number: "+39XXXXXXXXXX"
+
+session:
+  storage_path: "./session/state.json"
+  max_age_hours: 4
+
+logging:
+  level: "INFO"
+  file: "./logs/cup_monitor.log"
+  max_size_mb: 5
+  backup_count: 3
+
+timing:
+  page_timeout_ms: 30000
+  action_delay_ms: 2000
+  retry_count: 2
+  retry_delay_ms: 5000
