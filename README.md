@@ -116,6 +116,18 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
 */30 * * * * cd /percorso/progetto && python3 src/main.py >> logs/scheduler.log 2>&1
 ```
 
+### 🛑 Come Annullare o Fermare il Monitoraggio
+Quando hai finalmente prenotato la visita o l'esame desiderato e vuoi fermare il bot per non ricevere più notifiche:
+
+**Su Windows (PowerShell):**
+```powershell
+Unregister-ScheduledTask -TaskName "CUP Marche Monitor" -Confirm:$false
+```
+*In alternativa, apri l'app di sistema **Utilità di pianificazione** (`taskschd.msc`), fai clic destro su **"CUP Marche Monitor"** e seleziona **Elimina**.*
+
+**Su Linux / Mac:**
+Apri il crontab con `crontab -e` e cancella la riga del bot.
+
 ---
 
 ## 📁 Struttura del Progetto

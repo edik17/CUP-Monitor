@@ -370,6 +370,27 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
           </ol>
         </div>
 
+        <!-- Didascalia: Come Annullare o Fermare il Monitoraggio -->
+        <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-2 text-xs text-amber-900">
+          <h4 class="font-bold flex items-center text-amber-950 text-sm">
+            <span class="mr-2 text-base">🛑</span> Come annullare o fermare il monitoraggio:
+          </h4>
+          <p class="leading-relaxed">
+            Una volta che hai prenotato la visita o l'esame desiderato, puoi fermare il bot in qualsiasi momento:
+          </p>
+          <div class="space-y-2 pt-1">
+            <div>
+              <span class="font-bold text-amber-950 block mb-0.5">• Su Windows (PowerShell):</span>
+              <pre class="bg-amber-900/90 text-amber-50 p-2 rounded font-mono text-[11px] overflow-x-auto">Unregister-ScheduledTask -TaskName "CUP Marche Monitor" -Confirm:$false</pre>
+              <span class="text-[11px] text-amber-700">In alternativa: apri <em>Utilità di pianificazione</em> (<code class="font-mono font-bold">taskschd.msc</code>) e clicca col tasto destro su <strong>"CUP Marche Monitor"</strong> &gt; <strong>Elimina</strong>.</span>
+            </div>
+            <div>
+              <span class="font-bold text-amber-950 block mb-0.5">• Su Linux / Mac:</span>
+              <span class="text-[11px] text-amber-700">Apri il crontab con <code class="font-mono font-bold">crontab -e</code> e rimuovi la riga del bot.</span>
+            </div>
+          </div>
+        </div>
+
         <div class="flex justify-between pt-4 border-t border-slate-200">
           <button onclick="goToStep(3)" class="px-5 py-2.5 text-slate-600 hover:text-slate-900 font-bold text-sm">
             ← Modifica Dati
