@@ -71,6 +71,10 @@
       .btn-secondary:hover { background: #475569; }
       .status-badge { background: #334155; color: #cbd5e1; }
       .stop-note { background: #451a03; border-color: #78350f; color: #fde68a; }
+      #countdownBox { background: #1e1b4b !important; border-color: #3730a3 !important; }
+      #countdownLabel { color: #a5b4fc !important; }
+      #countdownTimer { color: #818cf8 !important; }
+      #resultBox { background: #0f172a !important; border-color: #334155 !important; }
     }
   </style>
 </head>
@@ -80,12 +84,20 @@
   <div class="subtitle">Scansione automatica direttamente nel tuo browser</div>
 
   <div class="card">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
       <span style="font-size: 12px; font-weight: 700;">Stato Monitor:</span>
       <div id="statusBadge" class="status-badge">
         <span id="statusDot" class="status-dot"></span>
         <span id="statusText">Non attivo</span>
       </div>
+    </div>
+
+    <!-- Countdown Timer -->
+    <div id="countdownBox" style="display: none; justify-content: space-between; align-items: center; background: #e0e7ff; border: 1px solid #c7d2fe; border-radius: 8px; padding: 7px 10px; margin-bottom: 12px; font-size: 11px;">
+      <span id="countdownLabel" style="color: #3730a3; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+        <span>⏳</span> Prossimo controllo tra:
+      </span>
+      <span id="countdownTimer" style="font-family: monospace; font-weight: 700; color: #1e1b4b; font-size: 12px;">--:--</span>
     </div>
 
     <label for="nreInput">Numero Ricetta (NRE) *</label>

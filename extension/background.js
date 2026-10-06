@@ -28,7 +28,10 @@ async function startAlarm() {
     periodInMinutes: intervalMinutes
   });
 
-  console.log(`CUP Monitor: allarme impostato ogni ${intervalMinutes} minuti.`);
+  const nextCheck = Date.now() + intervalMinutes * 60 * 1000;
+  await chrome.storage.local.set({ nextCheckTimestamp: nextCheck });
+
+  console.log(`CUP Monitor: allarme impostato ogni ${intervalMinutes} minuti. Prossimo alle: ${new Date(nextCheck).toLocaleTimeString()}`);
   
   // Esegui subito il primo controllo
   performCUPCheck();
@@ -39,13 +42,19 @@ function stopAlarm() {
   chrome.storage.local.set({
     lastStatus: "STOPPED",
     lastMessage: "Monitoraggio in pausa.",
-    lastCheck: new Date().toLocaleTimeString()
+    lastCheck: new Date().toLocaleTimeString(),
+    nextCheckTimestamp: null
   });
   console.log("CUP Monitor: allarme fermato.");
 }
 
-chrome.alarms.onAlarm.addListener((alarm) => {
+chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name === "CUP_MONITOR_ALARM") {
+    const data = await chrome.storage.local.get(["interval"]);
+    const intervalMinutes = data.interval || 30;
+    const nextCheck = Date.now() + intervalMinutes * 60 * 1000;
+    await chrome.storage.local.set({ nextCheckTimestamp: nextCheck });
+
     performCUPCheck();
   }
 });

@@ -10,9 +10,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   const statusDot = document.getElementById("statusDot");
   const statusText = document.getElementById("statusText");
 
+  const countdownBox = document.getElementById("countdownBox");
+  const countdownTimer = document.getElementById("countdownTimer");
+
   const resultBox = document.getElementById("resultBox");
   const lastCheckTime = document.getElementById("lastCheckTime");
   const lastCheckMessage = document.getElementById("lastCheckMessage");
+
+  let countdownIntervalId = null;
 
   // Rimuovi eventuale badge notifica
   chrome.action.setBadgeText({ text: "" });
@@ -26,7 +31,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     "isActive",
     "lastCheck",
     "lastStatus",
-    "lastMessage"
+    "lastMessage",
+    "nextCheckTimestamp"
   ]);
 
   if (data.nre) nreInput.value = data.nre;
@@ -38,6 +44,29 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (data.lastStatus) {
     displayResult(data.lastStatus, data.lastMessage, data.lastCheck);
   }
+  if (data.isActive && data.nextCheckTimestamp) {
+    startCountdown(data.nextCheckTimestamp);
+  }
+
+  // Ascolta aggiornamenti dallo storage in tempo reale
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area !== "local") return;
+    if (changes.isActive) {
+      updateUI(changes.isActive.newValue);
+    }
+    if (changes.nextCheckTimestamp) {
+      if (changes.nextCheckTimestamp.newValue) {
+        startCountdown(changes.nextCheckTimestamp.newValue);
+      } else {
+        stopCountdown();
+      }
+    }
+    if (changes.lastStatus || changes.lastMessage || changes.lastCheck) {
+      chrome.storage.local.get(["lastStatus", "lastMessage", "lastCheck"], (d) => {
+        if (d.lastStatus) displayResult(d.lastStatus, d.lastMessage, d.lastCheck);
+      });
+    }
+  });
 
   // Toggle Avvio / Fermata
   toggleBtn.addEventListener("click", async () => {
@@ -52,20 +81,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
 
+      const intVal = parseInt(intervalSelect.value, 10);
+      const nextTimestamp = Date.now() + intVal * 60 * 1000;
+
       await chrome.storage.local.set({
         nre: nre,
         cf: cf,
         province: provinceSelect.value,
-        interval: parseInt(intervalSelect.value, 10),
-        isActive: true
+        interval: intVal,
+        isActive: true,
+        nextCheckTimestamp: nextTimestamp
       });
 
       chrome.runtime.sendMessage({ action: "START_MONITORING" });
       updateUI(true);
+      startCountdown(nextTimestamp);
     } else {
-      await chrome.storage.local.set({ isActive: false });
+      await chrome.storage.local.set({
+        isActive: false,
+        nextCheckTimestamp: null
+      });
       chrome.runtime.sendMessage({ action: "STOP_MONITORING" });
       updateUI(false);
+      stopCountdown();
     }
   });
 
@@ -127,7 +165,42 @@ document.addEventListener("DOMContentLoaded", async () => {
       statusText.textContent = "In Pausa";
       statusBadge.style.color = "#475569";
       statusBadge.style.background = "#f1f5f9";
+      stopCountdown();
     }
+  }
+
+  function startCountdown(targetTimestamp) {
+    if (countdownIntervalId) clearInterval(countdownIntervalId);
+    if (!targetTimestamp) {
+      stopCountdown();
+      return;
+    }
+
+    countdownBox.style.display = "flex";
+
+    function update() {
+      const remainingMs = targetTimestamp - Date.now();
+      if (remainingMs <= 0) {
+        countdownTimer.textContent = "Verifica in corso... ⏳";
+        return;
+      }
+
+      const totalSec = Math.floor(remainingMs / 1000);
+      const min = Math.floor(totalSec / 60);
+      const sec = totalSec % 60;
+      countdownTimer.textContent = `${min}m ${sec < 10 ? '0' : ''}${sec}s`;
+    }
+
+    update();
+    countdownIntervalId = setInterval(update, 1000);
+  }
+
+  function stopCountdown() {
+    if (countdownIntervalId) {
+      clearInterval(countdownIntervalId);
+      countdownIntervalId = null;
+    }
+    countdownBox.style.display = "none";
   }
 
   function displayResult(status, message, time) {
