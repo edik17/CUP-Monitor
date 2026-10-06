@@ -12,6 +12,23 @@ import sys
 from typing import Union
 
 
+import re
+
+class SensitiveDataFilter(logging.Filter):
+    """Filtro di sicurezza e privacy per oscurare Codici Fiscali, Token e numeri di telefono dai log."""
+
+    CF_REGEX = re.compile(r'\b[A-Z]{6}[0-9LMNPQRSTUV]{2}[A-EHLMPR-T][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]\b', re.IGNORECASE)
+    BOT_TOKEN_REGEX = re.compile(r'\b[0-9]{8,10}:[a-zA-Z0-9_-]{35}\b')
+    PHONE_REGEX = re.compile(r'\b(?:\+39|0039)?3[0-9]{8,9}\b')
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        if isinstance(record.msg, str):
+            record.msg = self.CF_REGEX.sub(lambda m: f"{m.group(0)[:6]}******{m.group(0)[-3:]}", record.msg)
+            record.msg = self.BOT_TOKEN_REGEX.sub("[REDACTED_BOT_TOKEN]", record.msg)
+            record.msg = self.PHONE_REGEX.sub(lambda m: f"{m.group(0)[:4]}****{m.group(0)[-2:]}", record.msg)
+        return True
+
+
 def setup_logger(
     log_file: str = "./logs/cup_monitor.log",
     level: Union[str, int] = "INFO",
@@ -54,6 +71,7 @@ def setup_logger(
     log_format = "[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s"
     date_format = "%Y-%m-%d %H:%M:%S"
     formatter = logging.Formatter(fmt=log_format, datefmt=date_format)
+    privacy_filter = SensitiveDataFilter()
 
     # Risoluzione del percorso e creazione automatica della cartella logs se non esiste
     log_path = Path(log_file)
@@ -70,6 +88,7 @@ def setup_logger(
     )
     file_handler.setLevel(numeric_level)
     file_handler.setFormatter(formatter)
+    file_handler.addFilter(privacy_filter)
     logger.addHandler(file_handler)
 
     # Handler per console standard output (con gestione encoding Windows)
@@ -78,6 +97,7 @@ def setup_logger(
     )
     console_handler.setLevel(numeric_level)
     console_handler.setFormatter(formatter)
+    console_handler.addFilter(privacy_filter)
     logger.addHandler(console_handler)
 
     return logger

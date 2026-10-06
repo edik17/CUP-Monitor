@@ -87,7 +87,10 @@ class TelegramChannel:
                 res = requests.post(self.api_url, json=payload, timeout=10)
             return res.status_code == 200 and res.json().get("ok", False)
         except Exception as e:
-            logger.error("Errore invio Telegram: %s", e)
+            err_msg = str(e)
+            if self.bot_token:
+                err_msg = err_msg.replace(self.bot_token, "[REDACTED_BOT_TOKEN]")
+            logger.error("Errore invio Telegram: %s", err_msg)
             return False
 
 
@@ -113,7 +116,12 @@ class WhatsAppChannel:
             res = requests.get(url, timeout=15)
             return res.status_code == 200
         except Exception as e:
-            logger.error("Errore invio WhatsApp: %s", e)
+            err_msg = str(e)
+            if self.api_key:
+                err_msg = err_msg.replace(self.api_key, "[REDACTED_API_KEY]")
+            if self.phone:
+                err_msg = err_msg.replace(self.phone, "[REDACTED_PHONE]")
+            logger.error("Errore invio WhatsApp: %s", err_msg)
             return False
 
 
@@ -145,7 +153,10 @@ class SMSChannel:
             )
             return res.status_code in (200, 201)
         except Exception as e:
-            logger.error("Errore invio SMS: %s", e)
+            err_msg = str(e)
+            if self.auth_token:
+                err_msg = err_msg.replace(self.auth_token, "[REDACTED_AUTH_TOKEN]")
+            logger.error("Errore invio SMS: %s", err_msg)
             return False
 
 

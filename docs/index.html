@@ -8,6 +8,7 @@
   <!-- Content Security Policy & Privacy Shield: Nessuna trasmissione dati esterna permessa -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com; connect-src 'self' http://localhost:5000 http://127.0.0.1:5000; frame-ancestors 'none'; form-action 'none';">
   <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -897,14 +898,15 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
     }
 
     function generateConfig() {
+      const cleanYaml = (val) => (val || '').trim().replace(/[\r\n]+/g, '').replace(/"/g, '\\"');
       const channelType = document.querySelector('input[name="notification_channel"]:checked').value;
-      const cf = (document.getElementById('user_cf').value || 'INSERIRE_CODICE_FISCALE').trim().toUpperCase();
-      const nre = (document.getElementById('user_nre').value || 'INSERIRE_NRE').trim();
+      const cf = cleanYaml(document.getElementById('user_cf').value || 'INSERIRE_CODICE_FISCALE').toUpperCase();
+      const nre = cleanYaml(document.getElementById('user_nre').value || 'INSERIRE_NRE');
       const sendNoMatch = document.getElementById('send_no_match_toggle').checked;
-      const region = document.getElementById('selected_region').value;
+      const region = cleanYaml(document.getElementById('selected_region').value);
       const portalUrl = (REGIONAL_PORTALS[region] && REGIONAL_PORTALS[region].url) || "https://mycupmarche.it/prenotazionecittadino/web/search/nre";
       
-      const selectedProvs = Array.from(document.querySelectorAll('input[name="selected_provinces"]:checked')).map(cb => cb.value);
+      const selectedProvs = Array.from(document.querySelectorAll('input[name="selected_provinces"]:checked')).map(cb => cleanYaml(cb.value));
 
       let yaml = `# ==============================================================================\n`;
       yaml += `# CONFIGURAZIONE CUP MONITOR (Generata dal configuratore web per tutta Italia)\n`;
@@ -928,8 +930,8 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
 
       yaml += `notifications:\n`;
       if (channelType === 'telegram') {
-        const tgToken = (document.getElementById('tg_bot_token').value || 'INSERIRE_BOT_TOKEN').trim();
-        const tgChat = (document.getElementById('tg_chat_id').value || 'INSERIRE_CHAT_ID').trim();
+        const tgToken = cleanYaml(document.getElementById('tg_bot_token').value || 'INSERIRE_BOT_TOKEN');
+        const tgChat = cleanYaml(document.getElementById('tg_chat_id').value || 'INSERIRE_CHAT_ID');
         yaml += `  channel: "telegram"\n`;
         yaml += `  send_no_match: ${sendNoMatch}\n`;
         yaml += `  telegram:\n`;
@@ -938,18 +940,18 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
       } else {
         const phoneSubtype = document.querySelector('input[name="phone_subtype"]:checked').value;
         if (phoneSubtype === 'whatsapp') {
-          const waPhone = (document.getElementById('wa_phone').value || '39XXXXXXXXXX').trim();
-          const waKey = (document.getElementById('wa_apikey').value || 'INSERIRE_API_KEY_CALLMEBOT').trim();
+          const waPhone = cleanYaml(document.getElementById('wa_phone').value || '39XXXXXXXXXX');
+          const waKey = cleanYaml(document.getElementById('wa_apikey').value || 'INSERIRE_API_KEY_CALLMEBOT');
           yaml += `  channel: "whatsapp"\n`;
           yaml += `  send_no_match: ${sendNoMatch}\n`;
           yaml += `  whatsapp:\n`;
           yaml += `    phone_number: "${waPhone}"\n`;
           yaml += `    api_key: "${waKey}"\n`;
         } else {
-          const sid = (document.getElementById('sms_account_sid').value || 'INSERIRE_TWILIO_SID').trim();
-          const token = (document.getElementById('sms_auth_token').value || 'INSERIRE_TWILIO_TOKEN').trim();
-          const from = (document.getElementById('sms_from').value || '+1XXXXXXXXXX').trim();
-          const to = (document.getElementById('sms_to').value || '+39XXXXXXXXXX').trim();
+          const sid = cleanYaml(document.getElementById('sms_account_sid').value || 'INSERIRE_TWILIO_SID');
+          const token = cleanYaml(document.getElementById('sms_auth_token').value || 'INSERIRE_TWILIO_TOKEN');
+          const from = cleanYaml(document.getElementById('sms_from').value || '+1XXXXXXXXXX');
+          const to = cleanYaml(document.getElementById('sms_to').value || '+39XXXXXXXXXX');
           yaml += `  channel: "sms"\n`;
           yaml += `  send_no_match: ${sendNoMatch}\n`;
           yaml += `  sms:\n`;

@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "CUP Monitor — Prenotazioni Sanitarie",
+  "version": "1.0.0",
+  "description": "Monitora automaticamente le disponibilità sul portale CUP direttamente dal browser, senza installare Python o usare il terminale.",
+  "permissions": [
+    "storage",
+    "alarms",
+    "notifications",
+    "cookies",
+    "tabs"
+  ],
+  "host_permissions": [
+    "*://mycupmarche.it/*",
+    "*://*.mycupmarche.it/*",
+    "*://*.regione.marche.it/*",
+    "*://*.regione.lazio.it/*",
+    "*://*.regione.lombardia.it/*",
+    "*://*.cupweb.it/*",
+    "*://*.salutepiemonte.it/*",
+    "*://*.toscana.it/*",
+    "*://*.azero.veneto.it/*",
+    "*://*.sanita.puglia.it/*",
+    "*://*.sinfonia.regione.campania.it/*",
+    "*://*.prenotosanita.regione.liguria.it/*",
+    "*://*.sanita.fvg.it/*",
+    "*://*.cupumbria.it/*",
+    "*://*.regione.abruzzo.it/*",
+    "*://*.regione.calabria.it/*",
+    "*://*.sardegnasalute.it/*",
+    "*://*.siciliainsalute.it/*",
+    "*://*.aslbasilicata.it/*",
+    "*://*.asrem.gov.it/*",
+    "*://*.apss.tn.it/*",
+    "*://*.ausl.vda.it/*"
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "CUP Monitor",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none';"
+  }
+}

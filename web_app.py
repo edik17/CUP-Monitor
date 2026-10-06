@@ -19,6 +19,7 @@ import sys
 import webbrowser
 from pathlib import Path
 
+import time
 from urllib.parse import urlparse
 
 PORT = 5000
@@ -28,10 +29,21 @@ DOCS_DIR = BASE_DIR / "docs"
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(levelname)s: %(message)s")
 logger = logging.getLogger("web_dashboard")
 
+_last_subprocess_time = 0.0
+
 
 class DashboardHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(DOCS_DIR), **kwargs)
+
+    def end_headers(self):
+        # Header di sicurezza HTTP universali
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("X-Frame-Options", "DENY")
+        self.send_header("Referrer-Policy", "no-referrer")
+        if self.path.startswith("/api/"):
+            self.send_header("Cache-Control", "no-store, no-cache, must-revalidate")
+        super().end_headers()
 
     def do_GET(self):
         if self.path == "/api/status":
@@ -77,6 +89,19 @@ class DashboardHandler(http.server.SimpleHTTPRequestHandler):
         if self.path == "/api/save-config":
             try:
                 yaml_text = body.decode("utf-8")
+                # Convalida sintattica e strutturale YAML prima del salvataggio
+                try:
+                    import yaml
+                    parsed_yaml = yaml.safe_load(yaml_text)
+                    if not isinstance(parsed_yaml, dict):
+                        self._send_json({"ok": False, "message": "Struttura YAML non valida (deve essere un oggetto di configurazione)."}, status=400)
+                        return
+                except ImportError:
+                    pass
+                except Exception as parse_err:
+                    self._send_json({"ok": False, "message": f"Errore di sintassi YAML: {parse_err}"}, status=400)
+                    return
+
                 target_file = BASE_DIR / "config.yaml"
                 target_file.write_text(yaml_text, encoding="utf-8")
                 logger.info("File config.yaml salvato con successo dal pannello web.")
@@ -86,29 +111,36 @@ class DashboardHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json({"ok": False, "message": f"❌ Errore salvataggio: {e}"}, status=500)
             return
 
-        elif self.path == "/api/test-notification":
-            try:
-                # Esegue test di notifica in background
-                subprocess.Popen([sys.executable, str(BASE_DIR / "src" / "main.py"), "--test-telegram"])
-                self._send_json({"ok": True, "message": "🚀 Notifica di test inviata! Controlla Telegram o il tuo Telefono."})
-            except Exception as e:
-                self._send_json({"ok": False, "message": f"❌ Errore avvio test: {e}"}, status=500)
-            return
+        elif self.path in ("/api/test-notification", "/api/login-spid"):
+            # Protezione anti-flood / DoS da processi multipli concorrenti
+            global _last_subprocess_time
+            now = time.time()
+            if now - _last_subprocess_time < 5.0:
+                self._send_json({"ok": False, "message": "Attendi qualche secondo prima di richiedere una nuova operazione."}, status=429)
+                return
+            _last_subprocess_time = now
 
-        elif self.path == "/api/login-spid":
-            try:
-                # Apre il browser visibile per il login SPID
-                subprocess.Popen(
-                    [sys.executable, str(BASE_DIR / "src" / "main.py"), "--login"],
-                    creationflags=subprocess.CREATE_NEW_CONSOLE if os.name == "nt" else 0,
-                )
-                self._send_json({
-                    "ok": True,
-                    "message": "🔑 Finestra browser aperta sul PC! Esegui il login SPID e premi INVIO nel terminale che è comparso.",
-                })
-            except Exception as e:
-                self._send_json({"ok": False, "message": f"❌ Errore avvio SPID: {e}"}, status=500)
-            return
+            if self.path == "/api/test-notification":
+                try:
+                    subprocess.Popen([sys.executable, str(BASE_DIR / "src" / "main.py"), "--test-telegram"])
+                    self._send_json({"ok": True, "message": "🚀 Notifica di test inviata! Controlla Telegram o il tuo Telefono."})
+                except Exception as e:
+                    self._send_json({"ok": False, "message": f"❌ Errore avvio test: {e}"}, status=500)
+                return
+
+            elif self.path == "/api/login-spid":
+                try:
+                    subprocess.Popen(
+                        [sys.executable, str(BASE_DIR / "src" / "main.py"), "--login"],
+                        creationflags=subprocess.CREATE_NEW_CONSOLE if os.name == "nt" else 0,
+                    )
+                    self._send_json({
+                        "ok": True,
+                        "message": "🔑 Finestra browser aperta sul PC! Esegui il login SPID e premi INVIO nel terminale che è comparso.",
+                    })
+                except Exception as e:
+                    self._send_json({"ok": False, "message": f"❌ Errore avvio SPID: {e}"}, status=500)
+                return
 
         self.send_error(404, "Endpoint non trovato")
 

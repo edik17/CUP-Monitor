@@ -3,7 +3,7 @@ config.yaml
 
 # Cookie di sessione SPID e stati di navigazione
 session/
-*.json
+!extension/manifest.json
 
 # Log applicativi e screenshot (possono contenere NRE e Codici Fiscali)
 logs/

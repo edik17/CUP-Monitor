@@ -103,7 +103,7 @@ class NREScraper:
                     matrice1_loc.first.fill(part1)
                 matrice2_loc.first.fill(part2)
                 
-                logger.info(f"Form NRE compilato in due parti: '{part1}' e '{part2}'")
+                logger.info("Form NRE compilato nei campi del portale.")
             else:
                 # Modello a 1 campo (fallback se la UI cambia)
                 nre_selectors = [
@@ -134,7 +134,8 @@ class NREScraper:
             cf_loc = page.locator("#cf")
             if cf_loc.count() > 0:
                 cf_val = cf_loc.first.get_attribute("value")
-                logger.info(f"Codice Fiscale precompilato dal sistema: {cf_val}")
+                masked_cf = f"{cf_val[:6]}******{cf_val[-3:]}" if cf_val and len(cf_val) == 16 else "***"
+                logger.info(f"Codice Fiscale precompilato verificato: {masked_cf}")
             
             self._random_delay()
             
