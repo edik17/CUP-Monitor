@@ -19,6 +19,8 @@ import sys
 import webbrowser
 from pathlib import Path
 
+from urllib.parse import urlparse
+
 PORT = 5000
 BASE_DIR = Path(__file__).parent.resolve()
 DOCS_DIR = BASE_DIR / "docs"
@@ -45,14 +47,31 @@ class DashboardHandler(http.server.SimpleHTTPRequestHandler):
         super().do_GET()
 
     def do_POST(self):
-        # Protezione anti-CSRF: accetta comandi SOLO dal browser locale
-        origin = self.headers.get("Origin", "")
-        if origin and not any(allowed in origin for allowed in ("localhost:5000", "127.0.0.1:5000")):
-            logger.warning("Bloccata richiesta non autorizzata da Origin esterno: %s", origin)
-            self.send_error(403, "Accesso negato: le API locali accettano comandi solo da localhost")
+        # Protezione anti-CSRF rigorosa: convalida precisa di Origin e Referer
+        origin = self.headers.get("Origin") or self.headers.get("Referer", "")
+        if not origin:
+            logger.warning("Bloccata richiesta POST senza header Origin o Referer.")
+            self.send_error(403, "Accesso negato: richiesta non locale.")
+            return
+
+        try:
+            parsed = urlparse(origin)
+            allowed_hosts = ("localhost", "127.0.0.1")
+            if parsed.hostname not in allowed_hosts or parsed.port != PORT:
+                logger.warning("Bloccata richiesta non autorizzata da host '%s' porta '%s'", parsed.hostname, parsed.port)
+                self.send_error(403, "Accesso negato: le API locali accettano comandi solo da localhost:5000")
+                return
+        except Exception as e:
+            logger.error("Errore analisi origin: %s", e)
+            self.send_error(403, "Accesso negato")
             return
 
         content_length = int(self.headers.get("Content-Length", 0))
+        # Limite anti-DoS sul payload (max 1 MB)
+        if content_length > 1024 * 1024:
+            self.send_error(413, "Payload troppo grande")
+            return
+
         body = self.rfile.read(content_length)
 
         if self.path == "/api/save-config":

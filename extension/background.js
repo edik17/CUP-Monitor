@@ -232,7 +232,10 @@ function notifyUser(title, message, isMatch = false) {
   }
 }
 
-// Cliccando sulla notifica si apre la pagina del CUP
-chrome.notifications.onClicked.addListener(() => {
-  chrome.tabs.create({ url: "https://mycupmarche.it/prenotazionecittadino/web/search/nre" });
+// Cliccando sulla notifica si apre la pagina del CUP regionale configurato
+chrome.notifications.onClicked.addListener(async () => {
+  const data = await chrome.storage.local.get(["region"]);
+  const region = data.region || "Marche";
+  const portalCfg = REGIONAL_PORTALS_CONFIG[region] || REGIONAL_PORTALS_CONFIG["Marche"];
+  chrome.tabs.create({ url: portalCfg.searchUrl });
 });
