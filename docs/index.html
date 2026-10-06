@@ -46,6 +46,22 @@
     .sim-toast-show {
       animation: simToastSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
+
+    /* Stili Simulatore 2D Smartphone Touch */
+    .phone-touch-cursor {
+      transition: top 0.75s cubic-bezier(0.25, 1, 0.4, 1), left 0.75s cubic-bezier(0.25, 1, 0.4, 1), transform 0.15s ease;
+      will-change: top, left, transform;
+    }
+    .phone-touch-cursor.tapping {
+      transform: translate(-50%, -50%) scale(0.72) !important;
+    }
+    @keyframes phoneBannerDrop {
+      0% { transform: translateY(-50px) scale(0.92); opacity: 0; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .phone-banner-show {
+      animation: phoneBannerDrop 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
   </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
@@ -192,6 +208,234 @@
               <li>Apri la chat con il tuo nuovo bot appena creato, premi <strong>Avvia</strong> e inviagli un messaggio qualsiasi (es. "ciao").</li>
               <li>Per trovare il tuo <strong>Chat ID</strong>, visita: <code class="bg-sky-100 dark:bg-sky-900 px-1 py-0.5 rounded break-all">https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code> e cerca il numero in <code class="font-bold font-mono">"chat":{"id": 123456789}</code>.</li>
             </ol>
+          </div>
+
+          <!-- BOX SIMULATORE 2D SMARTPHONE (ANIMAZIONE TOUCH CELLULARE) -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-2xl space-y-4">
+            <!-- Header con Titolo & Controlli -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+              <div class="flex items-center space-x-2.5">
+                <span class="p-2 bg-indigo-950/80 border border-indigo-700/50 rounded-xl text-lg">📱</span>
+                <div>
+                  <h4 class="font-bold text-sm text-white flex items-center">
+                    <span>Simulatore 2D Smartphone: Bot & Notifiche su Telefono</span>
+                    <span class="ml-2 text-[10px] font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full">Animazione Touch</span>
+                  </h4>
+                  <p class="text-xs text-slate-400 mt-0.5">Guarda la simulazione dei tocchi sullo schermo, dall'avvio del bot all'avviso del posto trovato.</p>
+                </div>
+              </div>
+
+              <!-- Controlli Play / Pause / Restart & Switch -->
+              <div class="flex items-center space-x-2 text-xs shrink-0">
+                <button onclick="switchAppMode('extension')" type="button" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-indigo-300 font-semibold rounded-lg border border-indigo-500/30 flex items-center space-x-1 transition" title="Guarda la versione Computer">
+                  <span>💻</span>
+                  <span>Versione PC</span>
+                </button>
+                <button id="phoneSimPlayPauseBtn" onclick="togglePhoneSimPlayback()" type="button" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-lg border border-slate-700 flex items-center space-x-1.5 transition">
+                  <span id="phoneSimPlayIcon">⏸️</span>
+                  <span id="phoneSimPlayText">Pausa</span>
+                </button>
+                <button onclick="restartPhoneSimAnimation()" type="button" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-lg border border-slate-700 flex items-center space-x-1.5 transition">
+                  <span>🔄</span>
+                  <span>Ricomincia</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Barra di Stato & Avanzamento Step -->
+            <div class="bg-slate-950/70 border border-slate-800 rounded-xl px-4 py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <div class="flex items-center space-x-3">
+                <span id="phoneSimStepBadge" class="w-6 h-6 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shrink-0">1</span>
+                <span id="phoneSimStepDesc" class="text-xs sm:text-sm font-semibold text-slate-200">1. Apri Telegram sullo smartphone e crea il bot con @BotFather</span>
+              </div>
+              <div class="flex items-center space-x-1.5 text-xs">
+                <button onclick="jumpToPhoneSimStep(1)" id="phoneStepDot-1" type="button" class="px-2 py-1 rounded bg-indigo-600 text-white font-mono font-bold text-[11px] ring-2 ring-indigo-400/50 transition">1</button>
+                <button onclick="jumpToPhoneSimStep(2)" id="phoneStepDot-2" type="button" class="px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[11px] transition">2</button>
+                <button onclick="jumpToPhoneSimStep(3)" id="phoneStepDot-3" type="button" class="px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[11px] transition">3</button>
+                <button onclick="jumpToPhoneSimStep(4)" id="phoneStepDot-4" type="button" class="px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[11px] transition">4</button>
+                <button onclick="jumpToPhoneSimStep(5)" id="phoneStepDot-5" type="button" class="px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[11px] transition">5</button>
+              </div>
+            </div>
+
+            <!-- PALCOSCENICO SMARTPHONE 2D MOCKUP -->
+            <div id="phoneSimStageContainer" class="relative bg-slate-950 border border-slate-800 rounded-xl py-6 px-2 overflow-hidden shadow-inner select-none flex justify-center items-center">
+              
+              <!-- TELAIO CELLULARE (SMARTPHONE FRAME) -->
+              <div class="relative w-full max-w-[280px] sm:max-w-[300px] bg-slate-900 border-4 border-slate-700/80 rounded-[42px] shadow-2xl p-2.5 overflow-hidden ring-1 ring-slate-800/80">
+                
+                <!-- DISPLAY INTERNO SMARTPHONE -->
+                <div id="phoneInnerScreen" class="relative bg-slate-950 rounded-[32px] overflow-hidden border border-slate-800 h-[460px] flex flex-col justify-between">
+                  
+                  <!-- DYNAMIC ISLAND & STATUS BAR -->
+                  <div class="pt-2 px-4 flex items-center justify-between text-white text-[10px] font-semibold relative z-30 bg-slate-950/80 backdrop-blur">
+                    <span>09:41</span>
+                    <!-- Dynamic Island Notch -->
+                    <div class="w-20 h-4 bg-black rounded-full flex items-center justify-center space-x-1 border border-slate-800/40">
+                      <span class="w-1.5 h-1.5 rounded-full bg-slate-800"></span>
+                      <span class="w-1 h-1 rounded-full bg-emerald-500/80"></span>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                      <span>5G</span>
+                      <span>📶</span>
+                      <span class="text-emerald-400">🔋</span>
+                    </div>
+                  </div>
+
+                  <!-- BANNER NOTIFICA PUSH IN DISCESA (STEP 4 & 5) -->
+                  <div id="phonePushBanner" class="hidden absolute top-8 left-2 right-2 z-40 bg-slate-900/95 border-2 border-emerald-500/80 rounded-2xl p-2.5 shadow-2xl backdrop-blur-md transition-all">
+                    <div class="flex items-start space-x-2">
+                      <div class="w-7 h-7 rounded-lg bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-sm shrink-0">
+                        💬
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between">
+                          <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">CUP Monitor Bot</span>
+                          <span class="text-[9px] text-slate-400">Adesso</span>
+                        </div>
+                        <div class="text-[11px] font-bold text-white leading-tight mt-0.5">🎉 Posto Trovato! Prov. Ancona</div>
+                        <div class="text-[10px] text-slate-300 leading-snug mt-0.5">Disponibilità rilevata al CUP per il 18/10. Tocca qui per confermare subito!</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- SCHERMATA STEP 1: Creazione Bot con @BotFather -->
+                  <div id="phoneScreen-1" class="flex-1 p-3 flex flex-col justify-between text-xs transition-opacity duration-300">
+                    <!-- Telegram Header -->
+                    <div class="bg-sky-900/40 border border-sky-700/40 rounded-xl p-2 flex items-center justify-between mb-2">
+                      <div class="flex items-center space-x-2">
+                        <span class="w-6 h-6 rounded-full bg-sky-500 text-white flex items-center justify-center text-xs font-bold">🤖</span>
+                        <div>
+                          <div class="text-[11px] font-bold text-white flex items-center">
+                            BotFather <span class="text-sky-400 ml-1 text-[10px]">☑️</span>
+                          </div>
+                          <div class="text-[9px] text-slate-400">bot ufficiale</div>
+                        </div>
+                      </div>
+                      <span class="text-[10px] text-sky-400 font-mono">Telegram</span>
+                    </div>
+
+                    <!-- Bolle Chat Telegram -->
+                    <div class="space-y-2 flex-1 overflow-y-auto pr-1">
+                      <div class="flex justify-end">
+                        <div class="bg-sky-600 text-white rounded-xl rounded-tr-none px-2.5 py-1 text-[11px] shadow">
+                          /newbot
+                        </div>
+                      </div>
+                      <div class="flex justify-start">
+                        <div class="bg-slate-900 border border-slate-800 text-slate-200 rounded-xl rounded-tl-none p-2 text-[10px] space-y-1 shadow">
+                          <p>Ottimo! Come vuoi chiamare il bot?</p>
+                          <div id="phoneTokenPill" class="bg-slate-950 border border-sky-500/40 p-1.5 rounded text-[9px] font-mono text-emerald-400 break-all">
+                            🔑 Token: 789123456:AAFv...
+                          </div>
+                          <span class="text-[9px] text-slate-400 block text-right">09:41</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-1.5 flex items-center text-slate-400 text-[10px] mt-1">
+                      <span class="mr-1.5">📎</span>
+                      <span class="flex-1">Messaggio...</span>
+                      <span>➤</span>
+                    </div>
+                  </div>
+
+                  <!-- SCHERMATA STEP 2: Avvio Chat con CUP Monitor Bot -->
+                  <div id="phoneScreen-2" class="hidden flex-1 p-3 flex flex-col justify-between text-xs transition-opacity duration-300">
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-2 flex items-center space-x-2 mb-2">
+                      <span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">🏥</span>
+                      <div>
+                        <div class="text-[11px] font-bold text-white">CUP Monitor Bot</div>
+                        <div class="text-[9px] text-emerald-400">bot • online</div>
+                      </div>
+                    </div>
+
+                    <div class="flex-1 flex flex-col items-center justify-center text-center p-2 space-y-3">
+                      <div class="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-2xl shadow">
+                        🏥
+                      </div>
+                      <div>
+                        <div class="text-xs font-bold text-white">Cosa può fare questo bot?</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Ti avvisa in tempo reale sul telefono non appena si libera un appuntamento sanitario al CUP.</div>
+                      </div>
+                      <div id="phoneBotReadyPill" class="hidden bg-emerald-950/70 border border-emerald-500/60 text-emerald-300 px-2.5 py-1 rounded-lg text-[10px] font-semibold animate-pulse">
+                        ✅ Bot avviato e collegato!
+                      </div>
+                    </div>
+
+                    <!-- Pulsante AVVIA -->
+                    <button id="phoneTgStartBtn" type="button" class="w-full py-2 bg-sky-500 hover:bg-sky-400 font-bold rounded-xl text-white text-xs shadow-lg flex items-center justify-center space-x-1.5 transition">
+                      <span>▶️</span>
+                      <span>AVVIA</span>
+                    </button>
+                  </div>
+
+                  <!-- SCHERMATA STEP 3: Standby / Schermata di Blocco -->
+                  <div id="phoneScreen-3" class="hidden flex-1 p-4 flex flex-col items-center justify-center text-center text-xs relative overflow-hidden transition-opacity duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-b from-indigo-950/40 via-slate-950 to-slate-950 -z-0"></div>
+                    <div class="relative z-10 space-y-3">
+                      <span class="text-slate-400 text-base">🔒</span>
+                      <div class="text-3xl font-extrabold text-white font-mono tracking-tight">10:24</div>
+                      <div class="text-[11px] text-indigo-300 font-medium">Martedì, 6 Ottobre</div>
+                      
+                      <!-- Widget di ascolto in background -->
+                      <div class="mt-6 bg-slate-900/90 border border-indigo-500/40 rounded-2xl p-3 shadow-xl backdrop-blur-md max-w-[210px] mx-auto text-left space-y-1">
+                        <div class="flex items-center space-x-1.5">
+                          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                          <span class="text-[10px] font-bold text-slate-200">CUP Monitor attivo 24/7</span>
+                        </div>
+                        <div class="text-[9px] text-slate-400 leading-tight">Monitoraggio liste d'attesa in background. Telefono pronto a ricevere notifiche.</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- SCHERMATA STEP 4 & 5: Prenotazione CUP Aperta da Notifica -->
+                  <div id="phoneScreen-4" class="hidden flex-1 p-3 flex flex-col justify-between text-xs transition-opacity duration-300">
+                    <!-- Browser Bar Portale Regionale -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 flex items-center justify-between text-[10px] mb-2">
+                      <span class="text-emerald-400">🔒</span>
+                      <span class="text-slate-300 font-mono">prenotasalute.regione...</span>
+                      <span class="text-slate-500">↻</span>
+                    </div>
+
+                    <!-- Scheda Appuntamento Rilevato -->
+                    <div class="space-y-2 flex-1">
+                      <div class="bg-emerald-950/50 border border-emerald-500/60 rounded-xl p-2.5 space-y-1.5">
+                        <div class="flex items-center justify-between">
+                          <span class="text-[9px] font-bold bg-emerald-500/30 text-emerald-300 px-1.5 py-0.5 rounded">DISPONIBILE ORA</span>
+                          <span class="text-[10px] font-bold text-white">Posto Libero</span>
+                        </div>
+                        <div class="text-[11px] font-bold text-white">Visita Specialistica</div>
+                        <div class="text-[10px] text-slate-300">📍 Ospedale Regionale (Ancona)</div>
+                        <div class="text-[10px] font-bold text-emerald-400">📅 18 Ottobre 2026 • Ore 10:30</div>
+                      </div>
+
+                      <div class="bg-slate-900 border border-slate-800 rounded-xl p-2 text-[10px] text-slate-300">
+                        ⚡ Notifica ricevuta sul telefono in 0.8s. Nessuna lista d'attesa persa.
+                      </div>
+                    </div>
+
+                    <!-- Pulsante Conferma Prenotazione -->
+                    <button type="button" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 font-bold rounded-xl text-white text-xs shadow-lg flex items-center justify-center space-x-1.5">
+                      <span>✅</span>
+                      <span>Prenota e Blocca Subito</span>
+                    </button>
+                  </div>
+
+                  <!-- BARRA DI NAVIGAZIONE INFERIORE (HOME INDICATOR) -->
+                  <div class="pb-2 pt-1 flex justify-center z-30">
+                    <div class="w-24 h-1 bg-slate-600 rounded-full"></div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- CURSORE TOUCH 2D ANIMATO (DITO / TAP INDICATOR) -->
+              <div id="phoneTouchCursor" class="phone-touch-cursor absolute z-50 pointer-events-none w-8 h-8 rounded-full bg-indigo-400/40 border-2 border-white shadow-2xl backdrop-blur-sm flex items-center justify-center -translate-x-1/2 -translate-y-1/2" style="left: 150px; top: 220px;">
+                <div class="w-2.5 h-2.5 rounded-full bg-white shadow"></div>
+              </div>
+              <div id="phoneTouchRipple" class="absolute w-8 h-8 rounded-full border-2 border-indigo-400 pointer-events-none opacity-0 z-40"></div>
+
+            </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -538,6 +782,10 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
           </div>
           
           <div class="flex items-center space-x-2 text-xs shrink-0">
+            <button onclick="switchAppMode('script')" type="button" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-emerald-300 font-semibold rounded-lg border border-emerald-500/30 flex items-center space-x-1 transition" title="Guarda la versione Telefono">
+              <span>📱</span>
+              <span>Versione Telefono</span>
+            </button>
             <button id="simPlayPauseBtn" onclick="toggleSimPlayback()" type="button" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-lg border border-slate-700 flex items-center space-x-1.5 transition">
               <span id="simPlayIcon">⏸️</span>
               <span id="simPlayText">Pausa</span>
@@ -976,11 +1224,17 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
         tabScript.className = "p-4 rounded-2xl border-2 text-left transition relative bg-indigo-50/70 dark:bg-indigo-950/40 border-indigo-600 dark:border-indigo-500 shadow-sm";
         tabExt.className = "p-4 rounded-2xl border-2 text-left transition relative bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700";
         if (typeof simTimer !== 'undefined') clearTimeout(simTimer);
+        setTimeout(() => {
+          if (typeof restartPhoneSimAnimation === 'function') {
+            restartPhoneSimAnimation();
+          }
+        }, 150);
       } else {
         scriptCont.classList.add('hidden');
         extCont.classList.remove('hidden');
         tabExt.className = "p-4 rounded-2xl border-2 text-left transition relative bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-600 dark:border-emerald-500 shadow-sm";
         tabScript.className = "p-4 rounded-2xl border-2 text-left transition relative bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700";
+        if (typeof phoneSimTimer !== 'undefined') clearTimeout(phoneSimTimer);
         setTimeout(() => {
           if (typeof restartSimAnimation === 'function') {
             restartSimAnimation();
@@ -1584,11 +1838,269 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
       }
     }
 
+    // ==========================================
+    // SIMULATORE 2D INTERATTIVO SMARTPHONE (NOTIFICHE TELEFONO & BOT)
+    // ==========================================
+    let phoneSimCurrentStep = 1;
+    let phoneSimIsPaused = false;
+    let phoneSimTimer = null;
+
+    const phoneSimStepDescriptions = {
+      1: "1. Apri Telegram sullo smartphone e cerca @BotFather per creare il bot",
+      2: "2. Apri la chat con il tuo nuovo bot personale e tocca \"AVVIA\"",
+      3: "3. Lo smartphone è in standby: il bot monitora il CUP in background",
+      4: "4. Appena si libera un posto, arriva la notifica push in tempo reale!",
+      5: "5. Tocca la notifica e prenota direttamente dal cellulare!"
+    };
+
+    function updatePhoneSimStepUI(step) {
+      phoneSimCurrentStep = step;
+      const badge = document.getElementById('phoneSimStepBadge');
+      const desc = document.getElementById('phoneSimStepDesc');
+      if (badge) badge.textContent = step;
+      if (desc) desc.textContent = phoneSimStepDescriptions[step] || "";
+
+      for (let i = 1; i <= 5; i++) {
+        const dot = document.getElementById(`phoneStepDot-${i}`);
+        if (dot) {
+          if (i === step) {
+            dot.className = "px-2 py-1 rounded bg-indigo-600 text-white font-mono font-bold text-[11px] shadow ring-2 ring-indigo-400/50 transition";
+          } else {
+            dot.className = "px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[11px] transition";
+          }
+        }
+      }
+    }
+
+    function phoneMoveTouchTo(targetEl, callback) {
+      const cursor = document.getElementById('phoneTouchCursor');
+      const stage = document.getElementById('phoneSimStageContainer');
+      if (!cursor || !stage || !targetEl) {
+        if (callback) callback();
+        return;
+      }
+      const stageRect = stage.getBoundingClientRect();
+      const targetRect = targetEl.getBoundingClientRect();
+
+      if (stageRect.width === 0 || stageRect.height === 0) {
+        if (callback) callback();
+        return;
+      }
+
+      const targetX = (targetRect.left - stageRect.left) + (targetRect.width / 2);
+      const targetY = (targetRect.top - stageRect.top) + (targetRect.height / 2);
+
+      cursor.style.left = `${Math.max(10, Math.min(stageRect.width - 20, targetX))}px`;
+      cursor.style.top = `${Math.max(10, Math.min(stageRect.height - 20, targetY))}px`;
+
+      // Attende completamento transizione CSS del tocco (750ms)
+      setTimeout(() => {
+        phonePerformTap(targetX, targetY, callback);
+      }, 800);
+    }
+
+    function phonePerformTap(x, y, callback) {
+      const cursor = document.getElementById('phoneTouchCursor');
+      const ripple = document.getElementById('phoneTouchRipple');
+
+      if (cursor) cursor.classList.add('tapping');
+      if (ripple) {
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        ripple.classList.remove('sim-ripple-active');
+        void ripple.offsetWidth; // re-flow
+        ripple.classList.add('sim-ripple-active');
+      }
+
+      setTimeout(() => {
+        if (cursor) cursor.classList.remove('tapping');
+        if (callback) callback();
+      }, 250);
+    }
+
+    function resetPhoneSimScreens() {
+      const s1 = document.getElementById('phoneScreen-1');
+      const s2 = document.getElementById('phoneScreen-2');
+      const s3 = document.getElementById('phoneScreen-3');
+      const s4 = document.getElementById('phoneScreen-4');
+      const banner = document.getElementById('phonePushBanner');
+      const botPill = document.getElementById('phoneBotReadyPill');
+
+      if (s1) s1.classList.add('hidden');
+      if (s2) s2.classList.add('hidden');
+      if (s3) s3.classList.add('hidden');
+      if (s4) s4.classList.add('hidden');
+      if (banner) {
+        banner.classList.add('hidden');
+        banner.classList.remove('phone-banner-show');
+      }
+      if (botPill) botPill.classList.add('hidden');
+    }
+
+    function executePhoneSimStep(step) {
+      if (phoneSimIsPaused) return;
+      updatePhoneSimStepUI(step);
+
+      if (step === 1) {
+        resetPhoneSimScreens();
+        const s1 = document.getElementById('phoneScreen-1');
+        if (s1) s1.classList.remove('hidden');
+
+        const cursor = document.getElementById('phoneTouchCursor');
+        const stage = document.getElementById('phoneSimStageContainer');
+        if (cursor && stage) {
+          const rect = stage.getBoundingClientRect();
+          cursor.style.left = `${rect.width * 0.35}px`;
+          cursor.style.top = `${rect.height * 0.7}px`;
+        }
+
+        clearTimeout(phoneSimTimer);
+        phoneSimTimer = setTimeout(() => {
+          if (phoneSimIsPaused) return;
+          const tokenPill = document.getElementById('phoneTokenPill');
+          phoneMoveTouchTo(tokenPill, () => {
+            phoneSimTimer = setTimeout(() => {
+              if (!phoneSimIsPaused) executePhoneSimStep(2);
+            }, 1600);
+          });
+        }, 500);
+      }
+      else if (step === 2) {
+        resetPhoneSimScreens();
+        const s2 = document.getElementById('phoneScreen-2');
+        if (s2) s2.classList.remove('hidden');
+
+        const startBtn = document.getElementById('phoneTgStartBtn');
+        phoneMoveTouchTo(startBtn, () => {
+          const botPill = document.getElementById('phoneBotReadyPill');
+          if (botPill) botPill.classList.remove('hidden');
+
+          phoneSimTimer = setTimeout(() => {
+            if (!phoneSimIsPaused) executePhoneSimStep(3);
+          }, 1800);
+        });
+      }
+      else if (step === 3) {
+        resetPhoneSimScreens();
+        const s3 = document.getElementById('phoneScreen-3');
+        if (s3) s3.classList.remove('hidden');
+
+        const cursor = document.getElementById('phoneTouchCursor');
+        const stage = document.getElementById('phoneSimStageContainer');
+        if (cursor && stage) {
+          const rect = stage.getBoundingClientRect();
+          cursor.style.left = `${rect.width * 0.5}px`;
+          cursor.style.top = `${rect.height * 0.8}px`;
+        }
+
+        phoneSimTimer = setTimeout(() => {
+          if (!phoneSimIsPaused) executePhoneSimStep(4);
+        }, 2200);
+      }
+      else if (step === 4) {
+        const s3 = document.getElementById('phoneScreen-3');
+        if (s3) s3.classList.remove('hidden');
+
+        const banner = document.getElementById('phonePushBanner');
+        if (banner) {
+          banner.classList.remove('hidden');
+          banner.classList.add('phone-banner-show');
+        }
+
+        phoneSimTimer = setTimeout(() => {
+          if (!phoneSimIsPaused) executePhoneSimStep(5);
+        }, 2000);
+      }
+      else if (step === 5) {
+        const banner = document.getElementById('phonePushBanner');
+        if (banner) {
+          banner.classList.remove('hidden');
+          phoneMoveTouchTo(banner, () => {
+            resetPhoneSimScreens();
+            const s4 = document.getElementById('phoneScreen-4');
+            if (s4) s4.classList.remove('hidden');
+
+            phoneSimTimer = setTimeout(() => {
+              if (!phoneSimIsPaused) executePhoneSimStep(1);
+            }, 4500);
+          });
+        }
+      }
+    }
+
+    function togglePhoneSimPlayback() {
+      phoneSimIsPaused = !phoneSimIsPaused;
+      const playIcon = document.getElementById('phoneSimPlayIcon');
+      const playText = document.getElementById('phoneSimPlayText');
+      if (phoneSimIsPaused) {
+        clearTimeout(phoneSimTimer);
+        if (playIcon) playIcon.textContent = "▶️";
+        if (playText) playText.textContent = "Riprendi";
+      } else {
+        if (playIcon) playIcon.textContent = "⏸️";
+        if (playText) playText.textContent = "Pausa";
+        executePhoneSimStep(phoneSimCurrentStep);
+      }
+    }
+
+    function restartPhoneSimAnimation() {
+      clearTimeout(phoneSimTimer);
+      phoneSimIsPaused = false;
+      const playIcon = document.getElementById('phoneSimPlayIcon');
+      const playText = document.getElementById('phoneSimPlayText');
+      if (playIcon) playIcon.textContent = "⏸️";
+      if (playText) playText.textContent = "Pausa";
+      executePhoneSimStep(1);
+    }
+
+    function jumpToPhoneSimStep(step) {
+      clearTimeout(phoneSimTimer);
+      phoneSimIsPaused = false;
+      const playIcon = document.getElementById('phoneSimPlayIcon');
+      const playText = document.getElementById('phoneSimPlayText');
+      if (playIcon) playIcon.textContent = "⏸️";
+      if (playText) playText.textContent = "Pausa";
+
+      resetPhoneSimScreens();
+      if (step === 1) {
+        const s1 = document.getElementById('phoneScreen-1');
+        if (s1) s1.classList.remove('hidden');
+      } else if (step === 2) {
+        const s2 = document.getElementById('phoneScreen-2');
+        if (s2) s2.classList.remove('hidden');
+      } else if (step === 3 || step === 4) {
+        const s3 = document.getElementById('phoneScreen-3');
+        if (s3) s3.classList.remove('hidden');
+        if (step === 4) {
+          const banner = document.getElementById('phonePushBanner');
+          if (banner) {
+            banner.classList.remove('hidden');
+            banner.classList.add('phone-banner-show');
+          }
+        }
+      } else if (step === 5) {
+        const s4 = document.getElementById('phoneScreen-4');
+        if (s4) s4.classList.remove('hidden');
+      }
+
+      executePhoneSimStep(step);
+    }
+
+    function initPhone2DSimulator() {
+      const scriptCont = document.getElementById('mode-script-container');
+      if (!scriptCont) return;
+
+      if (!scriptCont.classList.contains('hidden')) {
+        setTimeout(() => executePhoneSimStep(1), 500);
+      }
+    }
+
     // Inizializzazione
     initTheme();
     renderProvinces();
     checkLocalServer();
     init2DSimulator();
+    initPhone2DSimulator();
   </script>
 </body>
 </html>
