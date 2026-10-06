@@ -2,10 +2,10 @@
 
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Configurator-emerald)](docs/index.html)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
+[![License: Proprietary / All Rights Reserved](https://img.shields.io/badge/License-Proprietary%20%7C%20All%20Rights%20Reserved-red.svg)](LICENSE)
 [![Privacy First](https://img.shields.io/badge/Privacy-100%25%20Locale-green.svg)](#-privacy-e-sicurezza-dei-dati)
 
-Un assistente open-source automatizzato che monitora costantemente le agende dei portali sanitari (CUP) per trovare appuntamenti, visite o esami anticipati non appena si libera un posto (disdette o nuove agende), inviando notifiche istantanee via **Telegram** o **Telefono (WhatsApp / SMS)**.
+Un assistente intelligente automatizzato e protetto che monitora costantemente le agende dei portali sanitari (CUP) per trovare appuntamenti, visite o esami anticipati non appena si libera un posto (disdette o nuove agende), inviando notifiche istantanee via **Telegram** o **Telefono (WhatsApp / SMS)**.
 
 ---
 
@@ -172,6 +172,14 @@ CUP-Monitor/
 
 ---
 
-## 📜 Licenza
-
-Rilasciato sotto licenza [MIT](LICENSE). Utilizzo consentito per fini personali e non commerciali.
+## 📜 Licenza e Diritti d'Autore
+ 
+Copyright © 2026 **Edoardo Dottori (Edik1700)**. Tutti i diritti riservati (*All Rights Reserved*).
+ 
+Questo software è protetto da licenza proprietaria esclusiva ad uso personale:
+- ✅ **Uso consentito**: Gratuito per cittadini e utenti privati per monitorare le proprie prenotazioni sanitarie locali.
+- 🚫 **Divieto di alterazione**: È severamente vietato modificare, manomettere, decompilare o creare versioni derivate non autorizzate (*fork*).
+- 🚫 **Divieto di ridistribuzione**: È vietato ripubblicare o distribuire il software o l'estensione su store terzi (Chrome Web Store, Edge Add-ons, ecc.) o altri siti senza consenso scritto.
+- 🚫 **Divieto commerciale**: È vietata la vendita, monetizzazione o inclusione in pacchetti a pagamento.
+ 
+Consulta il testo integrale e vincolante nel file [LICENSE](LICENSE).

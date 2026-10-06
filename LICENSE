@@ -1,21 +1,88 @@
-MIT License
+PROPRIETARY SOFTWARE LICENSE & TERMS OF USE
+LICENZA SOFTWARE PROPRIETARIA E CONDIZIONI D'USO ESCLUSIVE
 
-Copyright (c) 2026 CUP Monitor Contributors
+Copyright (c) 2026 Edoardo Dottori (Edik1700) <edottori17@gmail.com>.
+Tutti i diritti riservati / All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+================================================================================
+ITALIANO (TESTO PRINCIPALE E VINCOLANTE)
+================================================================================
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Il presente software denominato "CUP Monitor", inclusi senza limitazione il codice
+sorgente, gli script Python, l'estensione browser per Google Chrome / Microsoft Edge,
+l'applicazione web, i file di configurazione, le interfacce grafiche, i simulatori
+2D e la relativa documentazione (collettivamente l'"Opera"), è di proprietà intellettuale
+esclusiva ed inalienabile di Edoardo Dottori (l'"Autore").
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+1. CONCESSIONE D'USO LIMITATA
+   All'utente finale è concessa una licenza d'uso personale, non esclusiva,
+   non trasferibile, non sublicenziabile e revocabile, al solo scopo di installare
+   ed eseguire l'Opera in locale e per fini strettamente individuali e privati,
+   per monitorare in modo lecito le proprie prenotazioni sanitarie personali.
+
+2. DIVIETO DI MODIFICA, ALTERAZIONE E FORK NON AUTORIZZATI
+   È espressamente e categoricamente VIETATO a chiunque modificare, alterare,
+   adattare, tradurre, decompilare, disassemblare, manomettere o creare opere
+   derivate ("fork") basate sull'Opera o su parti di essa, nonché distribuire
+   o pubblicare versioni alterate. Nessuna terza parte ha il diritto di modificare
+   o alterare l'integrità del software, il suo codice originale o le sue finalità.
+
+3. DIVIETO DI RIDISTRIBUZIONE E RIPUBBLICAZIONE
+   È fatto assoluto divieto di ridistribuire, pubblicare, ri-ospitare (mirror),
+   duplicare o diffondere l'Opera, integralmente o parzialmente, su qualsiasi
+   repository pubblico o privato, sito web, piattaforma terza o store online
+   (inclusi, a titolo esemplificativo e non esaustivo: Google Chrome Web Store,
+   Microsoft Edge Add-ons, Firefox Add-ons) senza il previo, esplicito e formale
+   consenso scritto rilasciato dall'Autore.
+
+4. DIVIETO ASSOLUTO DI SFRUTTAMENTO COMMERCIALE
+   L'Opera NON può essere in alcun caso venduta, noleggiata, concessa in sublicenza
+   a pagamento, monetizzata tramite banner, pubblicità, paywall, abbonamenti
+   o integrata all'interno di servizi commerciali, a pagamento o consulenze terze.
+
+5. TUTELA DEL MARCHIO, DELL'IDENTITÀ E DELLA REPUTAZIONE
+   Il nome "CUP Monitor", i loghi, le icone, la grafica e i testi costituiscono
+   segni distintivi e identità creativa dell'Autore. È fatto espresso divieto
+   di utilizzare tali segni distintivi per promuovere prodotti, servizi o versioni
+   non autorizzate o per trarre in inganno gli utenti.
+
+6. INTEGRITÀ DEI SISTEMI SANITARI E RESPONSABILITÀ
+   L'Opera è ideata come strumento etico e trasparente a tutela dei cittadini.
+   È rigorosamente vietato qualsiasi utilizzo o alterazione del software volto ad
+   arrecare danno, condurre attacchi di negazione di servizio (DoS/DDoS) o sovraccaricare
+   in modo malevolo le infrastrutture informatiche dei Centri Unici di Prenotazione (CUP)
+   o del Servizio Sanitario Nazionale / Regionale.
+
+7. ESCLUSIONE DI GARANZIA E LIMITAZIONE DI RESPONSABILITÀ
+   L'OPERA È FORNITA "COSÌ COM'È" ("AS IS"), SENZA ALCUNA GARANZIA DI ALCUN TIPO,
+   ESPLICITA O IMPLICITA, COMPRESE, A TITOLO ESEMPLIFICATIVO, GARANZIE DI COMMERCIABILITÀ,
+   IDONEITÀ PER UNO SCOPO SPECIFICO O ASSENZA DI ERRORI. IN NESSUN CASO L'AUTORE
+   POTRÀ ESSERE RITENUTO RESPONSABILE PER EVENTUALI DANNI DIRETTI O INDIRETTI,
+   DISSERVIZI DEI PORTALI REGIONALI, APPUNTAMENTI MANCATI O PERSI, BLOCCHI DI SESSIONE
+   O QUALSIASI ALTRO EVENTO CONNESSO ALL'USO DELL'OPERA.
+
+================================================================================
+ENGLISH SUMMARY / COURTESY TRANSLATION
+================================================================================
+
+This software, "CUP Monitor", including its source code, browser extension, scripts,
+user interfaces, simulators, and documentation (the "Software"), is the exclusive
+proprietary intellectual property of Edoardo Dottori (the "Author").
+All rights are strictly reserved.
+
+1. PERMITTED USE: You are granted a limited, personal, non-exclusive, non-transferable,
+   revocable license to download and run the Software solely for personal, private,
+   and non-commercial use on your own local device.
+2. NO MODIFICATIONS / NO FORKS: You may NOT modify, alter, adapt, decompile, tamper with,
+   create derivative works ("forks"), or distribute modified versions of this Software.
+3. NO REDISTRIBUTION: You may NOT redistribute, mirror, re-host, or publish this Software
+   or its extension on third-party websites, repositories, or digital storefronts
+   (including Chrome Web Store, Edge Add-ons, etc.) without explicit prior written
+   permission from the Author.
+4. NO COMMERCIAL USE: Selling, monetizing, sublicensing, or bundling this Software with
+   any paid, commercial, or subscription service is strictly forbidden.
+5. INTEGRITY: Any malicious tampering, abuse, or use aimed at overloading healthcare
+   booking portals or regional services is strictly prohibited.
+6. NO WARRANTY: The Software is provided "AS IS", without warranties of any kind.
+   The Author shall not be held liable for any claims, missed appointments, damages,
+   or system downtime arising from the use of the Software.

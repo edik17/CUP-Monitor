@@ -2,6 +2,7 @@
   "manifest_version": 3,
   "name": "CUP Monitor — Prenotazioni Sanitarie",
   "version": "1.0.0",
+  "author": "Edoardo Dottori (Edik1700)",
   "description": "Monitora automaticamente le disponibilità sul portale CUP direttamente dal browser, senza installare Python o usare il terminale.",
   "permissions": [
     "storage",
