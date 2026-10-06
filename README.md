@@ -12,13 +12,12 @@ Un assistente open-source automatizzato che monitora costantemente le agende dei
 ## 🌟 Caratteristiche Principali
 
 - 🌐 **Sito Web & Configuratore Guidato**: Interfaccia grafica moderna (ospitabile gratis su GitHub Pages) che guida l'utente nella configurazione passo-passo.
-- 📱 **Canali di Notifica a Scelta**:
-  - **Bot Telegram**: notifiche push istantanee gratuite e illimitate.
-  - **WhatsApp (Telefono)**: notifiche gratuite tramite webhook CallMeBot.
-  - **SMS (Telefono)**: supporto a SMS tradizionali tramite Twilio.
+- 🧩 **Due Modalità a Scelta**:
+  - **Strada Messaggistica**: Script background con notifiche push su **Telegram**, **WhatsApp** o **SMS**.
+  - **Strada Web Browser**: Estensione Chrome/Edge per fare **tutto nel browser al 100% senza terminale**.
 - 🗺️ **Filtro Territoriale Flessibile**: Scegli una o più province/città accettabili (es. Ancona, Macerata, Pesaro-Urbino, o l'intera regione) per escludere strutture troppo lontane.
 - 🛡️ **Autenticazione Sicura con SPID**: Interazione umana con OTP nel browser dell'utente e session persistence locale.
-- ⏰ **Automazione 24/7 in Background**: Esecuzione silenziosa e programmata ogni 30 minuti tramite Task Scheduler di Windows o Cron Linux.
+- ⏰ **Automazione Flessibile**: Scegli ogni quanto eseguire il controllo (ogni 15 min, 30 min, 1 ora, 2 ore).
 - 🎭 **Messaggi Satirici & Meme**: Notifiche scritte con ironia sulla sanità italiana e le attese burocratiche.
 
 ---
@@ -96,6 +95,24 @@ Se preferisci lavorare da terminale:
    ```bash
    python src/main.py --debug
    ```
+
+---
+
+## 🧩 Modalità 3: Estensione Web Browser (Zero Terminale • 100% nel Browser)
+
+Se non vuoi installare Python o usare il terminale, puoi eseguire il monitoraggio direttamente all'interno del browser:
+
+1. Apri Google Chrome o Microsoft Edge e vai alla pagina delle estensioni:
+   - Su Chrome / Brave: `chrome://extensions`
+   - Su Edge: `edge://extensions`
+2. Attiva l'interruttore **"Modalità sviluppatore"** in alto a destra.
+3. Clicca su **"Carica estensione non pacchettizzata"** e seleziona la cartella [`extension/`](extension/) di questo repository.
+4. Clicca sull'icona 🏥 in alto a destra del browser, inserisci il tuo **NRE**, **Codice Fiscale** e seleziona la frequenza desiderata.
+5. Clicca su *"Apri Portale CUP per SPID"* ed effettua il login SPID nel browser.
+6. Clicca su *"Avvia Monitoraggio"*: l'estensione verificherà le disponibilità in background e ti invierà **notifiche desktop native** appena si libera un posto!
+
+#### 🛑 Come annullare o fermare nell'estensione:
+- Clicca sull'icona dell'estensione e premi **"Ferma Monitoraggio"**, oppure disattiva l'estensione con un clic da `chrome://extensions`.
 
 ---
 

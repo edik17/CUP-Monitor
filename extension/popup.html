@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      width: 360px;
+      margin: 0;
+      padding: 16px;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    .card { background: white; border-radius: 12px; padding: 14px; border: 1px solid #e2e8f0; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    h1 { font-size: 15px; font-weight: 700; margin: 0 0 4px; display: flex; align-items: center; gap: 6px; }
+    .subtitle { font-size: 11px; color: #64748b; margin-bottom: 12px; }
+    label { font-size: 11px; font-weight: 600; color: #334155; display: block; margin-bottom: 4px; }
+    input, select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 7px 10px;
+      font-size: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      outline: none;
+      font-family: inherit;
+    }
+    input:focus, select:focus { border-color: #4f46e5; ring: 2px #c7d2fe; }
+    .btn {
+      width: 100%;
+      padding: 9px;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: #4f46e5; color: white; margin-bottom: 8px; }
+    .btn-primary:hover { background: #4338ca; }
+    .btn-secondary { background: #e2e8f0; color: #1e293b; }
+    .btn-secondary:hover { background: #cbd5e1; }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      background: #f1f5f9;
+      color: #475569;
+    }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #94a3b8; }
+    .active-dot { background: #10b981; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+    .stop-note { font-size: 10px; color: #b45309; background: #fef3c7; border: 1px solid #fde68a; border-radius: 8px; padding: 8px; margin-top: 10px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+
+  <h1>🏥 CUP Monitor <span style="font-size: 10px; background: #e0e7ff; color: #3730a3; padding: 2px 6px; border-radius: 4px;">Browser</span></h1>
+  <div class="subtitle">Scansione automatica direttamente nel tuo browser</div>
+
+  <div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <span style="font-size: 12px; font-weight: 700;">Stato Monitor:</span>
+      <div id="statusBadge" class="status-badge">
+        <span id="statusDot" class="status-dot"></span>
+        <span id="statusText">Non attivo</span>
+      </div>
+    </div>
+
+    <label for="nreInput">Numero Ricetta (NRE) *</label>
+    <input type="text" id="nreInput" placeholder="es. 1100A1234567890" maxlength="15">
+
+    <label for="cfInput">Codice Fiscale *</label>
+    <input type="text" id="cfInput" placeholder="es. RSSMRA85M01H501Z" maxlength="16" style="text-transform: uppercase;">
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+      <div>
+        <label for="provinceSelect">Provincia</label>
+        <select id="provinceSelect">
+          <option value="Tutte">Tutte</option>
+          <option value="Ancona" selected>Ancona</option>
+          <option value="Pesaro e Urbino">Pesaro-Urbino</option>
+          <option value="Macerata">Macerata</option>
+          <option value="Fermo">Fermo</option>
+          <option value="Ascoli Piceno">Ascoli Piceno</option>
+        </select>
+      </div>
+      <div>
+        <label for="intervalSelect">Frequenza</label>
+        <select id="intervalSelect">
+          <option value="15">Ogni 15 min</option>
+          <option value="30" selected>Ogni 30 min</option>
+          <option value="60">Ogni 1 ora</option>
+        </select>
+      </div>
+    </div>
+
+    <button id="toggleBtn" class="btn btn-primary">
+      <span>▶️</span> Avvia Monitoraggio
+    </button>
+    <button id="loginCUPBtn" class="btn btn-secondary">
+      <span>🔑</span> Apri Portale CUP per SPID
+    </button>
+  </div>
+
+  <div class="stop-note">
+    🛑 <strong>Come annullare:</strong> Ti basta cliccare su <em>"Ferma Monitoraggio"</em> qui sopra o disattivare l'estensione da Chrome in qualsiasi momento.
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

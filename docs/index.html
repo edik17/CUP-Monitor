@@ -52,11 +52,47 @@
   <!-- Contenitore Principale -->
   <main class="max-w-4xl mx-auto px-4 py-8 flex-1 w-full">
     
-    <!-- Barra Avanzamento Step -->
+    <!-- SELETTORE MODALITÀ: BOT MESSAGGISTICA VS ESTENSIONE BROWSER -->
     <div class="mb-8">
-      <div class="flex items-center justify-between max-w-2xl mx-auto relative">
-        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 -z-0"></div>
-        <div id="stepLine" class="absolute left-0 top-1/2 -translate-y-1/2 w-0 h-1 bg-indigo-600 transition-all duration-300 -z-0"></div>
+      <div class="text-center mb-5">
+        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Come preferisci utilizzare CUP Monitor?</h2>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1">Scegli tra la versione con notifiche su smartphone o l'estensione 100% nel browser</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
+        <!-- Scheda Modalità A: Bot & Notifiche Messaggistica -->
+        <button onclick="switchAppMode('script')" id="tabBtn-script" type="button" class="p-4 rounded-2xl border-2 text-left transition relative bg-indigo-50/70 border-indigo-600 shadow-sm">
+          <div class="flex items-center space-x-3 mb-2">
+            <span class="text-3xl">📱</span>
+            <div>
+              <span class="font-bold text-sm text-slate-900 block">Bot & Messaggistica</span>
+              <span class="text-[11px] text-indigo-700 font-semibold">Telegram / WhatsApp / SMS</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">Ideale se vuoi monitoraggio 24/7 in background su PC, con notifiche dirette sul tuo smartphone.</p>
+        </button>
+
+        <!-- Scheda Modalità B: Estensione Web Browser -->
+        <button onclick="switchAppMode('extension')" id="tabBtn-extension" type="button" class="p-4 rounded-2xl border-2 text-left transition relative bg-white border-slate-200 hover:border-slate-300">
+          <div class="flex items-center space-x-3 mb-2">
+            <span class="text-3xl">🧩</span>
+            <div>
+              <span class="font-bold text-sm text-slate-900 block">Estensione Web Browser</span>
+              <span class="text-[11px] text-emerald-700 font-semibold bg-emerald-100 px-2 py-0.5 rounded-full inline-block">Zero Terminale • 100% Browser</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">Ideale se non vuoi toccare codice: si installa con 1 click in Chrome/Edge e fa tutto nel browser.</p>
+        </button>
+      </div>
+    </div>
+
+    <!-- CONTENITORE MODALITÀ SCRIPT (BOT & MESSAGGISTICA) -->
+    <div id="mode-script-container">
+      <!-- Barra Avanzamento Step -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between max-w-2xl mx-auto relative">
+          <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 -z-0"></div>
+          <div id="stepLine" class="absolute left-0 top-1/2 -translate-y-1/2 w-0 h-1 bg-indigo-600 transition-all duration-300 -z-0"></div>
 
         <button onclick="goToStep(1)" id="stepBtn-1" class="relative z-10 w-10 h-10 rounded-full font-bold text-sm flex items-center justify-center bg-indigo-600 text-white shadow transition">1</button>
         <button onclick="goToStep(2)" id="stepBtn-2" class="relative z-10 w-10 h-10 rounded-full font-bold text-sm flex items-center justify-center bg-white border-2 border-slate-300 text-slate-500 shadow transition">2</button>
@@ -398,11 +434,67 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
           <button onclick="downloadYaml()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow transition">
             📥 Scarica config.yaml
           </button>
-        </div>
-      </section>
+      </div>
+    </div> <!-- Fine mode-script-container -->
 
+    <!-- CONTENITORE MODALITÀ ESTENSIONE WEB BROWSER -->
+    <div id="mode-extension-container" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 sm:p-8 space-y-6">
+        <div>
+          <div class="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 mb-2">
+            ✨ Zero Terminale • 100% nel Browser
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Estensione Web Browser per Chrome & Edge</h2>
+          <p class="text-sm text-slate-500 mt-1">Nessun file da configurare, nessun comando da lanciare. Monitora il CUP direttamente mentre navighi sul web.</p>
+        </div>
+
+        <!-- 3 Semplici Passaggi -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <span class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">1</span>
+            <h3 class="font-bold text-sm text-slate-900">Scarica l'Estensione</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">Scarica o clona la cartella <code class="font-mono bg-white px-1 rounded border">extension/</code> dal repository GitHub sul tuo computer.</p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <span class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">2</span>
+            <h3 class="font-bold text-sm text-slate-900">Carica in Chrome/Edge</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">Apri <code class="font-mono bg-white px-1 rounded border">chrome://extensions</code>, attiva la <strong>"Modalità sviluppatore"</strong> e clicca su <strong>"Carica estensione non pacchettizzata"</strong>.</p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <span class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">3</span>
+            <h3 class="font-bold text-sm text-slate-900">Avvia il Monitoraggio</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">Clicca sull'icona 🏥 in alto a destra, inserisci NRE e Codice Fiscale, ed effettua il login SPID normalmente nel browser.</p>
+          </div>
+        </div>
+
+        <!-- Download & Repository Links -->
+        <div class="p-5 bg-indigo-50 border border-indigo-100 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <h4 class="font-bold text-sm text-indigo-950">Pronta all'uso nel repository</h4>
+            <p class="text-xs text-indigo-700 mt-0.5">Tutti i file dell'estensione sono già presenti nella cartella <code class="font-mono">extension/</code> del repo.</p>
+          </div>
+          <a href="https://github.com/edik17/CUP-Monitor/tree/main/extension" target="_blank" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow transition whitespace-nowrap">
+            📂 Apri Cartella Estensione su GitHub →
+          </a>
+        </div>
+
+        <!-- Didascalia Come Annullare nell'Estensione -->
+        <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-2 text-xs text-amber-900">
+          <h4 class="font-bold flex items-center text-amber-950 text-sm">
+            <span class="mr-2 text-base">🛑</span> Come annullare o fermare il monitoraggio:
+          </h4>
+          <p class="leading-relaxed">
+            Una volta trovata la prenotazione, fermare il monitoraggio è immediato:
+          </p>
+          <ul class="list-disc list-inside space-y-1 pl-1 text-[11px] text-amber-800">
+            <li><strong>Metodo 1:</strong> Clicca sull'icona dell'estensione in alto a destra nel browser e premi il pulsante rosso <strong>"Ferma Monitoraggio"</strong>.</li>
+            <li><strong>Metodo 2:</strong> Da <code class="font-mono font-bold">chrome://extensions</code> puoi disattivare o rimuovere l'estensione con un singolo click.</li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </main>
 
   <!-- Footer -->
   <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
@@ -423,6 +515,25 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
     };
 
     let currentStep = 1;
+
+    function switchAppMode(mode) {
+      const scriptCont = document.getElementById('mode-script-container');
+      const extCont = document.getElementById('mode-extension-container');
+      const tabScript = document.getElementById('tabBtn-script');
+      const tabExt = document.getElementById('tabBtn-extension');
+
+      if (mode === 'script') {
+        scriptCont.classList.remove('hidden');
+        extCont.classList.add('hidden');
+        tabScript.className = "p-4 rounded-2xl border-2 text-left transition relative bg-indigo-50/70 border-indigo-600 shadow-sm";
+        tabExt.className = "p-4 rounded-2xl border-2 text-left transition relative bg-white border-slate-200 hover:border-slate-300";
+      } else {
+        scriptCont.classList.add('hidden');
+        extCont.classList.remove('hidden');
+        tabExt.className = "p-4 rounded-2xl border-2 text-left transition relative bg-emerald-50/70 border-emerald-600 shadow-sm";
+        tabScript.className = "p-4 rounded-2xl border-2 text-left transition relative bg-white border-slate-200 hover:border-slate-300";
+      }
+    }
 
     function goToStep(step) {
       if (step < 1 || step > 4) return;
