@@ -116,12 +116,28 @@
       </div>
     </div>
 
-    <button id="toggleBtn" class="btn btn-primary">
-      <span>▶️</span> Avvia Monitoraggio
-    </button>
-    <button id="loginCUPBtn" class="btn btn-secondary">
-      <span>🔑</span> Apri Portale CUP per SPID
-    </button>
+    <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 10px;">
+      <button id="toggleBtn" class="btn btn-primary">
+        <span>▶️</span> Avvia Monitoraggio
+      </button>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+        <button id="checkNowBtn" class="btn btn-secondary" style="font-size: 11px;">
+          <span>⚡</span> Controlla Ora
+        </button>
+        <button id="loginCUPBtn" class="btn btn-secondary" style="font-size: 11px;">
+          <span>🔑</span> Apri Portale CUP
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Status / Esito Box -->
+    <div id="resultBox" style="margin-top: 12px; padding: 10px; border-radius: 8px; font-size: 11px; background: #f8fafc; border: 1px solid #cbd5e1; display: none;">
+      <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 4px;">
+        <span>Ultimo Controllo:</span>
+        <span id="lastCheckTime" style="color: #64748b;">--:--:--</span>
+      </div>
+      <div id="lastCheckMessage" style="line-height: 1.4; color: #334155;"></div>
+    </div>
   </div>
 
   <div class="stop-note">
