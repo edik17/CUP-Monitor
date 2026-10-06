@@ -72,6 +72,8 @@ logging:
   backup_count: 3
 
 timing:
+  # Frequenza consigliata per l'esecuzione del controllo (in minuti)
+  interval_minutes: 30
   page_timeout_ms: 30000
   action_delay_ms: 2000
   retry_count: 2
