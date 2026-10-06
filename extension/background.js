@@ -217,18 +217,27 @@ async function saveStatus(info) {
 }
 
 function notifyUser(title, message, isMatch = false) {
-  chrome.notifications.create({
-    type: "basic",
-    iconUrl: "icons/icon128.png",
-    title: title,
-    message: message,
-    priority: 2,
-    requireInteraction: true
-  });
+  try {
+    const iconPath = chrome.runtime.getURL("icons/icon128.png");
+    chrome.notifications.create({
+      type: "basic",
+      iconUrl: iconPath,
+      title: title,
+      message: message,
+      priority: 2,
+      requireInteraction: true
+    }, (notificationId) => {
+      if (chrome.runtime.lastError) {
+        console.warn("Avviso notifica Chrome:", chrome.runtime.lastError.message);
+      }
+    });
 
-  if (isMatch) {
-    chrome.action.setBadgeText({ text: "1" });
-    chrome.action.setBadgeBackgroundColor({ color: "#10b981" });
+    if (isMatch) {
+      chrome.action.setBadgeText({ text: "1" });
+      chrome.action.setBadgeBackgroundColor({ color: "#10b981" });
+    }
+  } catch (err) {
+    console.error("Errore notifica utente:", err);
   }
 }
 
