@@ -66,33 +66,33 @@
     <!-- SELETTORE MODALITÀ: BOT MESSAGGISTICA VS ESTENSIONE BROWSER -->
     <div class="mb-8">
       <div class="text-center mb-5">
-        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Come preferisci utilizzare CUP Monitor?</h2>
-        <p class="text-xs sm:text-sm text-slate-500 mt-1">Scegli tra la versione con notifiche su smartphone o l'estensione 100% nel browser</p>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">Come preferisci utilizzare CUP Monitor?</h2>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Scegli tra la versione con notifiche su smartphone o l'estensione 100% nel browser</p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
         <!-- Scheda Modalità A: Bot & Notifiche Messaggistica -->
-        <button onclick="switchAppMode('script')" id="tabBtn-script" type="button" class="p-4 rounded-2xl border-2 text-left transition relative bg-indigo-50/70 border-indigo-600 shadow-sm">
+        <button onclick="switchAppMode('script')" id="tabBtn-script" type="button" class="p-4 rounded-2xl border-2 text-left transition relative bg-indigo-50/70 dark:bg-indigo-950/40 border-indigo-600 dark:border-indigo-500 shadow-sm">
           <div class="flex items-center space-x-3 mb-2">
             <span class="text-3xl">📱</span>
             <div>
-              <span class="font-bold text-sm text-slate-900 block">Bot & Messaggistica</span>
-              <span class="text-[11px] text-indigo-700 font-semibold">Telegram / WhatsApp / SMS</span>
+              <span class="font-bold text-sm text-slate-900 dark:text-white block">Bot & Messaggistica</span>
+              <span class="text-[11px] text-indigo-700 dark:text-indigo-400 font-semibold">Telegram / WhatsApp / SMS</span>
             </div>
           </div>
-          <p class="text-xs text-slate-600 leading-relaxed">Ideale se vuoi monitoraggio 24/7 in background su PC, con notifiche dirette sul tuo smartphone.</p>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Ideale se vuoi monitoraggio 24/7 in background su PC, con notifiche dirette sul tuo smartphone.</p>
         </button>
 
         <!-- Scheda Modalità B: Estensione Web Browser -->
-        <button onclick="switchAppMode('extension')" id="tabBtn-extension" type="button" class="p-4 rounded-2xl border-2 text-left transition relative bg-white border-slate-200 hover:border-slate-300">
+        <button onclick="switchAppMode('extension')" id="tabBtn-extension" type="button" class="p-4 rounded-2xl border-2 text-left transition relative bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700">
           <div class="flex items-center space-x-3 mb-2">
             <span class="text-3xl">🧩</span>
             <div>
-              <span class="font-bold text-sm text-slate-900 block">Estensione Web Browser</span>
-              <span class="text-[11px] text-emerald-700 font-semibold bg-emerald-100 px-2 py-0.5 rounded-full inline-block">Zero Terminale • 100% Browser</span>
+              <span class="font-bold text-sm text-slate-900 dark:text-white block">Estensione Web Browser</span>
+              <span class="text-[11px] text-emerald-700 dark:text-emerald-300 font-semibold bg-emerald-100 dark:bg-emerald-950/70 px-2 py-0.5 rounded-full inline-block">Zero Terminale • 100% Browser</span>
             </div>
           </div>
-          <p class="text-xs text-slate-600 leading-relaxed">Ideale se non vuoi toccare codice: si installa con 1 click in Chrome/Edge e fa tutto nel browser.</p>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Ideale se non vuoi toccare codice: si installa con 1 click in Chrome/Edge e fa tutto nel browser.</p>
         </button>
       </div>
     </div>
@@ -119,110 +119,110 @@
     </div>
 
     <!-- BOX WIZARD -->
-    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden transition-colors">
       
       <!-- STEP 1: SCELTA NOTIFICHE (TELEGRAM / TELEFONO) -->
       <section id="step-1" class="p-6 sm:p-8 space-y-6">
         <div>
-          <h2 class="text-xl font-bold text-slate-900">1. Scegli il Canale di Notifica</h2>
-          <p class="text-sm text-slate-500 mt-1">Dove vuoi ricevere gli avvisi immediati appena si libera una visita o un esame?</p>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">1. Scegli il Canale di Notifica</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Dove vuoi ricevere gli avvisi immediati appena si libera una visita o un esame?</p>
         </div>
 
         <!-- Selettore Canale a Schede -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-indigo-600 bg-indigo-50/50" id="card-telegram">
+          <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/40" id="card-telegram">
             <input type="radio" name="notification_channel" value="telegram" checked onchange="updateChannelView()" class="sr-only">
             <div class="flex items-center space-x-3">
               <span class="text-3xl">💬</span>
               <div>
-                <span class="font-bold text-slate-900 block">Bot Telegram</span>
-                <span class="text-xs text-emerald-700 font-semibold bg-emerald-100 px-2 py-0.5 rounded-full inline-block mt-0.5">Consigliato • 100% Gratuito</span>
+                <span class="font-bold text-slate-900 dark:text-white block">Bot Telegram</span>
+                <span class="text-xs text-emerald-700 dark:text-emerald-300 font-semibold bg-emerald-100 dark:bg-emerald-950/70 px-2 py-0.5 rounded-full inline-block mt-0.5">Consigliato • 100% Gratuito</span>
               </div>
             </div>
-            <p class="text-xs text-slate-600 mt-3">Ricevi notifiche istantanee tramite un bot Telegram personale. Nessun costo e zero limiti di messaggi.</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400 mt-3">Ricevi notifiche istantanee tramite un bot Telegram personale. Nessun costo e zero limiti di messaggi.</p>
           </label>
 
-          <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 hover:border-slate-300" id="card-phone">
+          <label class="relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900" id="card-phone">
             <input type="radio" name="notification_channel" value="phone" onchange="updateChannelView()" class="sr-only">
             <div class="flex items-center space-x-3">
               <span class="text-3xl">📱</span>
               <div>
-                <span class="font-bold text-slate-900 block">Numero di Telefono</span>
-                <span class="text-xs text-blue-700 font-semibold bg-blue-100 px-2 py-0.5 rounded-full inline-block mt-0.5">WhatsApp o SMS</span>
+                <span class="font-bold text-slate-900 dark:text-white block">Numero di Telefono</span>
+                <span class="text-xs text-blue-700 dark:text-blue-300 font-semibold bg-blue-100 dark:bg-blue-950/70 px-2 py-0.5 rounded-full inline-block mt-0.5">WhatsApp o SMS</span>
               </div>
             </div>
-            <p class="text-xs text-slate-600 mt-3">Ricevi messaggi su WhatsApp (tramite webhook gratuito CallMeBot) oppure SMS tradizionali.</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400 mt-3">Ricevi messaggi su WhatsApp (tramite webhook gratuito CallMeBot) oppure SMS tradizionali.</p>
           </label>
         </div>
 
         <!-- GUIDA & CAMPI TELEGRAM -->
-        <div id="section-telegram-config" class="space-y-4 pt-4 border-t border-slate-200">
-          <div class="bg-sky-50 border border-sky-200 rounded-xl p-4">
-            <h3 class="text-sm font-bold text-sky-900 flex items-center">
+        <div id="section-telegram-config" class="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+          <div class="bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 rounded-xl p-4">
+            <h3 class="text-sm font-bold text-sky-900 dark:text-sky-200 flex items-center">
               <span class="mr-2">🧭</span> Procedura Guidata: Creare il Bot Telegram in 2 minuti
             </h3>
-            <ol class="text-xs text-sky-800 space-y-2 mt-2 list-decimal list-inside leading-relaxed">
-              <li>Apri Telegram e cerca <a href="https://t.me/BotFather" target="_blank" class="font-bold underline text-sky-900">@BotFather</a> (la spunta blu ufficiale).</li>
-              <li>Invia il comando <code class="bg-sky-100 px-1.5 py-0.5 rounded font-mono font-bold">/newbot</code>, scegli un nome e uno username che finisca con <code class="font-mono">bot</code>.</li>
+            <ol class="text-xs text-sky-800 dark:text-sky-300 space-y-2 mt-2 list-decimal list-inside leading-relaxed">
+              <li>Apri Telegram e cerca <a href="https://t.me/BotFather" target="_blank" class="font-bold underline text-sky-900 dark:text-sky-200">@BotFather</a> (la spunta blu ufficiale).</li>
+              <li>Invia il comando <code class="bg-sky-100 dark:bg-sky-900 px-1.5 py-0.5 rounded font-mono font-bold">/newbot</code>, scegli un nome e uno username che finisca con <code class="font-mono">bot</code>.</li>
               <li>BotFather ti risponderà dandoti il <strong>Token HTTP API</strong>. Copialo e incollalo qui sotto.</li>
               <li>Apri la chat con il tuo nuovo bot appena creato, premi <strong>Avvia</strong> e inviagli un messaggio qualsiasi (es. "ciao").</li>
-              <li>Per trovare il tuo <strong>Chat ID</strong>, visita: <code class="bg-sky-100 px-1 py-0.5 rounded break-all">https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code> e cerca il numero in <code class="font-bold font-mono">"chat":{"id": 123456789}</code>.</li>
+              <li>Per trovare il tuo <strong>Chat ID</strong>, visita: <code class="bg-sky-100 dark:bg-sky-900 px-1 py-0.5 rounded break-all">https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code> e cerca il numero in <code class="font-bold font-mono">"chat":{"id": 123456789}</code>.</li>
             </ol>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">Telegram Bot Token *</label>
-              <input type="text" id="tg_bot_token" placeholder="es. 123456789:ABCdefGHIjklMNOpqrs..." class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono">
+              <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Telegram Bot Token *</label>
+              <input type="text" id="tg_bot_token" placeholder="es. 123456789:ABCdefGHIjklMNOpqrs..." class="w-full px-3 py-2 text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono">
             </div>
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">Telegram Chat ID *</label>
-              <input type="text" id="tg_chat_id" placeholder="es. 987654321" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono">
+              <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Telegram Chat ID *</label>
+              <input type="text" id="tg_chat_id" placeholder="es. 987654321" class="w-full px-3 py-2 text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono">
             </div>
           </div>
         </div>
 
         <!-- GUIDA & CAMPI TELEFONO (WHATSAPP / SMS) -->
-        <div id="section-phone-config" class="hidden space-y-4 pt-4 border-t border-slate-200">
+        <div id="section-phone-config" class="hidden space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
           <div class="flex space-x-4 mb-2">
-            <label class="flex items-center text-xs font-bold text-slate-800 cursor-pointer">
+            <label class="flex items-center text-xs font-bold text-slate-800 dark:text-slate-200 cursor-pointer">
               <input type="radio" name="phone_subtype" value="whatsapp" checked onchange="updatePhoneSubtype()" class="mr-2"> WhatsApp (Gratuito via CallMeBot)
             </label>
-            <label class="flex items-center text-xs font-bold text-slate-800 cursor-pointer">
+            <label class="flex items-center text-xs font-bold text-slate-800 dark:text-slate-200 cursor-pointer">
               <input type="radio" name="phone_subtype" value="sms" onchange="updatePhoneSubtype()" class="mr-2"> SMS Tradizionali (Twilio)
             </label>
           </div>
 
           <!-- Sotto-guida WhatsApp -->
-          <div id="sub-whatsapp-guide" class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
-            <h3 class="text-sm font-bold text-emerald-900 flex items-center">
+          <div id="sub-whatsapp-guide" class="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl p-4">
+            <h3 class="text-sm font-bold text-emerald-900 dark:text-emerald-200 flex items-center">
               <span class="mr-2">💬</span> Procedura Guidata: Attivare Notifiche WhatsApp
             </h3>
-            <ol class="text-xs text-emerald-800 space-y-1.5 mt-2 list-decimal list-inside leading-relaxed">
+            <ol class="text-xs text-emerald-800 dark:text-emerald-300 space-y-1.5 mt-2 list-decimal list-inside leading-relaxed">
               <li>Aggiungi ai contatti del tuo telefono il numero di <strong>CallMeBot</strong>: <code class="font-bold font-mono">+34 644 59 19 86</code></li>
-              <li>Apri WhatsApp e inviagli questo messaggio esatto: <code class="bg-emerald-100 px-1 py-0.5 rounded font-mono font-bold">I allow callmebot to send me messages</code></li>
+              <li>Apri WhatsApp e inviagli questo messaggio esatto: <code class="bg-emerald-100 dark:bg-emerald-900 px-1 py-0.5 rounded font-mono font-bold">I allow callmebot to send me messages</code></li>
               <li>Il bot ti risponderà con la tua <strong>API Key personale</strong> gratuita.</li>
             </ol>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
               <div>
-                <label class="block text-xs font-bold text-emerald-900 mb-1">Numero di Telefono (con prefisso int., es. 393331234567)</label>
-                <input type="text" id="wa_phone" placeholder="393331234567" class="w-full px-3 py-2 text-sm border border-emerald-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none font-mono">
+                <label class="block text-xs font-bold text-emerald-900 dark:text-emerald-200 mb-1">Numero di Telefono (con prefisso int., es. 393331234567)</label>
+                <input type="text" id="wa_phone" placeholder="393331234567" class="w-full px-3 py-2 text-sm border border-emerald-300 dark:border-emerald-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none font-mono">
               </div>
               <div>
-                <label class="block text-xs font-bold text-emerald-900 mb-1">CallMeBot API Key</label>
-                <input type="text" id="wa_apikey" placeholder="es. 123456" class="w-full px-3 py-2 text-sm border border-emerald-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none font-mono">
+                <label class="block text-xs font-bold text-emerald-900 dark:text-emerald-200 mb-1">CallMeBot API Key</label>
+                <input type="text" id="wa_apikey" placeholder="es. 123456" class="w-full px-3 py-2 text-sm border border-emerald-300 dark:border-emerald-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none font-mono">
               </div>
             </div>
           </div>
 
           <!-- Sotto-guida SMS Twilio -->
-          <div id="sub-sms-guide" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
-            <p class="text-xs text-slate-600">Inserisci le chiavi del tuo account Twilio per ricevere SMS:</p>
+          <div id="sub-sms-guide" class="hidden bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-3">
+            <p class="text-xs text-slate-600 dark:text-slate-400">Inserisci le chiavi del tuo account Twilio per ricevere SMS:</p>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-              <input type="text" id="sms_account_sid" placeholder="Account SID Twilio" class="px-3 py-2 border rounded-lg font-mono">
-              <input type="text" id="sms_auth_token" placeholder="Auth Token Twilio" class="px-3 py-2 border rounded-lg font-mono">
-              <input type="text" id="sms_from" placeholder="From Number (+1...)" class="px-3 py-2 border rounded-lg font-mono">
-              <input type="text" id="sms_to" placeholder="Numero Destinatario (+39...)" class="px-3 py-2 border rounded-lg font-mono">
+              <input type="text" id="sms_account_sid" placeholder="Account SID Twilio" class="px-3 py-2 border dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg font-mono">
+              <input type="text" id="sms_auth_token" placeholder="Auth Token Twilio" class="px-3 py-2 border dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg font-mono">
+              <input type="text" id="sms_from" placeholder="From Number (+1...)" class="px-3 py-2 border dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg font-mono">
+              <input type="text" id="sms_to" placeholder="Numero Destinatario (+39...)" class="px-3 py-2 border dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg font-mono">
             </div>
           </div>
         </div>
@@ -237,14 +237,14 @@
       <!-- STEP 2: SCELTA TERRITORIO (REGIONI & PROVINCE) -->
       <section id="step-2" class="hidden p-6 sm:p-8 space-y-6">
         <div>
-          <h2 class="text-xl font-bold text-slate-900">2. Seleziona le Zone Accettabili</h2>
-          <p class="text-sm text-slate-500 mt-1">In quali province o presidi sei disposto ad andare a fare la visita/esame?</p>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">2. Seleziona le Zone Accettabili</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">In quali province o presidi sei disposto ad andare a fare la visita/esame?</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div class="sm:col-span-1">
-            <label class="block text-xs font-bold text-slate-700 mb-1">Regione</label>
-            <select id="selected_region" onchange="renderProvinces()" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-medium">
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Regione</label>
+            <select id="selected_region" onchange="renderProvinces()" class="w-full px-3 py-2 text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 font-medium">
               <option value="Marche" selected>Marche (mycupmarche.it)</option>
               <option value="Lazio" disabled>Lazio (In arrivo)</option>
               <option value="Lombardia" disabled>Lombardia (In arrivo)</option>
@@ -253,25 +253,25 @@
           </div>
 
           <div class="sm:col-span-2">
-            <label class="block text-xs font-bold text-slate-700 mb-1">Province Accettabili</label>
-            <div id="provincesContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Province Accettabili</label>
+            <div id="provincesContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700">
               <!-- Checkbox inserite dinamicamente da JS -->
             </div>
-            <div class="flex items-center justify-between mt-2 text-xs text-slate-500">
-              <button onclick="toggleAllProvinces(true)" type="button" class="text-indigo-600 font-semibold hover:underline">Seleziona tutte</button>
-              <button onclick="toggleAllProvinces(false)" type="button" class="text-slate-500 hover:underline">Deseleziona tutte</button>
+            <div class="flex items-center justify-between mt-2 text-xs text-slate-500 dark:text-slate-400">
+              <button onclick="toggleAllProvinces(true)" type="button" class="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">Seleziona tutte</button>
+              <button onclick="toggleAllProvinces(false)" type="button" class="text-slate-500 dark:text-slate-400 hover:underline">Deseleziona tutte</button>
             </div>
           </div>
         </div>
 
         <!-- Elenco presidi coperti in anteprima -->
-        <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-xl text-xs text-emerald-900">
+        <div class="p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-800/60 rounded-xl text-xs text-emerald-900 dark:text-emerald-200">
           <span class="font-bold">Presidi e comuni monitorati:</span>
-          <span id="previewKeywords" class="text-emerald-800 ml-1">Ancona, Torrette, INRCA, Jesi, Fabriano, Senigallia, Osimo, Loreto...</span>
+          <span id="previewKeywords" class="text-emerald-800 dark:text-emerald-300 ml-1">Ancona, Torrette, INRCA, Jesi, Fabriano, Senigallia, Osimo, Loreto...</span>
         </div>
 
-        <div class="flex justify-between pt-4 border-t border-slate-200">
-          <button onclick="goToStep(1)" class="px-5 py-2.5 text-slate-600 hover:text-slate-900 font-bold text-sm">
+        <div class="flex justify-between pt-4 border-t border-slate-200 dark:border-slate-800">
+          <button onclick="goToStep(1)" class="px-5 py-2.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-bold text-sm">
             ← Indietro
           </button>
           <button onclick="goToStep(3)" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl shadow transition">
@@ -283,51 +283,51 @@
       <!-- STEP 3: DATI RICETTA & OPZIONI -->
       <section id="step-3" class="hidden p-6 sm:p-8 space-y-6">
         <div>
-          <h2 class="text-xl font-bold text-slate-900">3. Inserisci i Dati della Ricetta</h2>
-          <p class="text-sm text-slate-500 mt-1">I dati necessari per consentire al bot di compilare il modulo CUP al posto tuo.</p>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">3. Inserisci i Dati della Ricetta</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">I dati necessari per consentire al bot di compilare il modulo CUP al posto tuo.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Codice Fiscale dell'assistito *</label>
-            <input type="text" id="user_cf" maxlength="16" placeholder="es. RSSMRA85M01H501Z" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono uppercase">
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Codice Fiscale dell'assistito *</label>
+            <input type="text" id="user_cf" maxlength="16" placeholder="es. RSSMRA85M01H501Z" class="w-full px-3 py-2 text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono uppercase">
             <span class="text-[11px] text-slate-400">16 caratteri alfanumerici.</span>
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Numero Ricetta Elettronica (NRE) *</label>
-            <input type="text" id="user_nre" maxlength="15" placeholder="es. 1100A1234567890" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono">
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Numero Ricetta Elettronica (NRE) *</label>
+            <input type="text" id="user_nre" maxlength="15" placeholder="es. 1100A1234567890" class="w-full px-3 py-2 text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono">
             <span class="text-[11px] text-slate-400">Il codice di 15 cifre/lettere presente sulla ricetta bianca o dematerializzata.</span>
           </div>
         </div>
 
         <!-- Selezione Frequenza Notifiche e Monitoraggio -->
         <div class="pt-2">
-          <label class="block text-xs font-bold text-slate-700 mb-2">Ogni quanto eseguire il controllo e ricevere l'aggiornamento?</label>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">Ogni quanto eseguire il controllo e ricevere l'aggiornamento?</label>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-            <label id="card-int-15" class="relative flex flex-col p-3 border rounded-xl cursor-pointer transition text-center hover:bg-slate-50 border-slate-200">
+            <label id="card-int-15" class="relative flex flex-col p-3 border rounded-xl cursor-pointer transition text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
               <input type="radio" name="check_interval" value="15" onchange="updateIntervalSelection()" class="sr-only">
               <span class="text-base mb-0.5">⚡</span>
-              <span class="text-xs font-bold text-slate-900">Ogni 15 min</span>
-              <span class="text-[10px] text-slate-500">Caccia serrata</span>
+              <span class="text-xs font-bold text-slate-900 dark:text-white">Ogni 15 min</span>
+              <span class="text-[10px] text-slate-500 dark:text-slate-400">Caccia serrata</span>
             </label>
-            <label id="card-int-30" class="relative flex flex-col p-3 border-2 rounded-xl cursor-pointer transition text-center border-indigo-600 bg-indigo-50/50">
+            <label id="card-int-30" class="relative flex flex-col p-3 border-2 rounded-xl cursor-pointer transition text-center border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/40">
               <input type="radio" name="check_interval" value="30" checked onchange="updateIntervalSelection()" class="sr-only">
               <span class="text-base mb-0.5">🎯</span>
-              <span class="text-xs font-bold text-slate-900">Ogni 30 min</span>
-              <span class="text-[10px] text-indigo-700 font-semibold">Consigliato</span>
+              <span class="text-xs font-bold text-slate-900 dark:text-white">Ogni 30 min</span>
+              <span class="text-[10px] text-indigo-700 dark:text-indigo-400 font-semibold">Consigliato</span>
             </label>
-            <label id="card-int-60" class="relative flex flex-col p-3 border rounded-xl cursor-pointer transition text-center hover:bg-slate-50 border-slate-200">
+            <label id="card-int-60" class="relative flex flex-col p-3 border rounded-xl cursor-pointer transition text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
               <input type="radio" name="check_interval" value="60" onchange="updateIntervalSelection()" class="sr-only">
               <span class="text-base mb-0.5">☕</span>
-              <span class="text-xs font-bold text-slate-900">Ogni 1 ora</span>
-              <span class="text-[10px] text-slate-500">Moderato</span>
+              <span class="text-xs font-bold text-slate-900 dark:text-white">Ogni 1 ora</span>
+              <span class="text-[10px] text-slate-500 dark:text-slate-400">Moderato</span>
             </label>
-            <label id="card-int-120" class="relative flex flex-col p-3 border rounded-xl cursor-pointer transition text-center hover:bg-slate-50 border-slate-200">
+            <label id="card-int-120" class="relative flex flex-col p-3 border rounded-xl cursor-pointer transition text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
               <input type="radio" name="check_interval" value="120" onchange="updateIntervalSelection()" class="sr-only">
               <span class="text-base mb-0.5">🛋️</span>
-              <span class="text-xs font-bold text-slate-900">Ogni 2 ore</span>
-              <span class="text-[10px] text-slate-500">Basso impatto</span>
+              <span class="text-xs font-bold text-slate-900 dark:text-white">Ogni 2 ore</span>
+              <span class="text-[10px] text-slate-500 dark:text-slate-400">Basso impatto</span>
             </label>
           </div>
         </div>
@@ -336,14 +336,14 @@
           <label class="flex items-start space-x-3 cursor-pointer">
             <input type="checkbox" id="send_no_match_toggle" checked class="mt-1 w-4 h-4 text-indigo-600 rounded">
             <div>
-              <span class="text-xs font-bold text-slate-800 block">Invia aggiornamento anche se NON trova posti</span>
-              <span class="text-[11px] text-slate-500">Ti invia i simpatici meme satirici per rassicurarti che il controllo è avvenuto regolarmente.</span>
+              <span class="text-xs font-bold text-slate-800 dark:text-slate-200 block">Invia aggiornamento anche se NON trova posti</span>
+              <span class="text-[11px] text-slate-500 dark:text-slate-400">Ti invia i simpatici meme satirici per rassicurarti che il controllo è avvenuto regolarmente.</span>
             </div>
           </label>
         </div>
 
-        <div class="flex justify-between pt-4 border-t border-slate-200">
-          <button onclick="goToStep(2)" class="px-5 py-2.5 text-slate-600 hover:text-slate-900 font-bold text-sm">
+        <div class="flex justify-between pt-4 border-t border-slate-200 dark:border-slate-800">
+          <button onclick="goToStep(2)" class="px-5 py-2.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-bold text-sm">
             ← Indietro
           </button>
           <button onclick="generateConfig(); goToStep(4);" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl shadow transition">
@@ -355,18 +355,18 @@
       <!-- STEP 4: GENERAZIONE CONFIG & AVVIO LOCALE -->
       <section id="step-4" class="hidden p-6 sm:p-8 space-y-6">
         <div>
-          <h2 class="text-xl font-bold text-slate-900">4. Configurazione Pronta & Istruzioni</h2>
-          <p class="text-sm text-slate-500 mt-1">Ecco il tuo file personalizzato. Scaricalo e avvia il monitoraggio sul tuo computer.</p>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">4. Configurazione Pronta & Istruzioni</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Ecco il tuo file personalizzato. Scaricalo e avvia il monitoraggio sul tuo computer.</p>
         </div>
 
         <!-- Azioni Server Locale (Se attivo) -->
-        <div id="localActionsBox" class="hidden p-4 bg-emerald-50 border border-emerald-200 rounded-xl space-y-3">
+        <div id="localActionsBox" class="hidden p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl space-y-3">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-emerald-900 flex items-center">
+            <span class="text-xs font-bold text-emerald-900 dark:text-emerald-200 flex items-center">
               <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse mr-2"></span>
               Pannello di Controllo Locale Rilevato
             </span>
-            <span class="text-[11px] text-emerald-700 font-semibold bg-emerald-100 px-2 py-0.5 rounded">Pronto all'uso</span>
+            <span class="text-[11px] text-emerald-700 dark:text-emerald-300 font-semibold bg-emerald-100 dark:bg-emerald-900/60 px-2 py-0.5 rounded">Pronto all'uso</span>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
             <button onclick="saveConfigToServer()" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition shadow-sm">
@@ -375,11 +375,11 @@
             <button onclick="triggerTestNotification()" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition shadow-sm">
               🧪 Testa Notifica Ora
             </button>
-            <button onclick="triggerLogin()" class="px-3 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-lg transition shadow-sm">
+            <button onclick="triggerLogin()" class="px-3 py-2 bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 dark:hover:bg-slate-600 text-white text-xs font-bold rounded-lg transition shadow-sm">
               🔑 Fai Login SPID
             </button>
           </div>
-          <div id="localActionResult" class="text-xs text-slate-700 hidden"></div>
+          <div id="localActionResult" class="text-xs text-slate-700 dark:text-slate-300 hidden"></div>
         </div>
 
         <!-- Box Anteprima YAML -->
@@ -395,21 +395,21 @@
         </div>
 
         <!-- Guida all'avvio locale -->
-        <div class="p-5 bg-slate-100 rounded-xl space-y-3 text-xs text-slate-700 leading-relaxed border border-slate-200">
-          <h3 class="font-bold text-slate-900 text-sm">🚀 Come avviare il monitoraggio sul tuo computer:</h3>
+        <div class="p-5 bg-slate-100 dark:bg-slate-800/60 rounded-xl space-y-3 text-xs text-slate-700 dark:text-slate-300 leading-relaxed border border-slate-200 dark:border-slate-700">
+          <h3 class="font-bold text-slate-900 dark:text-white text-sm">🚀 Come avviare il monitoraggio sul tuo computer:</h3>
           <ol class="list-decimal list-inside space-y-2">
             <li>Clona o scarica il repository da GitHub:
-              <pre class="bg-slate-900 text-slate-100 p-2 rounded mt-1 font-mono text-[11px] overflow-x-auto">git clone https://github.com/TuoUsername/CUP-Monitor.git
+              <pre class="bg-slate-900 dark:bg-slate-950 text-slate-100 p-2 rounded mt-1 font-mono text-[11px] overflow-x-auto">git clone https://github.com/TuoUsername/CUP-Monitor.git
 cd CUP-Monitor</pre>
             </li>
-            <li>Inserisci il file scaricato <code class="font-mono bg-white px-1.5 py-0.5 rounded border">config.yaml</code> nella cartella principale del progetto.</li>
+            <li>Inserisci il file scaricato <code class="font-mono bg-white dark:bg-slate-700 px-1.5 py-0.5 rounded border dark:border-slate-600 text-slate-900 dark:text-slate-100">config.yaml</code> nella cartella principale del progetto.</li>
             <li>Installa i requisiti ed effettua il primo accesso SPID una tantum:
-              <pre class="bg-slate-900 text-slate-100 p-2 rounded mt-1 font-mono text-[11px] overflow-x-auto">pip install -r requirements.txt
+              <pre class="bg-slate-900 dark:bg-slate-950 text-slate-100 p-2 rounded mt-1 font-mono text-[11px] overflow-x-auto">pip install -r requirements.txt
 playwright install chromium
 python src/main.py --login</pre>
             </li>
-            <li>Automatizza l'esecuzione e l'invio notifiche ogni <span id="summaryIntervalLabel" class="font-bold text-indigo-700">30 minuti</span> con <strong>Task Scheduler di Windows</strong> (copia questo comando in PowerShell):
-              <pre id="schedCommandSnippet" class="bg-slate-900 text-slate-100 p-2.5 rounded mt-1 font-mono text-[11px] overflow-x-auto leading-relaxed">$action = New-ScheduledTaskAction -Execute "$PWD\run_bot.bat"
+            <li>Automatizza l'esecuzione e l'invio notifiche ogni <span id="summaryIntervalLabel" class="font-bold text-indigo-700 dark:text-indigo-400">30 minuti</span> con <strong>Task Scheduler di Windows</strong> (copia questo comando in PowerShell):
+              <pre id="schedCommandSnippet" class="bg-slate-900 dark:bg-slate-950 text-slate-100 p-2.5 rounded mt-1 font-mono text-[11px] overflow-x-auto leading-relaxed">$action = New-ScheduledTaskAction -Execute "$PWD\run_bot.bat"
 $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 30)
 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
 Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -TaskName "CUP Marche Monitor" -Force</pre>
@@ -418,8 +418,8 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
         </div>
 
         <!-- Didascalia: Come Annullare o Fermare il Monitoraggio -->
-        <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-2 text-xs text-amber-900">
-          <h4 class="font-bold flex items-center text-amber-950 text-sm">
+        <div class="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-xl space-y-2 text-xs text-amber-900 dark:text-amber-200">
+          <h4 class="font-bold flex items-center text-amber-950 dark:text-amber-300 text-sm">
             <span class="mr-2 text-base">🛑</span> Come annullare o fermare il monitoraggio:
           </h4>
           <p class="leading-relaxed">
@@ -427,85 +427,88 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
           </p>
           <div class="space-y-2 pt-1">
             <div>
-              <span class="font-bold text-amber-950 block mb-0.5">• Su Windows (PowerShell):</span>
-              <pre class="bg-amber-900/90 text-amber-50 p-2 rounded font-mono text-[11px] overflow-x-auto">Unregister-ScheduledTask -TaskName "CUP Marche Monitor" -Confirm:$false</pre>
-              <span class="text-[11px] text-amber-700">In alternativa: apri <em>Utilità di pianificazione</em> (<code class="font-mono font-bold">taskschd.msc</code>) e clicca col tasto destro su <strong>"CUP Marche Monitor"</strong> &gt; <strong>Elimina</strong>.</span>
+              <span class="font-bold text-amber-950 dark:text-amber-200 block mb-0.5">• Su Windows (PowerShell):</span>
+              <pre class="bg-amber-900/90 dark:bg-slate-950 text-amber-50 dark:text-amber-200 p-2 rounded font-mono text-[11px] overflow-x-auto">Unregister-ScheduledTask -TaskName "CUP Marche Monitor" -Confirm:$false</pre>
+              <span class="text-[11px] text-amber-700 dark:text-amber-300">In alternativa: apri <em>Utilità di pianificazione</em> (<code class="font-mono font-bold">taskschd.msc</code>) e clicca col tasto destro su <strong>"CUP Marche Monitor"</strong> &gt; <strong>Elimina</strong>.</span>
             </div>
             <div>
-              <span class="font-bold text-amber-950 block mb-0.5">• Su Linux / Mac:</span>
-              <span class="text-[11px] text-amber-700">Apri il crontab con <code class="font-mono font-bold">crontab -e</code> e rimuovi la riga del bot.</span>
+              <span class="font-bold text-amber-950 dark:text-amber-200 block mb-0.5">• Su Linux / Mac:</span>
+              <span class="text-[11px] text-amber-700 dark:text-amber-300">Apri il crontab con <code class="font-mono font-bold">crontab -e</code> e rimuovi la riga del bot.</span>
             </div>
           </div>
         </div>
 
-        <div class="flex justify-between pt-4 border-t border-slate-200">
-          <button onclick="goToStep(3)" class="px-5 py-2.5 text-slate-600 hover:text-slate-900 font-bold text-sm">
+        <div class="flex justify-between pt-4 border-t border-slate-200 dark:border-slate-800">
+          <button onclick="goToStep(3)" class="px-5 py-2.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-bold text-sm">
             ← Modifica Dati
           </button>
           <button onclick="downloadYaml()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow transition">
             📥 Scarica config.yaml
           </button>
+        </div>
+      </section>
+    </div> <!-- Fine BOX WIZARD -->
+  </div> <!-- Fine mode-script-container -->
+
+  <!-- CONTENITORE MODALITÀ ESTENSIONE WEB BROWSER -->
+  <div id="mode-extension-container" class="hidden space-y-6">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 space-y-6 transition-colors">
+      <div>
+        <div class="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 mb-2">
+          ✨ Zero Terminale • 100% nel Browser
+        </div>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">Estensione Web Browser per Chrome & Edge</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Nessun file da configurare, nessun comando da lanciare. Monitora il CUP direttamente mentre navighi sul web.</p>
       </div>
-    </div> <!-- Fine mode-script-container -->
 
-    <!-- CONTENITORE MODALITÀ ESTENSIONE WEB BROWSER -->
-    <div id="mode-extension-container" class="hidden space-y-6">
-      <div class="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 sm:p-8 space-y-6">
+      <!-- 3 Semplici Passaggi -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+          <span class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">1</span>
+          <h3 class="font-bold text-sm text-slate-900 dark:text-white">Scarica l'Estensione</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Scarica o clona la cartella <code class="font-mono bg-white dark:bg-slate-700 px-1 rounded border dark:border-slate-600 text-slate-800 dark:text-slate-200">extension/</code> dal repository GitHub sul tuo computer.</p>
+        </div>
+
+        <div class="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+          <span class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">2</span>
+          <h3 class="font-bold text-sm text-slate-900 dark:text-white">Carica in Chrome/Edge</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Apri <code class="font-mono bg-white dark:bg-slate-700 px-1 rounded border dark:border-slate-600 text-slate-800 dark:text-slate-200">chrome://extensions</code>, attiva la <strong>"Modalità sviluppatore"</strong> e clicca su <strong>"Carica estensione non pacchettizzata"</strong>.</p>
+        </div>
+
+        <div class="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+          <span class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">3</span>
+          <h3 class="font-bold text-sm text-slate-900 dark:text-white">Avvia il Monitoraggio</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Clicca sull'icona 🏥 in alto a destra, inserisci NRE e Codice Fiscale, ed effettua il login SPID normalmente nel browser.</p>
+        </div>
+      </div>
+
+      <!-- Download & Repository Links -->
+      <div class="p-5 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/60 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
-          <div class="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 mb-2">
-            ✨ Zero Terminale • 100% nel Browser
-          </div>
-          <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Estensione Web Browser per Chrome & Edge</h2>
-          <p class="text-sm text-slate-500 mt-1">Nessun file da configurare, nessun comando da lanciare. Monitora il CUP direttamente mentre navighi sul web.</p>
+          <h4 class="font-bold text-sm text-indigo-950 dark:text-indigo-200">Pronta all'uso nel repository</h4>
+          <p class="text-xs text-indigo-700 dark:text-indigo-400 mt-0.5">Tutti i file dell'estensione sono già presenti nella cartella <code class="font-mono bg-white/70 dark:bg-slate-800 px-1 rounded">extension/</code> del repo.</p>
         </div>
+        <a href="https://github.com/edik17/CUP-Monitor/tree/main/extension" target="_blank" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow transition whitespace-nowrap">
+          📂 Apri Cartella Estensione su GitHub →
+        </a>
+      </div>
 
-        <!-- 3 Semplici Passaggi -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-            <span class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">1</span>
-            <h3 class="font-bold text-sm text-slate-900">Scarica l'Estensione</h3>
-            <p class="text-xs text-slate-600 leading-relaxed">Scarica o clona la cartella <code class="font-mono bg-white px-1 rounded border">extension/</code> dal repository GitHub sul tuo computer.</p>
-          </div>
-
-          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-            <span class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">2</span>
-            <h3 class="font-bold text-sm text-slate-900">Carica in Chrome/Edge</h3>
-            <p class="text-xs text-slate-600 leading-relaxed">Apri <code class="font-mono bg-white px-1 rounded border">chrome://extensions</code>, attiva la <strong>"Modalità sviluppatore"</strong> e clicca su <strong>"Carica estensione non pacchettizzata"</strong>.</p>
-          </div>
-
-          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-            <span class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">3</span>
-            <h3 class="font-bold text-sm text-slate-900">Avvia il Monitoraggio</h3>
-            <p class="text-xs text-slate-600 leading-relaxed">Clicca sull'icona 🏥 in alto a destra, inserisci NRE e Codice Fiscale, ed effettua il login SPID normalmente nel browser.</p>
-          </div>
-        </div>
-
-        <!-- Download & Repository Links -->
-        <div class="p-5 bg-indigo-50 border border-indigo-100 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            <h4 class="font-bold text-sm text-indigo-950">Pronta all'uso nel repository</h4>
-            <p class="text-xs text-indigo-700 mt-0.5">Tutti i file dell'estensione sono già presenti nella cartella <code class="font-mono">extension/</code> del repo.</p>
-          </div>
-          <a href="https://github.com/edik17/CUP-Monitor/tree/main/extension" target="_blank" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow transition whitespace-nowrap">
-            📂 Apri Cartella Estensione su GitHub →
-          </a>
-        </div>
-
-        <!-- Didascalia Come Annullare nell'Estensione -->
-        <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-2 text-xs text-amber-900">
-          <h4 class="font-bold flex items-center text-amber-950 text-sm">
-            <span class="mr-2 text-base">🛑</span> Come annullare o fermare il monitoraggio:
-          </h4>
-          <p class="leading-relaxed">
-            Una volta trovata la prenotazione, fermare il monitoraggio è immediato:
-          </p>
-          <ul class="list-disc list-inside space-y-1 pl-1 text-[11px] text-amber-800">
-            <li><strong>Metodo 1:</strong> Clicca sull'icona dell'estensione in alto a destra nel browser e premi il pulsante rosso <strong>"Ferma Monitoraggio"</strong>.</li>
-            <li><strong>Metodo 2:</strong> Da <code class="font-mono font-bold">chrome://extensions</code> puoi disattivare o rimuovere l'estensione con un singolo click.</li>
-          </ul>
-        </div>
+      <!-- Didascalia Come Annullare nell'Estensione -->
+      <div class="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-xl space-y-2 text-xs text-amber-900 dark:text-amber-200">
+        <h4 class="font-bold flex items-center text-amber-950 dark:text-amber-300 text-sm">
+          <span class="mr-2 text-base">🛑</span> Come annullare o fermare il monitoraggio:
+        </h4>
+        <p class="leading-relaxed">
+          Una volta trovata la prenotazione, fermare il monitoraggio è immediato:
+        </p>
+        <ul class="list-disc list-inside space-y-1 pl-1 text-[11px] text-amber-800 dark:text-amber-300">
+          <li><strong>Metodo 1:</strong> Clicca sull'icona dell'estensione in alto a destra nel browser e premi il pulsante rosso <strong>"Ferma Monitoraggio"</strong>.</li>
+          <li><strong>Metodo 2:</strong> Da <code class="font-mono font-bold">chrome://extensions</code> puoi disattivare o rimuovere l'estensione con un singolo click.</li>
+        </ul>
       </div>
     </div>
+  </div>
+</main>
 
   <!-- Footer -->
   <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 mt-12 text-center text-xs text-slate-500 dark:text-slate-400 transition-colors">
