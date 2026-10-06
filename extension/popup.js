@@ -9,6 +9,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const statusDot = document.getElementById("statusDot");
   const statusText = document.getElementById("statusText");
 
+  // Rimuovi eventuale badge notifica
+  chrome.action.setBadgeText({ text: "" });
+
   // Carica impostazioni salvate
   const data = await chrome.storage.local.get([
     "nre",

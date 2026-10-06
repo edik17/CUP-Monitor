@@ -70,12 +70,23 @@ async function performCUPCheck() {
   }
 }
 
-function notifyUser(title, message) {
+function notifyUser(title, message, isMatch = false) {
   chrome.notifications.create({
     type: "basic",
     iconUrl: "icons/icon128.png",
     title: title,
     message: message,
-    priority: 2
+    priority: 2,
+    requireInteraction: true // Rimane visibile finché l'utente non interagisce
   });
+
+  if (isMatch) {
+    chrome.action.setBadgeText({ text: "1" });
+    chrome.action.setBadgeBackgroundColor({ color: "#10b981" });
+  }
 }
+
+// Cliccando sulla notifica, apre direttamente la pagina CUP nel browser
+chrome.notifications.onClicked.addListener(() => {
+  chrome.tabs.create({ url: "https://mycupmarche.it/prenotazionecittadino/web/search/nre" });
+});
