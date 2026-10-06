@@ -82,6 +82,223 @@ const REGIONAL_PORTALS_CONFIG = {
   "Veneto": { domain: "azero.veneto.it", searchUrl: "https://www.azero.veneto.it" }
 };
 
+const REGIONAL_PROVINCES_KEYWORDS = {
+  "Marche": {
+    "Ancona": [
+      "ancona", "torrette", "inrca", "jesi", "fabriano", "senigallia", "osimo",
+      "chiaravalle", "loreto", "castelfidardo", "falconara", "camerano",
+      "agugliano", "montemarciano", "filottrano", "cupramontana", "arcevia",
+      "sassoferrato", "serra san quirico", "genga", "staffolo", "cerreto",
+      "polverigi", "offagna", "numana", "sirolo", "monte san vito"
+    ],
+    "Pesaro e Urbino": [
+      "pesaro", "fano", "urbino", "fossombrone", "cagli", "pergola", "mondolfo",
+      "colli al metauro", "gabicce", "gradara", "tavullia", "vallefoglia"
+    ],
+    "Macerata": [
+      "macerata", "civitanova", "recanati", "tolentino", "san severino",
+      "potenza picena", "porto recanati", "corridonia", "morrovalle", "matelica", "camerino"
+    ],
+    "Fermo": [
+      "fermo", "porto san giorgio", "sant'elpidio", "porto sant'elpidio",
+      "montegranaro", "amandola", "monte urano"
+    ],
+    "Ascoli Piceno": [
+      "ascoli", "san benedetto", "grottammare", "monteprandone",
+      "folignano", "castel di lama", "spinetoli", "offida"
+    ]
+  },
+  "Abruzzo": {
+    "L'Aquila": ["l'aquila", "avezzano", "sulmona", "castel di sangro"],
+    "Chieti": ["chieti", "vasto", "lanciano", "ortona", "atessa"],
+    "Pescara": ["pescara", "penne", "popoli", "montesilvano"],
+    "Teramo": ["teramo", "giulianova", "atri", "sant'omero"]
+  },
+  "Basilicata": {
+    "Potenza": ["potenza", "melfi", "venosa", "villa d'agri", "lagonegro"],
+    "Matera": ["matera", "policoro", "tinchi", "stigliano", "pisticci"]
+  },
+  "Calabria": {
+    "Catanzaro": ["catanzaro", "lamezia", "soverato"],
+    "Cosenza": ["cosenza", "rende", "rossano", "corigliano", "castrovillari", "paola"],
+    "Crotone": ["crotone", "cirò"],
+    "Reggio Calabria": ["reggio calabria", "gioia tauro", "locri", "polistena"],
+    "Vibo Valentia": ["vibo valentia", "tropea"]
+  },
+  "Campania": {
+    "Napoli": ["napoli", "cardarelli", "policlinico", "pozzuoli", "giugliano", "castellammare", "nola"],
+    "Salerno": ["salerno", "ruggi", "battipaglia", "nocera", "cava de' tirreni", "eboli"],
+    "Caserta": ["caserta", "aversa", "marcianise", "santa maria capua vetere"],
+    "Avellino": ["avellino", "moscati", "ariano"],
+    "Benevento": ["benevento", "san pio", "rummo"]
+  },
+  "Emilia-Romagna": {
+    "Bologna": ["bologna", "sant'orsola", "maggiore", "rizzoli", "bellaria", "imola"],
+    "Modena": ["modena", "policlinico", "baggiovara", "carpi", "sassuolo"],
+    "Reggio Emilia": ["reggio emilia", "santa maria nuova", "guastalla"],
+    "Parma": ["parma", "maggiore", "fidenza"],
+    "Ferrara": ["ferrara", "cona", "cento"],
+    "Forlì-Cesena": ["forlì", "cesena", "bufalini"],
+    "Ravenna": ["ravenna", "faenza", "lugo"],
+    "Rimini": ["rimini", "riccione"],
+    "Piacenza": ["piacenza"]
+  },
+  "Friuli-Venezia Giulia": {
+    "Trieste": ["trieste", "cattinara"],
+    "Udine": ["udine", "santa maria della misericordia", "tolmezzo"],
+    "Pordenone": ["pordenone", "san vito"],
+    "Gorizia": ["gorizia", "monfalcone"]
+  },
+  "Lazio": {
+    "Roma": ["roma", "umberto i", "gemelli", "sant'andrea", "san camillo", "tor vergata", "san giovanni", "tivoli", "civita"],
+    "Latina": ["latina", "aprilia", "terracina", "formia"],
+    "Frosinone": ["frosinone", "cassino", "sora"],
+    "Viterbo": ["viterbo", "belcolle"],
+    "Rieti": ["rieti"]
+  },
+  "Liguria": {
+    "Genova": ["genova", "san martino", "galliera", "gaslini", "villa scassi"],
+    "La Spezia": ["la spezia", "sarzana"],
+    "Savona": ["savona", "pietra ligure", "albenga"],
+    "Imperia": ["imperia", "sanremo"]
+  },
+  "Lombardia": {
+    "Milano": ["milano", "niguarda", "policlinico", "san raffaele", "humanitas", "san carlo", "san paolo", "sesto", "legnano"],
+    "Brescia": ["brescia", "spedali civili", "desenzano", "chiari"],
+    "Bergamo": ["bergamo", "papa giovanni", "treviglio"],
+    "Monza e Brianza": ["monza", "san gerardo", "desio", "vimercate"],
+    "Como": ["como", "sant'anna", "cantù"],
+    "Varese": ["varese", "circolo", "busto arsizio", "gallarate", "saronno"],
+    "Pavia": ["pavia", "san matteo", "vigevano", "voghera"],
+    "Cremona": ["cremona", "crema"],
+    "Mantova": ["mantova", "carlo poma"],
+    "Lecco": ["lecco"],
+    "Lodi": ["lodi"],
+    "Sondrio": ["sondrio"]
+  },
+  "Molise": {
+    "Campobasso": ["campobasso", "cardarelli", "termoli"],
+    "Isernia": ["isernia", "venafro"]
+  },
+  "Piemonte": {
+    "Torino": ["torino", "molinette", "cto", "mauriziano", "san luigi", "rivoli"],
+    "Cuneo": ["cuneo", "santa croce", "alba"],
+    "Alessandria": ["alessandria", "casale"],
+    "Novara": ["novara", "maggiore"],
+    "Asti": ["asti"],
+    "Biella": ["biella"],
+    "Vercelli": ["vercelli"],
+    "Verbano-Cusio-Ossola": ["verbania", "domodossola"]
+  },
+  "Puglia": {
+    "Bari": ["bari", "policlinico", "di venere", "san paolo"],
+    "Lecce": ["lecce", "vito fazzi"],
+    "Taranto": ["taranto", "annunziata"],
+    "Foggia": ["foggia", "riuniti"],
+    "Brindisi": ["brindisi", "perrino"],
+    "Barletta-Andria-Trani": ["barletta", "andria", "trani"]
+  },
+  "Sardegna": {
+    "Cagliari": ["cagliari", "brotzu", "monserrato"],
+    "Sassari": ["sassari", "alghero"],
+    "Nuoro": ["nuoro"],
+    "Oristano": ["oristano"],
+    "Sud Sardegna": ["carbonia", "iglesias"]
+  },
+  "Sicilia": {
+    "Palermo": ["palermo", "civico", "policlinico", "villa sofia"],
+    "Catania": ["catania", "garibaldi", "cannizzaro", "policlinico"],
+    "Messina": ["messina", "policlinico", "papardo"],
+    "Agrigento": ["agrigento", "sciacca"],
+    "Trapani": ["trapani", "marsala"],
+    "Siracusa": ["siracusa"],
+    "Ragusa": ["ragusa"],
+    "Caltanissetta": ["caltanissetta"],
+    "Enna": ["enna"]
+  },
+  "Toscana": {
+    "Firenze": ["firenze", "careggi", "meyer", "santa maria nuova"],
+    "Pisa": ["pisa", "cisanello"],
+    "Livorno": ["livorno"],
+    "Arezzo": ["arezzo"],
+    "Pistoia": ["pistoia"],
+    "Lucca": ["lucca", "versilia"],
+    "Prato": ["prato"],
+    "Grosseto": ["grosseto"],
+    "Siena": ["siena", "le scotte"],
+    "Massa-Carrara": ["massa", "carrara"]
+  },
+  "Trentino-Alto Adige": {
+    "Trento": ["trento", "santa chiara", "rovereto"],
+    "Bolzano": ["bolzano", "merano", "bressanone"]
+  },
+  "Umbria": {
+    "Perugia": ["perugia", "santa maria della misericordia", "foligno", "città di castello"],
+    "Terni": ["terni", "santa maria", "orvieto"]
+  },
+  "Valle d'Aosta": {
+    "Aosta": ["aosta", "parini"]
+  },
+  "Veneto": {
+    "Venezia": ["venezia", "mestre", "chioggia", "san donà"],
+    "Verona": ["verona", "borgo trento", "borgo roma", "legnago"],
+    "Padova": ["padova", "sant'antonio", "schiavonia"],
+    "Vicenza": ["vicenza", "san bortolo", "bassano"],
+    "Treviso": ["treviso", "conegliano"],
+    "Rovigo": ["rovigo"],
+    "Belluno": ["belluno", "feltre"]
+  }
+};
+
+/**
+ * Isola ed estrae il testo pulito dei SOLI risultati/appuntamenti effettivi,
+ * rimuovendo completamente header, footer, script, stili e menu a tendina (<select>).
+ */
+function extractCleanAppointmentsText(html) {
+  if (!html) return "";
+
+  // 1. Se esiste il form specifico con i risultati di prenotazione, isoliamo il suo blocco
+  const prenFormMatch = html.match(/<form[^>]*id=["']prenForm["'][^>]*>([\s\S]*?)<\/form>/i);
+  let targetHtml = prenFormMatch ? prenFormMatch[1] : html;
+
+  // 2. Se non c'è prenForm, cerchiamo il blocco id="content" escludendo il footer
+  if (!prenFormMatch) {
+    const cIdx = html.indexOf('id="content"');
+    const fIdx = html.indexOf('id="footer"');
+    if (cIdx !== -1) {
+      targetHtml = fIdx > cIdx ? html.substring(cIdx, fIdx) : html.substring(cIdx);
+    }
+  }
+
+  // 3. FONDAMENTALE: Rimuovi TUTTI i menu a tendina <select>...</select>
+  // I menu a tendina del portale contengono l'elenco di tutte le AST/province (anche se non ci sono posti!)
+  let cleaned = targetHtml.replace(/<select\b[^>]*>[\s\S]*?<\/select>/gi, " ");
+
+  // 4. Rimuovi script, stili, navigation, header, footer e searchbar
+  cleaned = cleaned
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
+    .replace(/<header\b[^>]*>[\s\S]*?<\/header>/gi, " ")
+    .replace(/<footer\b[^>]*>[\s\S]*?<\/footer>/gi, " ")
+    .replace(/<nav\b[^>]*>[\s\S]*?<\/nav>/gi, " ")
+    .replace(/<div[^>]*id=["']searchbar["'][^>]*>[\s\S]*?<\/div>/gi, " ")
+    .replace(/<div[^>]*id=["']header["'][^>]*>[\s\S]*?<\/div>/gi, " ")
+    .replace(/<div[^>]*id=["']menuTemplate["'][^>]*>[\s\S]*?<\/div>/gi, " ");
+
+  // 5. Rimuovi tutti i tag HTML rimanenti
+  cleaned = cleaned.replace(/<[^>]+>/g, " ");
+
+  // 6. Normalizza spazi e caratteri
+  cleaned = cleaned
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&[a-z]+;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+
+  return cleaned;
+}
+
 async function performCUPCheck() {
   const data = await chrome.storage.local.get(["nre", "cf", "region", "province", "isActive"]);
   const nre = (data.nre || "").trim();
@@ -185,14 +402,54 @@ async function performCUPCheck() {
       return res;
     }
 
-    // Se siamo arrivati qui e la pagina contiene tabelle o risultati:
+    // 5. Estrai il testo pulito dei SOLI risultati/appuntamenti effettivi (escludendo header, footer e menu a tendina)
+    const appointmentsText = extractCleanAppointmentsText(searchText);
+    console.log(`CUP Monitor (${region}): testo appuntamenti pulito:`, appointmentsText);
+
+    // 6. Filtraggio territoriale per Provincia selezionata
+    const selectedProvince = data.province || "Tutte";
+    if (selectedProvince && selectedProvince !== "Tutte") {
+      const regKeywords = REGIONAL_PROVINCES_KEYWORDS[region] || {};
+      const provKeywords = regKeywords[selectedProvince] || [selectedProvince.toLowerCase()];
+      const searchTerms = [selectedProvince.toLowerCase(), ...provKeywords];
+
+      // Verifichiamo se almeno un presidio/comune della provincia richiesta compare negli appuntamenti
+      const matchFound = searchTerms.some(term => appointmentsText.includes(term.toLowerCase()));
+
+      if (!matchFound) {
+        // Rileviamo se compare il nome di un'altra provincia della stessa regione
+        let otherProvinceName = "";
+        for (const [pName, pKeywords] of Object.entries(regKeywords)) {
+          if (pName !== selectedProvince) {
+            const otherTerms = [pName.toLowerCase(), ...pKeywords];
+            if (otherTerms.some(t => appointmentsText.includes(t.toLowerCase()))) {
+              otherProvinceName = pName;
+              break;
+            }
+          }
+        }
+
+        const hint = otherProvinceName ? ` (trovato posto solo a ${otherProvinceName})` : "";
+        console.log(`CUP Monitor: trovata disponibilità sul portale${hint}, ma NESSUNA in provincia di ${selectedProvince}.`);
+
+        const res = {
+          status: "NO_MATCH",
+          message: `Disponibilità presente in altre province${hint}, ma nessuna in provincia di ${selectedProvince}. Il monitoraggio resta attivo.`,
+          time: new Date().toLocaleTimeString()
+        };
+        await saveStatus(res);
+        return res;
+      }
+    }
+
+    // Se arriviamo qui, c'è disponibilità effettiva per la provincia selezionata (o per "Tutte"):
     const res = {
       status: "FOUND",
-      message: "🎉 DISPONIBILITÀ TROVATA! Clicca per prenotare subito sul CUP Marche.",
+      message: `🎉 DISPONIBILITÀ TROVATA${selectedProvince !== "Tutte" ? " in provincia di " + selectedProvince : ""}! Clicca per prenotare subito.`,
       time: new Date().toLocaleTimeString()
     };
 
-    notifyUser("🎉 Posto Trovato! CUP Marche", res.message, true);
+    notifyUser(`🎉 Posto Trovato (${selectedProvince !== "Tutte" ? selectedProvince : region})!`, res.message, true);
     await saveStatus(res);
     return res;
 

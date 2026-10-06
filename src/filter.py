@@ -237,7 +237,8 @@ def filter_by_provincia(results: list[dict], keywords: list[str]) -> list[dict]:
     for result in results:
         struttura = result.get("struttura", "").lower()
         indirizzo = result.get("indirizzo", "").lower()
-        combined_text = f"{struttura} {indirizzo}"
+        raw_text = result.get("raw_text", "").lower()
+        combined_text = f"{struttura} {indirizzo} {raw_text}"
 
         if any(kw in combined_text for kw in lower_keywords):
             filtered_results.append(result)

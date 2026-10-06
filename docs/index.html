@@ -23,6 +23,29 @@
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
     .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); }
+
+    /* Stili Simulatore 2D Mouse Animato */
+    @keyframes simRippleEffect {
+      0% { transform: translate(-50%, -50%) scale(0.3); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(2.8); opacity: 0; }
+    }
+    .sim-ripple-active {
+      animation: simRippleEffect 0.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+    }
+    .sim-cursor {
+      transition: top 0.85s cubic-bezier(0.25, 1, 0.4, 1), left 0.85s cubic-bezier(0.25, 1, 0.4, 1), transform 0.15s ease;
+      will-change: top, left, transform;
+    }
+    .sim-cursor.clicking {
+      transform: scale(0.82) rotate(-6deg);
+    }
+    @keyframes simToastSlideIn {
+      0% { transform: translateY(-20px) scale(0.9); opacity: 0; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .sim-toast-show {
+      animation: simToastSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
   </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
@@ -502,6 +525,197 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
         </div>
       </div>
 
+      <!-- SIMULATORE 2D INTERATTIVO CON MOUSE ANIMATO -->
+      <div class="bg-slate-900 text-white rounded-2xl p-4 sm:p-6 shadow-2xl border border-slate-800 overflow-hidden relative">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-4 border-b border-slate-800">
+          <div>
+            <div class="flex items-center space-x-2.5 mb-1">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <h3 class="font-bold text-sm sm:text-base text-white">🎬 Simulazione 2D: Movimenti del Mouse Passo-Passo</h3>
+              <span class="text-[10px] font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full">Animazione Automatica</span>
+            </div>
+            <p class="text-xs text-slate-400">Guarda come spostare il puntatore e cosa cliccare per installare e attivare CUP Monitor.</p>
+          </div>
+          
+          <div class="flex items-center space-x-2 text-xs shrink-0">
+            <button id="simPlayPauseBtn" onclick="toggleSimPlayback()" type="button" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-lg border border-slate-700 flex items-center space-x-1.5 transition">
+              <span id="simPlayIcon">⏸️</span>
+              <span id="simPlayText">Pausa</span>
+            </button>
+            <button onclick="restartSimAnimation()" type="button" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-lg border border-slate-700 flex items-center space-x-1.5 transition">
+              <span>🔄</span>
+              <span>Ricomincia</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Barra di Stato & Avanzamento Step -->
+        <div class="bg-slate-950/70 border border-slate-800 rounded-xl px-4 py-3 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <div class="flex items-center space-x-3">
+            <span id="simStepBadge" class="w-6 h-6 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shrink-0">1</span>
+            <span id="simStepDesc" class="text-xs sm:text-sm font-semibold text-slate-200">1. Sposta il mouse in alto a destra e attiva la "Modalità sviluppatore"</span>
+          </div>
+          <div class="flex items-center space-x-1.5 text-xs">
+            <button onclick="jumpToSimStep(1)" id="stepDot-1" type="button" class="px-2 py-1 rounded bg-indigo-600 text-white font-mono font-bold text-[11px] transition">1</button>
+            <button onclick="jumpToSimStep(2)" id="stepDot-2" type="button" class="px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[11px] transition">2</button>
+            <button onclick="jumpToSimStep(3)" id="stepDot-3" type="button" class="px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[11px] transition">3</button>
+            <button onclick="jumpToSimStep(4)" id="stepDot-4" type="button" class="px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[11px] transition">4</button>
+            <button onclick="jumpToSimStep(5)" id="stepDot-5" type="button" class="px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[11px] transition">5</button>
+          </div>
+        </div>
+
+        <!-- Palcoscenico Finestra Browser 2D Mockup -->
+        <div id="simStageContainer" class="relative bg-slate-950 border border-slate-800 rounded-xl overflow-hidden shadow-inner select-none min-h-[380px] sm:min-h-[420px]">
+          
+          <!-- Barra Superiore Browser (Titlebar & Tabs) -->
+          <div class="bg-slate-900 border-b border-slate-800 px-3 py-2 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-red-500/80 inline-block"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block"></span>
+              <div class="ml-2 px-3 py-1 bg-slate-950 rounded-t-lg border-t border-x border-slate-800 text-[11px] text-slate-300 font-medium flex items-center space-x-1.5">
+                <span>🧩</span>
+                <span id="simTabTitle">Estensioni</span>
+              </div>
+            </div>
+            <div class="text-[10px] text-slate-500 font-mono hidden sm:block">Google Chrome / Microsoft Edge</div>
+          </div>
+
+          <!-- Barra degli Indirizzi & Toolbar Estensioni -->
+          <div class="bg-slate-900/80 border-b border-slate-800 px-3 py-1.5 flex items-center justify-between gap-3">
+            <div class="flex items-center space-x-2 text-slate-400 text-xs">
+              <span>←</span>
+              <span>→</span>
+              <span class="text-slate-300">↻</span>
+            </div>
+            <div class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs font-mono text-slate-300 flex items-center space-x-1.5">
+              <span class="text-emerald-500 text-[10px]">🔒</span>
+              <span id="simUrlBar" class="text-slate-200">chrome://extensions</span>
+            </div>
+            
+            <!-- Icone Toolbar Browser (Estensioni) -->
+            <div class="flex items-center space-x-2 relative">
+              <span class="p-1 text-slate-400 text-sm">🧩</span>
+              
+              <!-- Icona CUP Monitor nella Barra del Browser -->
+              <div id="simToolbarExtIcon" class="p-1 px-1.5 bg-slate-800 hover:bg-slate-700 rounded-md border border-slate-700 cursor-pointer flex items-center justify-center transition">
+                <span class="text-sm">🏥</span>
+                <span id="simExtBadgeDot" class="w-1.5 h-1.5 rounded-full bg-emerald-400 ml-1"></span>
+              </div>
+
+              <!-- POPUP ESTENSIONE DROP DOWN -->
+              <div id="simPopupCard" class="hidden absolute right-0 top-10 w-72 bg-slate-900 border border-indigo-500/50 rounded-xl shadow-2xl p-3 z-30 transition-all">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+                  <div class="flex items-center space-x-1.5">
+                    <span class="text-sm">🏥</span>
+                    <span class="text-xs font-bold text-white">CUP Monitor</span>
+                  </div>
+                  <span id="simPopupStatusBadge" class="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-slate-800 text-slate-400">Non attivo</span>
+                </div>
+                
+                <div class="space-y-2 text-[11px]">
+                  <div>
+                    <label class="text-slate-400 block text-[10px] mb-0.5">Numero Ricetta (NRE)</label>
+                    <input type="text" value="4257489435" readonly class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-slate-200 font-mono text-[10px]">
+                  </div>
+                  <div>
+                    <label class="text-slate-400 block text-[10px] mb-0.5">Codice Fiscale</label>
+                    <input type="text" value="DTTDRD00R17E388P" readonly class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-slate-200 font-mono text-[10px]">
+                  </div>
+                  <div class="grid grid-cols-2 gap-1.5">
+                    <div>
+                      <label class="text-slate-400 block text-[10px] mb-0.5">Regione</label>
+                      <div class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-slate-200 text-[10px]">Marche</div>
+                    </div>
+                    <div>
+                      <label class="text-slate-400 block text-[10px] mb-0.5">Provincia</label>
+                      <div class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-slate-200 text-[10px]">Ancona</div>
+                    </div>
+                  </div>
+
+                  <!-- Countdown nel Popup -->
+                  <div id="simCountdownBox" class="hidden justify-between items-center bg-indigo-950/60 border border-indigo-800/80 rounded px-2 py-1 text-[10px]">
+                    <span class="text-indigo-300 font-medium">⏳ Prossimo tra:</span>
+                    <span id="simCountdownDigits" class="font-mono font-bold text-indigo-200">29m 59s</span>
+                  </div>
+
+                  <!-- Pulsante Avvia nel Popup -->
+                  <button id="simPopupToggleBtn" type="button" class="w-full py-1.5 px-3 bg-indigo-600 font-bold rounded-lg text-white text-xs shadow flex items-center justify-center space-x-1 transition">
+                    <span>▶️</span>
+                    <span id="simPopupToggleBtnText">Avvia Monitoraggio</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pagina Interna (Contenuto chrome://extensions) -->
+          <div id="simExtensionsPage" class="p-4 sm:p-6 space-y-5">
+            <!-- Header Pagina Estensioni con Switch Sviluppatore -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
+              <h4 class="text-sm sm:text-base font-bold text-white flex items-center">
+                <span>Estensioni</span>
+              </h4>
+              
+              <!-- Switch Modalità Sviluppatore -->
+              <div id="simDevSwitchBox" class="flex items-center space-x-2.5 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg shrink-0">
+                <span class="text-xs text-slate-300 font-medium">Modalità sviluppatore</span>
+                <div id="simDevToggle" class="w-10 h-5 bg-slate-700 rounded-full p-0.5 transition-colors cursor-pointer flex items-center">
+                  <div id="simDevKnob" class="w-4 h-4 rounded-full bg-white transition-transform"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pulsanti di Azione (Carica pacchettizzata) -->
+            <div id="simActionsBar" class="opacity-40 transition-opacity flex flex-wrap gap-2 text-xs">
+              <button id="simLoadUnpackedBtn" type="button" class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-indigo-300 font-semibold rounded-lg border border-indigo-500/30 flex items-center space-x-1.5 transition">
+                <span>📂</span>
+                <span>Carica estensione non pacchettizzata</span>
+              </button>
+              <button type="button" class="px-3 py-1.5 bg-slate-900 text-slate-500 rounded-lg border border-slate-800 hidden sm:inline-block">Comprimi estensione</button>
+              <button type="button" class="px-3 py-1.5 bg-slate-900 text-slate-500 rounded-lg border border-slate-800 hidden sm:inline-block">Aggiorna</button>
+            </div>
+
+            <!-- Card Estensione CUP Monitor -->
+            <div id="simInstalledCard" class="hidden bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg transition-all max-w-md">
+              <div class="flex items-start justify-between">
+                <div class="flex space-x-3">
+                  <span class="text-2xl p-2 bg-slate-950 rounded-xl border border-slate-800">🏥</span>
+                  <div>
+                    <h5 class="text-xs font-bold text-white">CUP Monitor — Prenotazioni Sanitarie</h5>
+                    <p class="text-[10px] text-slate-400 mt-0.5">Versione 1.0.0 • Manifest V3</p>
+                    <p class="text-[11px] text-slate-300 mt-1">Monitora automaticamente le disponibilità direttamente dal browser.</p>
+                  </div>
+                </div>
+                <div class="w-8 h-4 bg-indigo-600 rounded-full p-0.5 flex items-center justify-end">
+                  <div class="w-3 h-3 rounded-full bg-white"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Toast Notifica Windows / Chrome (Simulata) -->
+          <div id="simNotificationToast" class="hidden absolute top-4 right-4 bg-slate-900 border-2 border-emerald-500/80 rounded-xl p-3 shadow-2xl z-40 max-w-xs transition-all">
+            <div class="flex items-start space-x-2.5">
+              <span class="text-xl">🎉</span>
+              <div>
+                <div class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">CUP Monitor • Notifica Desktop</div>
+                <div class="text-xs font-bold text-white mt-0.5">Posto Trovato in provincia di Ancona!</div>
+                <div class="text-[10px] text-slate-300 mt-1">Disponibilità rilevata al CUP. Clicca qui per prenotare subito!</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cursore Mouse 2D Animato & Click Ripple -->
+          <div id="simMouseCursor" class="sim-cursor absolute z-50 pointer-events-none" style="left: 40px; top: 120px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" class="drop-shadow-lg">
+              <path d="M4 2 L20 10 L12 12 L8 20 Z" fill="#ffffff" stroke="#0f172a" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div id="simClickRipple" class="absolute w-8 h-8 rounded-full border-2 border-indigo-400 pointer-events-none opacity-0 z-40"></div>
+        </div>
+      </div>
+
       <!-- Download & Repository Links -->
       <div class="p-5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
@@ -761,11 +975,17 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
         extCont.classList.add('hidden');
         tabScript.className = "p-4 rounded-2xl border-2 text-left transition relative bg-indigo-50/70 dark:bg-indigo-950/40 border-indigo-600 dark:border-indigo-500 shadow-sm";
         tabExt.className = "p-4 rounded-2xl border-2 text-left transition relative bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700";
+        if (typeof simTimer !== 'undefined') clearTimeout(simTimer);
       } else {
         scriptCont.classList.add('hidden');
         extCont.classList.remove('hidden');
         tabExt.className = "p-4 rounded-2xl border-2 text-left transition relative bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-600 dark:border-emerald-500 shadow-sm";
         tabScript.className = "p-4 rounded-2xl border-2 text-left transition relative bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700";
+        setTimeout(() => {
+          if (typeof restartSimAnimation === 'function') {
+            restartSimAnimation();
+          }
+        }, 150);
       }
     }
 
@@ -1045,10 +1265,330 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
       }
     }
 
+    // ==========================================
+    // SIMULATORE 2D INTERATTIVO (ESTENSIONE & BOT WALKTHROUGH)
+    // ==========================================
+    let simCurrentStep = 1;
+    let simIsPaused = false;
+    let simTimer = null;
+    let simCountdownInterval = null;
+
+    const simStepDescriptions = {
+      1: "1. Sposta il mouse in alto a destra e attiva la \"Modalità sviluppatore\"",
+      2: "2. Clicca su \"Carica estensione non pacchettizzata\" e seleziona la cartella",
+      3: "3. Clicca sull'icona di CUP Monitor nella barra in alto del browser",
+      4: "4. Inserisci i dati e clicca sul pulsante \"Avvia Monitoraggio\"",
+      5: "5. Appena si libera un posto al CUP, ricevi la notifica istantanea sul PC!"
+    };
+
+    function updateSimStepUI(step) {
+      simCurrentStep = step;
+      const badge = document.getElementById('simStepBadge');
+      const desc = document.getElementById('simStepDesc');
+      if (badge) badge.textContent = step;
+      if (desc) desc.textContent = simStepDescriptions[step] || "";
+
+      for (let i = 1; i <= 5; i++) {
+        const dot = document.getElementById(`stepDot-${i}`);
+        if (dot) {
+          if (i === step) {
+            dot.className = "px-2 py-1 rounded bg-indigo-600 text-white font-mono font-bold text-[11px] shadow ring-2 ring-indigo-400/50 transition";
+          } else {
+            dot.className = "px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[11px] transition";
+          }
+        }
+      }
+    }
+
+    function simMoveCursorTo(targetEl, callback) {
+      const cursor = document.getElementById('simMouseCursor');
+      const stage = document.getElementById('simStageContainer');
+      if (!cursor || !stage || !targetEl) {
+        if (callback) callback();
+        return;
+      }
+      const stageRect = stage.getBoundingClientRect();
+      const targetRect = targetEl.getBoundingClientRect();
+
+      if (stageRect.width === 0 || stageRect.height === 0) {
+        if (callback) callback();
+        return;
+      }
+
+      const targetX = (targetRect.left - stageRect.left) + (targetRect.width / 2);
+      const targetY = (targetRect.top - stageRect.top) + (targetRect.height / 2);
+
+      cursor.style.left = `${Math.max(10, Math.min(stageRect.width - 25, targetX))}px`;
+      cursor.style.top = `${Math.max(10, Math.min(stageRect.height - 25, targetY))}px`;
+
+      // Attende completamento transizione CSS del cursore (850ms)
+      setTimeout(() => {
+        simPerformClick(targetX, targetY, callback);
+      }, 900);
+    }
+
+    function simPerformClick(x, y, callback) {
+      const cursor = document.getElementById('simMouseCursor');
+      const ripple = document.getElementById('simClickRipple');
+
+      if (cursor) cursor.classList.add('clicking');
+      if (ripple) {
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        ripple.classList.remove('sim-ripple-active');
+        void ripple.offsetWidth; // re-flow
+        ripple.classList.add('sim-ripple-active');
+      }
+
+      setTimeout(() => {
+        if (cursor) cursor.classList.remove('clicking');
+        if (callback) callback();
+      }, 250);
+    }
+
+    function resetSimElements() {
+      // Step 1: Switch Dev
+      const devToggle = document.getElementById('simDevToggle');
+      const devKnob = document.getElementById('simDevKnob');
+      const actionsBar = document.getElementById('simActionsBar');
+      if (devToggle) {
+        devToggle.classList.remove('bg-indigo-600');
+        devToggle.classList.add('bg-slate-700');
+      }
+      if (devKnob) {
+        devKnob.classList.remove('translate-x-5');
+      }
+      if (actionsBar) {
+        actionsBar.classList.remove('opacity-100');
+        actionsBar.classList.add('opacity-40');
+      }
+
+      // Step 2: Card Estensione
+      const installedCard = document.getElementById('simInstalledCard');
+      if (installedCard) installedCard.classList.add('hidden');
+
+      // Step 3 & 4: Popup Estensione
+      const popupCard = document.getElementById('simPopupCard');
+      const statusBadge = document.getElementById('simPopupStatusBadge');
+      const toggleBtn = document.getElementById('simPopupToggleBtn');
+      const toggleBtnText = document.getElementById('simPopupToggleBtnText');
+      const countdownBox = document.getElementById('simCountdownBox');
+
+      if (popupCard) popupCard.classList.add('hidden');
+      if (statusBadge) {
+        statusBadge.textContent = "Non attivo";
+        statusBadge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-slate-800 text-slate-400";
+      }
+      if (toggleBtn) {
+        toggleBtn.className = "w-full py-1.5 px-3 bg-indigo-600 hover:bg-indigo-500 font-bold rounded-lg text-white text-xs shadow flex items-center justify-center space-x-1 transition";
+      }
+      if (toggleBtnText) toggleBtnText.textContent = "Avvia Monitoraggio";
+      if (countdownBox) countdownBox.classList.add('hidden');
+      if (simCountdownInterval) {
+        clearInterval(simCountdownInterval);
+        simCountdownInterval = null;
+      }
+
+      // Step 5: Toast Notifica
+      const toast = document.getElementById('simNotificationToast');
+      if (toast) {
+        toast.classList.add('hidden');
+        toast.classList.remove('sim-toast-show');
+      }
+    }
+
+    function executeSimStep(step) {
+      if (simIsPaused) return;
+      updateSimStepUI(step);
+
+      if (step === 1) {
+        resetSimElements();
+        const cursor = document.getElementById('simMouseCursor');
+        if (cursor) {
+          cursor.style.left = "40px";
+          cursor.style.top = "150px";
+        }
+        clearTimeout(simTimer);
+        simTimer = setTimeout(() => {
+          if (simIsPaused) return;
+          const devToggle = document.getElementById('simDevToggle');
+          simMoveCursorTo(devToggle, () => {
+            if (devToggle) {
+              devToggle.classList.remove('bg-slate-700');
+              devToggle.classList.add('bg-indigo-600');
+            }
+            const devKnob = document.getElementById('simDevKnob');
+            if (devKnob) devKnob.classList.add('translate-x-5');
+            const actionsBar = document.getElementById('simActionsBar');
+            if (actionsBar) {
+              actionsBar.classList.remove('opacity-40');
+              actionsBar.classList.add('opacity-100');
+            }
+
+            simTimer = setTimeout(() => {
+              if (!simIsPaused) executeSimStep(2);
+            }, 1600);
+          });
+        }, 500);
+      }
+      else if (step === 2) {
+        const devToggle = document.getElementById('simDevToggle');
+        const devKnob = document.getElementById('simDevKnob');
+        const actionsBar = document.getElementById('simActionsBar');
+        if (devToggle) { devToggle.classList.remove('bg-slate-700'); devToggle.classList.add('bg-indigo-600'); }
+        if (devKnob) devKnob.classList.add('translate-x-5');
+        if (actionsBar) { actionsBar.classList.remove('opacity-40'); actionsBar.classList.add('opacity-100'); }
+
+        const loadBtn = document.getElementById('simLoadUnpackedBtn');
+        simMoveCursorTo(loadBtn, () => {
+          const installedCard = document.getElementById('simInstalledCard');
+          if (installedCard) {
+            installedCard.classList.remove('hidden');
+          }
+
+          simTimer = setTimeout(() => {
+            if (!simIsPaused) executeSimStep(3);
+          }, 1800);
+        });
+      }
+      else if (step === 3) {
+        const installedCard = document.getElementById('simInstalledCard');
+        if (installedCard) installedCard.classList.remove('hidden');
+
+        const toolbarIcon = document.getElementById('simToolbarExtIcon');
+        simMoveCursorTo(toolbarIcon, () => {
+          const popup = document.getElementById('simPopupCard');
+          if (popup) {
+            popup.classList.remove('hidden');
+          }
+
+          simTimer = setTimeout(() => {
+            if (!simIsPaused) executeSimStep(4);
+          }, 1600);
+        });
+      }
+      else if (step === 4) {
+        const popup = document.getElementById('simPopupCard');
+        if (popup) popup.classList.remove('hidden');
+
+        const toggleBtn = document.getElementById('simPopupToggleBtn');
+        simMoveCursorTo(toggleBtn, () => {
+          const statusBadge = document.getElementById('simPopupStatusBadge');
+          if (statusBadge) {
+            statusBadge.textContent = "Attivo";
+            statusBadge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+          }
+          if (toggleBtn) {
+            toggleBtn.className = "w-full py-1.5 px-3 bg-rose-600 hover:bg-rose-500 font-bold rounded-lg text-white text-xs shadow flex items-center justify-center space-x-1 transition";
+          }
+          const toggleBtnText = document.getElementById('simPopupToggleBtnText');
+          if (toggleBtnText) toggleBtnText.textContent = "Ferma Monitoraggio";
+
+          const countdownBox = document.getElementById('simCountdownBox');
+          if (countdownBox) countdownBox.classList.remove('hidden');
+
+          let sec = 59;
+          const countdownDigits = document.getElementById('simCountdownDigits');
+          if (simCountdownInterval) clearInterval(simCountdownInterval);
+          simCountdownInterval = setInterval(() => {
+            sec = sec <= 0 ? 59 : sec - 1;
+            if (countdownDigits) countdownDigits.textContent = `29m ${sec < 10 ? '0' : ''}${sec}s`;
+          }, 1000);
+
+          simTimer = setTimeout(() => {
+            if (!simIsPaused) executeSimStep(5);
+          }, 2200);
+        });
+      }
+      else if (step === 5) {
+        const stage = document.getElementById('simStageContainer');
+        const cursor = document.getElementById('simMouseCursor');
+        if (stage && cursor) {
+          const rect = stage.getBoundingClientRect();
+          cursor.style.left = `${rect.width * 0.4}px`;
+          cursor.style.top = `${rect.height * 0.6}px`;
+        }
+
+        const toast = document.getElementById('simNotificationToast');
+        if (toast) {
+          toast.classList.remove('hidden');
+          toast.classList.add('sim-toast-show');
+        }
+
+        simTimer = setTimeout(() => {
+          if (!simIsPaused) executeSimStep(1);
+        }, 4500);
+      }
+    }
+
+    function toggleSimPlayback() {
+      simIsPaused = !simIsPaused;
+      const playIcon = document.getElementById('simPlayIcon');
+      const playText = document.getElementById('simPlayText');
+      if (simIsPaused) {
+        clearTimeout(simTimer);
+        if (playIcon) playIcon.textContent = "▶️";
+        if (playText) playText.textContent = "Riprendi";
+      } else {
+        if (playIcon) playIcon.textContent = "⏸️";
+        if (playText) playText.textContent = "Pausa";
+        executeSimStep(simCurrentStep);
+      }
+    }
+
+    function restartSimAnimation() {
+      clearTimeout(simTimer);
+      simIsPaused = false;
+      const playIcon = document.getElementById('simPlayIcon');
+      const playText = document.getElementById('simPlayText');
+      if (playIcon) playIcon.textContent = "⏸️";
+      if (playText) playText.textContent = "Pausa";
+      executeSimStep(1);
+    }
+
+    function jumpToSimStep(step) {
+      clearTimeout(simTimer);
+      simIsPaused = false;
+      const playIcon = document.getElementById('simPlayIcon');
+      const playText = document.getElementById('simPlayText');
+      if (playIcon) playIcon.textContent = "⏸️";
+      if (playText) playText.textContent = "Pausa";
+
+      resetSimElements();
+      if (step >= 2) {
+        const devToggle = document.getElementById('simDevToggle');
+        const devKnob = document.getElementById('simDevKnob');
+        const actionsBar = document.getElementById('simActionsBar');
+        if (devToggle) { devToggle.classList.remove('bg-slate-700'); devToggle.classList.add('bg-indigo-600'); }
+        if (devKnob) devKnob.classList.add('translate-x-5');
+        if (actionsBar) { actionsBar.classList.remove('opacity-40'); actionsBar.classList.add('opacity-100'); }
+      }
+      if (step >= 3) {
+        const installedCard = document.getElementById('simInstalledCard');
+        if (installedCard) installedCard.classList.remove('hidden');
+      }
+      if (step >= 4) {
+        const popup = document.getElementById('simPopupCard');
+        if (popup) popup.classList.remove('hidden');
+      }
+
+      executeSimStep(step);
+    }
+
+    function init2DSimulator() {
+      const extCont = document.getElementById('mode-extension-container');
+      if (!extCont) return;
+
+      if (!extCont.classList.contains('hidden')) {
+        setTimeout(() => executeSimStep(1), 500);
+      }
+    }
+
     // Inizializzazione
     initTheme();
     renderProvinces();
     checkLocalServer();
+    init2DSimulator();
   </script>
 </body>
 </html>
