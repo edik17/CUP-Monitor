@@ -1,5 +1,6 @@
 # Credenziali e configurazione personale (NON caricare mai su GitHub!)
 config.yaml
+github_secrets/
 
 # Cookie di sessione SPID e stati di navigazione
 session/

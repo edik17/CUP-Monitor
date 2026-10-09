@@ -912,19 +912,37 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
           </ol>
         </div>
 
-        <!-- Sezione: Vuoi spegnere il PC? Monitoraggio Cloud Gratuito -->
-        <div class="p-4 sm:p-5 bg-gradient-to-br from-indigo-50/90 to-sky-50/50 dark:from-indigo-950/40 dark:to-slate-900/60 border border-indigo-200/80 dark:border-indigo-800/60 rounded-2xl space-y-2.5 text-xs text-indigo-950 dark:text-indigo-200 shadow-sm">
-          <div class="flex items-center space-x-2.5">
-            <span class="text-xl">☁️</span>
-            <h4 class="font-bold text-xs sm:text-sm text-indigo-950 dark:text-indigo-200">Vuoi spegnere il PC? Come monitorare a computer spento</h4>
+        <!-- Sezione: Vuoi spegnere il PC? Monitoraggio Cloud Gratuito (Strada 1) -->
+        <div class="p-4 sm:p-5 bg-gradient-to-br from-indigo-50/90 via-sky-50/60 to-purple-50/40 dark:from-indigo-950/40 dark:via-slate-900/80 dark:to-sky-950/30 border border-indigo-200/80 dark:border-indigo-800/60 rounded-2xl space-y-3 text-xs text-indigo-950 dark:text-indigo-200 shadow-md">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2.5">
+              <span class="text-xl">☁️</span>
+              <div>
+                <h4 class="font-extrabold text-xs sm:text-sm text-indigo-950 dark:text-indigo-200">Vuoi spegnere il PC? Modalità Cloud 24/7 (GitHub Actions)</h4>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400">Esecuzione gratuita sui server di GitHub • PC 100% spento • Notifiche sul tuo cellulare</p>
+              </div>
+            </div>
+            <span class="hidden sm:inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 border border-indigo-500/20">Consigliato</span>
           </div>
+
           <p class="leading-relaxed text-[11px] sm:text-xs text-slate-700 dark:text-slate-300">
-            Per ricevere le notifiche sul telefono anche a computer spento senza lasciarlo acceso a casa, hai 2 opzioni semplici e gratuite:
+            Il repository include già il workflow automatico in <code class="font-mono bg-white dark:bg-slate-800 px-1.5 py-0.5 rounded border dark:border-slate-700 font-bold">.github/workflows/cup_monitor.yml</code> che effettua i controlli <strong>ogni 30 minuti in cloud</strong> e salva la sessione nella cache di GitHub.
           </p>
-          <ul class="list-disc list-inside space-y-1.5 text-[11px] sm:text-xs text-slate-700 dark:text-slate-300">
-            <li><strong>GitHub Actions (Cloud Gratuito):</strong> puoi configurare un'automazione programmata direttamente sul tuo account GitHub che lancia il bot in cloud ogni X minuti e ti manda la notifica su Telegram ovunque tu sia.</li>
-            <li><strong>Mini PC / Raspberry Pi / Serverino domestico:</strong> consuma pochissima corrente e rimane attivo 24/7 in silenzio.</li>
-          </ul>
+
+          <div class="bg-white/80 dark:bg-slate-900/70 p-3 sm:p-4 rounded-xl border border-indigo-100 dark:border-indigo-900/40 space-y-2.5 text-[11px] sm:text-xs text-slate-700 dark:text-slate-300">
+            <span class="font-bold text-slate-900 dark:text-white block">Come attivarlo in 2 minuti:</span>
+            <ol class="list-decimal list-inside space-y-1.5 pl-1 leading-relaxed">
+              <li>Apri il tuo repository su GitHub: <a href="https://github.com/edik17/CUP-Monitor/settings/secrets/actions/new" target="_blank" class="text-indigo-600 dark:text-indigo-400 font-bold underline hover:no-underline">Crea Nuovo Secret</a>.</li>
+              <li>Aggiungi il secret <strong><code class="font-mono font-bold">CUP_CONFIG_YAML</code></strong> incollando il contenuto del tuo file <code class="font-mono">config.yaml</code>.</li>
+              <li>Aggiungi il secret <strong><code class="font-mono font-bold">CUP_SESSION_STATE</code></strong> incollando il contenuto del tuo file <code class="font-mono">session/state.json</code>.</li>
+              <li>Fatto! Ora puoi spegnere il computer: il bot girerà in cloud e ti avviserà su Telegram.</li>
+            </ol>
+            <div class="pt-1 flex flex-wrap gap-2">
+              <a href="https://github.com/edik17/CUP-Monitor/actions" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-bold text-[11px] shadow transition active:scale-95">
+                <span>⚡</span> <span>Apri Scheda Actions (Avvia / Controlla da Mobile)</span>
+              </a>
+            </div>
+          </div>
         </div>
 
         <!-- Didascalia: Come Annullare o Fermare il Monitoraggio -->

@@ -1,0 +1,83 @@
+name: CUP Monitor Cloud 24/7
+
+on:
+  schedule:
+    # Esegue ogni 30 minuti tra le 05:00 e le 21:00 UTC (07:00 - 23:00 italiane)
+    - cron: '*/30 5-21 * * *'
+  workflow_dispatch: # Permette di avviare il controllo manualmente con 1 click anche da smartphone
+
+concurrency:
+  group: cup-monitor-cloud
+  cancel-in-progress: false
+
+jobs:
+  run-monitor:
+    name: Verifica Disponibilità CUP
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐍 Configura Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 📦 Installa Dipendenze & Playwright Chromium
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          playwright install chromium --with-deps
+
+      - name: 🔄 Ripristina Sessione SPID da Cache GitHub
+        uses: actions/cache/restore@v4
+        id: session-cache
+        with:
+          path: session/state.json
+          key: cup-session-${{ github.run_id }}
+          restore-keys: |
+            cup-session-
+
+      - name: ⚙️ Prepara Configurazione & Sessione
+        env:
+          CONFIG_YAML_CONTENT: ${{ secrets.CUP_CONFIG_YAML }}
+          SESSION_STATE_CONTENT: ${{ secrets.CUP_SESSION_STATE }}
+        run: |
+          mkdir -p session logs
+
+          # 1. Scrittura di config.yaml
+          if [ -n "$CONFIG_YAML_CONTENT" ]; then
+            echo "$CONFIG_YAML_CONTENT" > config.yaml
+            echo "✅ config.yaml configurato con successo dai Secrets."
+          else
+            echo "❌ ERRORE CRITICO: Secret CUP_CONFIG_YAML non impostato!"
+            echo "Aggiungi il secret 'CUP_CONFIG_YAML' in Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+
+          # 2. Ripristino file session/state.json
+          if [ ! -s session/state.json ]; then
+            if [ -n "$SESSION_STATE_CONTENT" ]; then
+              echo "$SESSION_STATE_CONTENT" > session/state.json
+              echo "✅ File session/state.json inizializzato dal secret iniziale CUP_SESSION_STATE."
+            else
+              echo "⚠️ ATTENZIONE: Nessuna sessione trovata (né in cache né nei secrets)."
+              echo "Il monitor avviserà su Telegram della necessità di login."
+            fi
+          else
+            echo "✅ Sessione SPID ripristinata con successo dalla cache delle esecuzioni precedenti."
+          fi
+
+      - name: 🏥 Esegui Controllo CUP Monitor
+        run: |
+          python src/main.py
+
+      - name: 💾 Salva Sessione Aggiornata in Cache per il Prossimo Run
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: session/state.json
+          key: cup-session-${{ github.run_id }}
