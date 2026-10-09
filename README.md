@@ -32,19 +32,6 @@ Un assistente intelligente automatizzato e protetto che monitora costantemente l
 
 ---
 
-## 🚀 Come Pubblicare il Sito su GitHub Pages
-
-Puoi pubblicare gratuitamente il configuratore guidato per te o per altri utenti in 2 passaggi:
-
-1. Fai il push di questo repository sul tuo profilo GitHub.
-2. Vai su **Settings** del repository → **Pages** (sulla barra a sinistra):
-   - Sotto **Build and deployment** > **Source**, seleziona `Deploy from a branch`.
-   - Seleziona il branch `main` (o `master`) e imposta la cartella su `/docs`.
-   - Clicca **Save**.
-3. In meno di 60 secondi il tuo sito sarà online all'indirizzo `https://<tuo-username>.github.io/<nome-repo>/`!
-
----
-
 ## 💻 Installazione & Uso Locale
 
 ### 1. Prerequisiti
