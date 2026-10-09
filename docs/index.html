@@ -96,6 +96,14 @@
     .phone-banner-show {
       animation: phoneBannerDrop 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
+    @keyframes privacyShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .privacy-shake {
+      animation: privacyShake 0.45s ease-in-out;
+    }
   </style>
 </head>
 <body class="bg-slate-50 dark:bg-[#0b0f19] text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200 relative selection:bg-indigo-500 selection:text-white bg-grid-dots">
@@ -615,8 +623,33 @@
           </div>
         </div>
 
-        <div class="flex justify-end pt-3 sm:pt-4">
-          <button onclick="goToStep(2)" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-indigo-600 via-indigo-500 to-sky-500 hover:from-indigo-500 hover:to-sky-400 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-indigo-500/25 transition-all duration-200 flex items-center justify-center active:scale-95">
+        <!-- Checkbox di Consenso Obbligatorio Privacy & Disclaimer Legale -->
+        <div id="privacyConsentBox" class="p-3.5 sm:p-4 rounded-2xl border-2 transition-all duration-300 bg-slate-50/80 dark:bg-slate-800/40 border-slate-200/80 dark:border-slate-700/80 space-y-2">
+          <label class="flex items-start space-x-3 cursor-pointer select-none">
+            <input type="checkbox" id="privacyConsentCheckbox" onchange="togglePrivacyConsent(this.checked)" class="mt-0.5 w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500/30 shrink-0 cursor-pointer">
+            <div class="text-xs">
+              <span class="font-bold text-slate-800 dark:text-slate-200 block">
+                Dichiaro di aver letto, compreso e di accettare l'Informativa sulla Privacy e la Clausola di Manleva <span class="text-rose-500">*</span>
+              </span>
+              <span class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed block mt-0.5">
+                Confermo che il configuratore opera al 100% in locale e che il software non è affiliato con il Servizio Sanitario Nazionale né con le Regioni. 
+                <button type="button" onclick="openPrivacyModal(true)" class="text-indigo-600 dark:text-indigo-400 font-bold underline hover:no-underline ml-0.5 cursor-pointer">
+                  Apri testo clausola →
+                </button>
+              </span>
+            </div>
+          </label>
+          <div id="privacyConsentAlert" class="hidden text-[11px] text-rose-600 dark:text-rose-400 font-bold flex items-center gap-1.5 pt-1">
+            <span>⚠️</span> <span>Per andare avanti è obbligatorio accettare la clausola cliccando su "Ho compreso e accetto".</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-1">
+          <div id="privacyStatusPill" class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            <span>Accettazione clausola richiesta per proseguire</span>
+          </div>
+          <button id="step1NextBtn" onclick="handleStep1Next()" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-indigo-600 via-indigo-500 to-sky-500 hover:from-indigo-500 hover:to-sky-400 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-indigo-500/25 transition-all duration-200 flex items-center justify-center active:scale-95 cursor-pointer">
             <span>Avanti: Scegli Territorio</span> <span class="ml-2 text-base">→</span>
           </button>
         </div>
@@ -1294,6 +1327,12 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
         </button>
       </div>
 
+      <!-- Banner Avviso Obbligo di Accettazione (Visibile se richiesto) -->
+      <div id="privacyModalReqBanner" class="hidden p-3 bg-amber-500/10 border-b border-amber-500/20 text-amber-800 dark:text-amber-200 text-xs font-semibold flex items-center gap-2">
+        <span class="text-base shrink-0">⚠️</span>
+        <span>Per procedere nella pagina è necessario confermare la presa visione cliccando su <strong>"Ho compreso e accetto"</strong> in fondo a questa scheda.</span>
+      </div>
+
       <!-- Corpo del Testo (Scrollabile) -->
       <div class="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
         
@@ -1373,8 +1412,8 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
         <span class="text-[11px] text-slate-500 dark:text-slate-400 text-center sm:text-left">
           Ultimo aggiornamento: Ottobre 2026 • GDPR Compliant
         </span>
-        <button onclick="closePrivacyModal()" type="button" class="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white font-bold text-xs rounded-xl shadow-md transition active:scale-95 cursor-pointer">
-          Ho compreso e accetto
+        <button onclick="acceptPrivacyFromModal()" type="button" class="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-emerald-600/25 transition active:scale-95 cursor-pointer flex items-center justify-center gap-1.5">
+          <span>✅</span> <span>Ho compreso e accetto</span>
         </button>
       </div>
 
@@ -1590,8 +1629,59 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
       }
     }
 
-    function openPrivacyModal() {
+    function isPrivacyAccepted() {
+      return localStorage.getItem('cup_privacy_accepted') === 'true';
+    }
+
+    function updatePrivacyConsentUI(accepted) {
+      const checkbox = document.getElementById('privacyConsentCheckbox');
+      const box = document.getElementById('privacyConsentBox');
+      const alert = document.getElementById('privacyConsentAlert');
+      const pill = document.getElementById('privacyStatusPill');
+
+      if (checkbox) checkbox.checked = !!accepted;
+
+      if (box) {
+        if (accepted) {
+          box.className = "p-3.5 sm:p-4 rounded-2xl border-2 transition-all duration-300 bg-emerald-50/60 dark:bg-emerald-950/20 border-emerald-500/40 dark:border-emerald-500/30 space-y-2";
+        } else {
+          box.className = "p-3.5 sm:p-4 rounded-2xl border-2 transition-all duration-300 bg-slate-50/80 dark:bg-slate-800/40 border-slate-200/80 dark:border-slate-700/80 space-y-2";
+        }
+      }
+
+      if (alert && accepted) {
+        alert.classList.add('hidden');
+      }
+
+      if (pill) {
+        if (accepted) {
+          pill.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span><span class="text-emerald-700 dark:text-emerald-400 font-bold">Clausola accettata (GDPR Compliant)</span>';
+        } else {
+          pill.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span><span>Accettazione clausola richiesta per proseguire</span>';
+        }
+      }
+    }
+
+    function togglePrivacyConsent(checked) {
+      if (checked) {
+        localStorage.setItem('cup_privacy_accepted', 'true');
+        updatePrivacyConsentUI(true);
+      } else {
+        localStorage.removeItem('cup_privacy_accepted');
+        updatePrivacyConsentUI(false);
+      }
+    }
+
+    function openPrivacyModal(isRequired = false) {
       const modal = document.getElementById('privacyModal');
+      const banner = document.getElementById('privacyModalReqBanner');
+      if (banner) {
+        if (isRequired && !isPrivacyAccepted()) {
+          banner.classList.remove('hidden');
+        } else {
+          banner.classList.add('hidden');
+        }
+      }
       if (modal) {
         modal.classList.remove('hidden');
         document.body.classList.add('overflow-hidden');
@@ -1604,6 +1694,39 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
         modal.classList.add('hidden');
         document.body.classList.remove('overflow-hidden');
       }
+    }
+
+    function acceptPrivacyFromModal() {
+      localStorage.setItem('cup_privacy_accepted', 'true');
+      updatePrivacyConsentUI(true);
+      closePrivacyModal();
+      if (currentStep === 1) {
+        goToStep(2);
+      }
+    }
+
+    function highlightPrivacyRequired() {
+      const box = document.getElementById('privacyConsentBox');
+      const alert = document.getElementById('privacyConsentAlert');
+      if (box) {
+        box.className = "p-3.5 sm:p-4 rounded-2xl border-2 transition-all duration-300 bg-rose-50/80 dark:bg-rose-950/20 border-rose-500 ring-4 ring-rose-500/20 space-y-2 privacy-shake";
+        setTimeout(() => {
+          if (box && !isPrivacyAccepted()) {
+            box.classList.remove('privacy-shake');
+          }
+        }, 500);
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      if (alert) alert.classList.remove('hidden');
+    }
+
+    function handleStep1Next() {
+      if (!isPrivacyAccepted()) {
+        highlightPrivacyRequired();
+        openPrivacyModal(true);
+        return;
+      }
+      goToStep(2);
     }
 
     // Gestione chiusura modale con tasto Esc o click sullo sfondo
@@ -1648,6 +1771,11 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
 
     function goToStep(step) {
       if (step < 1 || step > 4) return;
+      if (step > 1 && !isPrivacyAccepted()) {
+        highlightPrivacyRequired();
+        openPrivacyModal(true);
+        return;
+      }
       currentStep = step;
 
       for (let i = 1; i <= 4; i++) {
@@ -2506,8 +2634,13 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
       }
     }
 
+    function initPrivacyConsent() {
+      updatePrivacyConsentUI(isPrivacyAccepted());
+    }
+
     // Inizializzazione
     initTheme();
+    initPrivacyConsent();
     renderProvinces();
     checkLocalServer();
     init2DSimulator();
