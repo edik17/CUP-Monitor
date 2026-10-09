@@ -43,28 +43,40 @@ jobs:
 
       - name: ⚙️ Prepara Configurazione & Sessione
         env:
-          CONFIG_YAML_CONTENT: ${{ secrets.CUP_CONFIG_YAML }}
-          SESSION_STATE_CONTENT: ${{ secrets.CUP_SESSION_STATE }}
+          S_CUP_CONFIG_YAML: ${{ secrets.CUP_CONFIG_YAML }}
+          V_CUP_CONFIG_YAML: ${{ vars.CUP_CONFIG_YAML }}
+          S_CONFIG_YAML: ${{ secrets.CONFIG_YAML }}
+          V_CONFIG_YAML: ${{ vars.CONFIG_YAML }}
+          S_CUP_CONFIG: ${{ secrets.CUP_CONFIG }}
+          V_CUP_CONFIG: ${{ vars.CUP_CONFIG }}
+          S_CUP_SESSION_STATE: ${{ secrets.CUP_SESSION_STATE }}
+          V_CUP_SESSION_STATE: ${{ vars.CUP_SESSION_STATE }}
+          S_SESSION_STATE: ${{ secrets.SESSION_STATE }}
+          V_SESSION_STATE: ${{ vars.SESSION_STATE }}
         run: |
           mkdir -p session logs
 
+          # Cerca il valore della configurazione tra secret e variabili
+          CONFIG_CONTENT="${S_CUP_CONFIG_YAML:-${V_CUP_CONFIG_YAML:-${S_CONFIG_YAML:-${V_CONFIG_YAML:-${S_CUP_CONFIG:-$V_CUP_CONFIG}}}}}"
+          SESSION_CONTENT="${S_CUP_SESSION_STATE:-${V_CUP_SESSION_STATE:-${S_SESSION_STATE:-$V_SESSION_STATE}}}"
+
           # 1. Scrittura di config.yaml
-          if [ -n "$CONFIG_YAML_CONTENT" ]; then
-            echo "$CONFIG_YAML_CONTENT" > config.yaml
-            echo "✅ config.yaml configurato con successo dai Secrets."
+          if [ -n "$CONFIG_CONTENT" ]; then
+            echo "$CONFIG_CONTENT" > config.yaml
+            echo "✅ config.yaml configurato con successo."
           else
-            echo "❌ ERRORE CRITICO: Secret CUP_CONFIG_YAML non impostato!"
-            echo "Aggiungi il secret 'CUP_CONFIG_YAML' in Settings > Secrets and variables > Actions."
+            echo "❌ ERRORE CRITICO: Configurazione non trovata!"
+            echo "Assicurati di aver aggiunto il secret 'CUP_CONFIG_YAML' in Settings > Secrets and variables > Actions > Repository secrets."
             exit 1
           fi
 
           # 2. Ripristino file session/state.json
           if [ ! -s session/state.json ]; then
-            if [ -n "$SESSION_STATE_CONTENT" ]; then
-              echo "$SESSION_STATE_CONTENT" > session/state.json
-              echo "✅ File session/state.json inizializzato dal secret iniziale CUP_SESSION_STATE."
+            if [ -n "$SESSION_CONTENT" ]; then
+              echo "$SESSION_CONTENT" > session/state.json
+              echo "✅ File session/state.json inizializzato dal secret iniziale."
             else
-              echo "⚠️ ATTENZIONE: Nessuna sessione trovata (né in cache né nei secrets)."
+              echo "⚠️ ATTENZIONE: Nessun file di sessione trovato (né in cache né nei secrets)."
               echo "Il monitor avviserà su Telegram della necessità di login."
             fi
           else
