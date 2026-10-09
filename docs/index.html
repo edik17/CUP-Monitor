@@ -24,9 +24,39 @@
     html, body {
       max-width: 100vw;
       overflow-x: hidden;
+      scroll-behavior: smooth;
     }
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); }
+    
+    /* Pattern e orbi ambientali */
+    .bg-grid-dots {
+      background-image: radial-gradient(rgba(99, 102, 241, 0.12) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .dark .bg-grid-dots {
+      background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    }
+    
+    /* Scrollbar personalizzata ultra-pulita */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.4); border-radius: 9999px; }
+    .dark ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25); }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.6); }
+
+    /* Ombre ed effetti telaio 2D */
+    .phone-chassis-shadow {
+      box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.12),
+        0 25px 65px -15px rgba(0, 0, 0, 0.8),
+        0 0 35px -5px rgba(99, 102, 241, 0.22);
+    }
+    .browser-chassis-shadow {
+      box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 25px 65px -15px rgba(0, 0, 0, 0.75),
+        0 0 40px -10px rgba(99, 102, 241, 0.15);
+    }
 
     /* Stili Simulatore 2D Mouse Animato */
     @keyframes simRippleEffect {
@@ -68,34 +98,44 @@
     }
   </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+<body class="bg-slate-50 dark:bg-[#0b0f19] text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200 relative selection:bg-indigo-500 selection:text-white bg-grid-dots">
 
-  <!-- Header / Navbar Responsive -->
-  <header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm transition-colors duration-200">
+  <!-- Luci Ambientali di Sfondo (Glow Auras) -->
+  <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[380px] bg-gradient-to-b from-indigo-500/15 via-sky-500/10 to-transparent blur-[130px] pointer-events-none rounded-full -z-10"></div>
+  <div class="fixed bottom-0 right-0 w-[500px] h-[500px] bg-emerald-500/5 blur-[150px] pointer-events-none rounded-full -z-10"></div>
+
+  <!-- Header / Navbar Frosted Glass -->
+  <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-50 shadow-sm transition-colors duration-200">
     <div class="max-w-6xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between">
-      <div class="flex items-center space-x-2 sm:space-x-3 min-w-0">
-        <span class="text-xl sm:text-2xl shrink-0">🏥</span>
+      <div class="flex items-center space-x-2.5 sm:space-x-3.5 min-w-0">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-sky-500 text-white flex items-center justify-center text-lg shadow-md shadow-indigo-500/25 ring-1 ring-white/20 shrink-0">
+          🏥
+        </div>
         <div class="min-w-0">
-          <h1 class="text-base sm:text-lg font-bold leading-tight text-slate-900 dark:text-white truncate flex items-center">
-            <span>CUP Monitor</span>
-            <span class="text-[10px] sm:text-xs bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-semibold px-1.5 sm:px-2 py-0.5 rounded-full ml-1.5 border border-emerald-200 dark:border-emerald-800 shrink-0">Open Source</span>
-          </h1>
+          <div class="flex items-center gap-1.5">
+            <h1 class="text-base sm:text-lg font-extrabold leading-tight tracking-tight text-slate-900 dark:text-white truncate">
+              CUP Monitor
+            </h1>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shadow-sm shrink-0">
+              v1.0 • Protetto
+            </span>
+          </div>
           <p class="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block truncate">Configuratore guidato & Assistente per prenotazioni sanitarie</p>
         </div>
       </div>
-      <div class="flex items-center space-x-1.5 sm:space-x-2.5 shrink-0">
+      <div class="flex items-center space-x-2 sm:space-x-2.5 shrink-0">
         <!-- Pulsante Tema Scuro / Chiaro -->
-        <button id="themeToggleBtn" onclick="toggleDarkMode()" type="button" aria-label="Cambia tema chiaro/scuro" class="p-2 rounded-xl text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 transition flex items-center justify-center">
+        <button id="themeToggleBtn" onclick="toggleDarkMode()" type="button" aria-label="Cambia tema chiaro/scuro" class="p-2 sm:p-2.5 rounded-xl text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700/80 border border-slate-200 dark:border-slate-700 transition flex items-center justify-center shadow-sm active:scale-95">
           <span id="themeIconSun" class="hidden text-sm">☀️</span>
           <span id="themeIconMoon" class="text-sm">🌙</span>
         </button>
 
-        <div id="localServerBadge" class="hidden items-center text-xs font-medium px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+        <div id="localServerBadge" class="hidden items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 shadow-sm">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse mr-1.5"></span>
-          <span class="hidden sm:inline">Server Locale Connesso</span>
+          <span class="hidden sm:inline">Server Locale Attivo</span>
           <span class="sm:hidden">Locale</span>
         </div>
-        <a href="https://github.com/edik17/CUP-Monitor" target="_blank" class="inline-flex items-center text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-900 dark:bg-slate-800 text-white hover:bg-slate-800 dark:hover:bg-slate-700 border border-slate-800 dark:border-slate-700 transition">
+        <a href="https://github.com/edik17/CUP-Monitor" target="_blank" class="inline-flex items-center text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-900 dark:bg-slate-800 text-white hover:bg-slate-800 dark:hover:bg-slate-700 border border-slate-700/60 dark:border-slate-700 shadow-sm transition active:scale-95">
           <svg class="w-4 h-4 sm:mr-1.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
           <span class="hidden sm:inline">Repository GitHub</span>
           <span class="sm:hidden font-mono text-[11px]">Git</span>
@@ -105,73 +145,111 @@
   </header>
 
   <!-- Banner Privacy Assoluta -->
-  <div class="bg-indigo-50 dark:bg-indigo-950/60 border-b border-indigo-100 dark:border-indigo-900/40 py-2 sm:py-2.5 px-3 sm:px-4 text-[11px] sm:text-xs text-indigo-900 dark:text-indigo-200 text-center font-medium transition-colors leading-relaxed">
-    🔒 <span class="font-bold">Zero Dati Salvati Online:</span> Questo configuratore viene eseguito interamente all'interno del tuo browser. Nessun Codice Fiscale, NRE o numero di telefono viene inviato a server esterni.
+  <div class="bg-gradient-to-r from-indigo-50/90 via-sky-50/90 to-indigo-50/90 dark:from-indigo-950/40 dark:via-slate-900/40 dark:to-indigo-950/40 border-b border-indigo-100/70 dark:border-indigo-900/30 py-2 sm:py-2.5 px-3 sm:px-4 text-[11px] sm:text-xs text-indigo-950 dark:text-indigo-200 text-center font-medium transition-colors leading-relaxed">
+    🔒 <span class="font-bold">Zero Dati Salvati Online:</span> Questo configuratore opera al 100% all'interno del tuo browser. Nessun Codice Fiscale, NRE o credenziale viene mai inviato a server esterni.
   </div>
 
   <!-- Contenitore Principale -->
-  <main class="max-w-4xl mx-auto px-3 sm:px-4 py-5 sm:py-8 flex-1 w-full">
+  <main class="max-w-4xl mx-auto px-3 sm:px-4 py-6 sm:py-10 flex-1 w-full space-y-8">
+    
+    <!-- HERO SECTION MODERNA -->
+    <div class="text-center max-w-2xl mx-auto space-y-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/80 dark:border-indigo-800/70 text-indigo-700 dark:text-indigo-300 text-xs font-semibold shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>Assistente Sanitario Intelligente 2.0</span>
+      </div>
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+        Trova la tua visita medica al CUP <br class="hidden sm:inline">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-sky-600 to-emerald-500 dark:from-indigo-400 dark:via-sky-400 dark:to-emerald-400">senza liste d'attesa</span>
+      </h2>
+      <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl mx-auto">
+        Monitora automaticamente i posti disponibili nei portali sanitari regionali e ricevi una notifica immediata appena un appuntamento si libera per disdetta.
+      </p>
+
+      <!-- 3 Mini Badge Caratteristiche -->
+      <div class="flex flex-wrap justify-center gap-2 pt-1 text-[11px] text-slate-600 dark:text-slate-400 font-medium">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+          <span>🔒</span> 100% Privacy Locale
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+          <span>⚡</span> Notifiche in tempo reale
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+          <span>🇮🇹</span> Tutte le 20 Regioni
+        </span>
+      </div>
+    </div>
     
     <!-- SELETTORE MODALITÀ: BOT MESSAGGISTICA VS ESTENSIONE BROWSER -->
-    <div class="mb-6 sm:mb-8">
-      <div class="text-center mb-4 sm:mb-5">
-        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">Come preferisci utilizzare CUP Monitor?</h2>
-        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Scegli tra la versione con notifiche su smartphone o l'estensione 100% nel browser</p>
+    <div class="space-y-4">
+      <div class="text-center">
+        <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">Come preferisci utilizzare CUP Monitor?</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Scegli tra la versione con notifiche su smartphone o l'estensione integrata nel browser</p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-2xl mx-auto">
         <!-- Scheda Modalità A: Bot & Notifiche Messaggistica -->
-        <button onclick="switchAppMode('script')" id="tabBtn-script" type="button" class="p-3.5 sm:p-4 rounded-2xl border-2 text-left transition relative bg-indigo-50/70 dark:bg-indigo-950/40 border-indigo-600 dark:border-indigo-500 shadow-sm">
-          <div class="flex items-center space-x-3 mb-2">
-            <span class="text-2xl sm:text-3xl">📱</span>
-            <div>
-              <span class="font-bold text-sm text-slate-900 dark:text-white block">Bot & Messaggistica</span>
-              <span class="text-[11px] text-indigo-700 dark:text-indigo-400 font-semibold">Telegram / WhatsApp / SMS</span>
+        <button onclick="switchAppMode('script')" id="tabBtn-script" type="button" class="p-4 sm:p-5 rounded-2xl border-2 text-left transition-all duration-300 relative bg-gradient-to-b from-indigo-50/90 to-white dark:from-indigo-950/40 dark:to-slate-900/90 border-indigo-600 dark:border-indigo-500 shadow-xl shadow-indigo-500/10 dark:shadow-indigo-500/5 ring-1 ring-indigo-500/20 active:scale-[0.99]">
+          <div class="flex items-start space-x-3.5 mb-2.5">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 to-sky-600 text-white flex items-center justify-center text-2xl shadow-md shadow-indigo-500/25 shrink-0">
+              📱
+            </div>
+            <div class="min-w-0 flex-1">
+              <span class="font-bold text-sm sm:text-base text-slate-900 dark:text-white block">Bot & Messaggistica</span>
+              <span class="text-[11px] text-indigo-700 dark:text-indigo-400 font-semibold flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                Telegram / WhatsApp / SMS
+              </span>
             </div>
           </div>
-          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Ideale se vuoi monitoraggio in background con notifiche push dirette sul tuo smartphone.</p>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Ideale se vuoi monitoraggio in background su PC o Cloud, con notifiche push con suono e vibrazione sul tuo smartphone.</p>
         </button>
 
         <!-- Scheda Modalità B: Estensione Web Browser -->
-        <button onclick="switchAppMode('extension')" id="tabBtn-extension" type="button" class="p-3.5 sm:p-4 rounded-2xl border-2 text-left transition relative bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700">
-          <div class="flex items-center space-x-3 mb-2">
-            <span class="text-2xl sm:text-3xl">🧩</span>
-            <div>
-              <span class="font-bold text-sm text-slate-900 dark:text-white block">Estensione Web Browser</span>
-              <span class="text-[11px] text-emerald-700 dark:text-emerald-300 font-semibold bg-emerald-100 dark:bg-emerald-950/70 px-2 py-0.5 rounded-full inline-block">Zero Terminale • 100% Browser</span>
+        <button onclick="switchAppMode('extension')" id="tabBtn-extension" type="button" class="p-4 sm:p-5 rounded-2xl border-2 text-left transition-all duration-300 relative bg-white/80 dark:bg-slate-900/60 border-slate-200/80 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-md backdrop-blur active:scale-[0.99]">
+          <div class="flex items-start space-x-3.5 mb-2.5">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-600 text-white flex items-center justify-center text-2xl shadow-md shadow-emerald-500/25 shrink-0">
+              🧩
+            </div>
+            <div class="min-w-0 flex-1">
+              <span class="font-bold text-sm sm:text-base text-slate-900 dark:text-white block">Estensione Web Browser</span>
+              <span class="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                Zero Terminale • 100% Browser
+              </span>
             </div>
           </div>
-          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Ideale per computer: si installa con 1 click in Chrome/Edge e fa tutto direttamente dal browser.</p>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Ideale per computer: si installa con 1 click in Chrome/Edge e controlla i posti direttamente mentre navighi sul web.</p>
         </button>
       </div>
     </div>
 
     <!-- CONTENITORE MODALITÀ SCRIPT (BOT & MESSAGGISTICA) -->
-    <div id="mode-script-container">
-      <!-- Barra Avanzamento Step -->
-      <div class="mb-6 sm:mb-8">
+    <div id="mode-script-container" class="space-y-6">
+      <!-- Barra Avanzamento Step con Glow -->
+      <div>
         <div class="flex items-center justify-between max-w-2xl mx-auto relative px-2 sm:px-4">
-          <div class="absolute left-2 sm:left-4 right-2 sm:right-4 top-1/2 -translate-y-1/2 h-1 bg-slate-200 dark:bg-slate-800 -z-0"></div>
-          <div id="stepLine" class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-0 h-1 bg-indigo-600 transition-all duration-300 -z-0"></div>
+          <div class="absolute left-3 sm:left-6 right-3 sm:right-6 top-1/2 -translate-y-1/2 h-1.5 bg-slate-200/80 dark:bg-slate-800/80 rounded-full -z-0"></div>
+          <div id="stepLine" class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-0 h-1.5 bg-gradient-to-r from-indigo-600 via-indigo-500 to-sky-500 rounded-full shadow-sm shadow-indigo-500/50 transition-all duration-300 -z-0"></div>
 
-          <button onclick="goToStep(1)" id="stepBtn-1" class="relative z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full font-bold text-xs sm:text-sm flex items-center justify-center bg-indigo-600 text-white shadow transition">1</button>
-          <button onclick="goToStep(2)" id="stepBtn-2" class="relative z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full font-bold text-xs sm:text-sm flex items-center justify-center bg-white dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 shadow transition">2</button>
-          <button onclick="goToStep(3)" id="stepBtn-3" class="relative z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full font-bold text-xs sm:text-sm flex items-center justify-center bg-white dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 shadow transition">3</button>
-          <button onclick="goToStep(4)" id="stepBtn-4" class="relative z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full font-bold text-xs sm:text-sm flex items-center justify-center bg-white dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 shadow transition">4</button>
+          <button onclick="goToStep(1)" id="stepBtn-1" class="relative z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white shadow-lg shadow-indigo-600/30 ring-4 ring-indigo-500/20 scale-105 transition-all">1</button>
+          <button onclick="goToStep(2)" id="stepBtn-2" class="relative z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 shadow-sm transition-all">2</button>
+          <button onclick="goToStep(3)" id="stepBtn-3" class="relative z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 shadow-sm transition-all">3</button>
+          <button onclick="goToStep(4)" id="stepBtn-4" class="relative z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 shadow-sm transition-all">4</button>
         </div>
         <div class="flex justify-between max-w-2xl mx-auto mt-2 text-[10px] sm:text-xs font-semibold text-slate-600 dark:text-slate-400 text-center px-1">
-          <span class="w-16 sm:w-20 text-indigo-700 dark:text-indigo-400">1. Notifiche</span>
+          <span class="w-16 sm:w-20 text-indigo-700 dark:text-indigo-400 font-bold">1. Notifiche</span>
           <span class="w-16 sm:w-20">2. Territorio</span>
           <span class="w-16 sm:w-20">3. Dati Ricetta</span>
           <span class="w-16 sm:w-20">4. Avvio Bot</span>
         </div>
       </div>
 
-    <!-- BOX WIZARD -->
-    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden transition-colors">
+    <!-- BOX WIZARD (FROSTED GLASS CONTAINER) -->
+    <div class="bg-white/90 dark:bg-slate-900/80 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-slate-900/5 dark:shadow-black/50 border border-slate-200/80 dark:border-slate-800/80 overflow-hidden transition-all duration-200">
       
       <!-- STEP 1: SCELTA NOTIFICHE (TELEGRAM / TELEFONO) -->
-      <section id="step-1" class="p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
+      <section id="step-1" class="p-4 sm:p-6 md:p-8 space-y-6">
         <div>
           <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">1. Scegli il Canale di Notifica</h2>
           <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Dove vuoi ricevere gli avvisi immediati appena si libera una visita o un esame?</p>
@@ -179,56 +257,83 @@
 
         <!-- Selettore Canale a Schede -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          <label class="relative flex flex-col p-3.5 sm:p-4 border-2 rounded-xl cursor-pointer transition border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/40" id="card-telegram">
+          <label class="relative flex flex-col p-4 sm:p-5 border-2 rounded-2xl cursor-pointer transition-all duration-300 border-indigo-600 dark:border-indigo-500 bg-gradient-to-br from-indigo-500/10 via-white to-sky-500/5 dark:from-indigo-950/50 dark:via-slate-900/90 dark:to-sky-950/20 shadow-lg shadow-indigo-500/10 ring-1 ring-indigo-500/20 active:scale-[0.99]" id="card-telegram">
             <input type="radio" name="notification_channel" value="telegram" checked onchange="updateChannelView()" class="sr-only">
-            <div class="flex items-center space-x-3">
-              <span class="text-2xl sm:text-3xl">💬</span>
-              <div>
+            <div class="flex items-start space-x-3.5 mb-2">
+              <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 text-white flex items-center justify-center text-2xl shadow-md shadow-sky-500/25 shrink-0">
+                💬
+              </div>
+              <div class="min-w-0 flex-1">
                 <span class="font-bold text-sm sm:text-base text-slate-900 dark:text-white block">Bot Telegram</span>
-                <span class="text-[10px] sm:text-xs text-emerald-700 dark:text-emerald-300 font-semibold bg-emerald-100 dark:bg-emerald-950/70 px-2 py-0.5 rounded-full inline-block mt-0.5">Consigliato • 100% Gratuito</span>
+                <span class="text-[10px] sm:text-xs text-emerald-700 dark:text-emerald-400 font-semibold bg-emerald-100/80 dark:bg-emerald-950/80 px-2 py-0.5 rounded-full inline-flex items-center gap-1 mt-0.5 border border-emerald-500/20">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Consigliato • Gratuito
+                </span>
               </div>
             </div>
-            <p class="text-xs text-slate-600 dark:text-slate-400 mt-2.5 leading-relaxed">Ricevi notifiche istantanee tramite un bot Telegram personale. Nessun costo e zero limiti di messaggi.</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Ricevi notifiche push istantanee tramite un bot Telegram personale. Nessun costo e zero limiti di messaggi.</p>
           </label>
 
-          <label class="relative flex flex-col p-3.5 sm:p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900" id="card-phone">
+          <label class="relative flex flex-col p-4 sm:p-5 border-2 rounded-2xl cursor-pointer transition-all duration-300 border-slate-200/80 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700 bg-white/80 dark:bg-slate-900/60 hover:shadow-md backdrop-blur active:scale-[0.99]" id="card-phone">
             <input type="radio" name="notification_channel" value="phone" onchange="updateChannelView()" class="sr-only">
-            <div class="flex items-center space-x-3">
-              <span class="text-2xl sm:text-3xl">📱</span>
-              <div>
+            <div class="flex items-start space-x-3.5 mb-2">
+              <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white flex items-center justify-center text-2xl shadow-md shadow-emerald-500/25 shrink-0">
+                📱
+              </div>
+              <div class="min-w-0 flex-1">
                 <span class="font-bold text-sm sm:text-base text-slate-900 dark:text-white block">Numero di Telefono</span>
-                <span class="text-[10px] sm:text-xs text-blue-700 dark:text-blue-300 font-semibold bg-blue-100 dark:bg-blue-950/70 px-2 py-0.5 rounded-full inline-block mt-0.5">WhatsApp o SMS</span>
+                <span class="text-[10px] sm:text-xs text-sky-700 dark:text-sky-400 font-semibold bg-sky-100/80 dark:bg-sky-950/80 px-2 py-0.5 rounded-full inline-flex items-center gap-1 mt-0.5 border border-sky-500/20">
+                  <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span> WhatsApp o SMS
+                </span>
               </div>
             </div>
-            <p class="text-xs text-slate-600 dark:text-slate-400 mt-2.5 leading-relaxed">Ricevi messaggi su WhatsApp (tramite webhook gratuito CallMeBot) oppure SMS tradizionali.</p>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Ricevi messaggi su WhatsApp (tramite webhook gratuito CallMeBot) oppure SMS tradizionali.</p>
           </label>
         </div>
 
         <!-- GUIDA & CAMPI TELEGRAM -->
-        <div id="section-telegram-config" class="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-          <div class="bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 rounded-xl p-3.5 sm:p-4">
-            <h3 class="text-xs sm:text-sm font-bold text-sky-900 dark:text-sky-200 flex items-center">
-              <span class="mr-2">🧭</span> Procedura Guidata: Creare il Bot Telegram in 2 minuti
-            </h3>
-            <ol class="text-[11px] sm:text-xs text-sky-800 dark:text-sky-300 space-y-1.5 sm:space-y-2 mt-2 list-decimal list-inside leading-relaxed">
-              <li>Apri Telegram e cerca <a href="https://t.me/BotFather" target="_blank" class="font-bold underline text-sky-900 dark:text-sky-200">@BotFather</a> (la spunta blu ufficiale).</li>
-              <li>Invia il comando <code class="bg-sky-100 dark:bg-sky-900 px-1.5 py-0.5 rounded font-mono font-bold">/newbot</code>, scegli un nome e uno username che finisca con <code class="font-mono">bot</code>.</li>
-              <li>BotFather ti risponderà dandoti il <strong>Token HTTP API</strong>. Copialo e incollalo qui sotto.</li>
-              <li>Apri la chat con il tuo nuovo bot appena creato, premi <strong>Avvia</strong> e inviagli un messaggio qualsiasi (es. "ciao").</li>
-              <li>Per trovare il tuo <strong>Chat ID</strong>, visita: <code class="bg-sky-100 dark:bg-sky-900 px-1 py-0.5 rounded break-all">https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code> e cerca il numero in <code class="font-bold font-mono">"chat":{"id": 123456789}</code>.</li>
-            </ol>
+        <div id="section-telegram-config" class="space-y-5 pt-4 border-t border-slate-200/80 dark:border-slate-800/80">
+          <div class="bg-gradient-to-br from-sky-50/90 via-indigo-50/40 to-white dark:from-sky-950/30 dark:via-slate-900/60 dark:to-slate-900/80 border border-sky-200/80 dark:border-sky-900/50 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xs sm:text-sm font-bold text-sky-950 dark:text-sky-200 flex items-center gap-2">
+                <span class="p-1.5 bg-sky-500/10 rounded-xl text-base">🧭</span>
+                <span>Procedura Guidata: Creare il Bot Telegram in 2 minuti</span>
+              </h3>
+              <span class="text-[10px] font-semibold text-sky-600 dark:text-sky-400 bg-sky-100 dark:bg-sky-950 px-2 py-0.5 rounded-full border border-sky-300 dark:border-sky-800 hidden sm:inline-block">Passo 1 di 2</span>
+            </div>
+            <div class="grid grid-cols-1 gap-2.5 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+              <div class="flex items-start gap-2.5 p-2 rounded-xl bg-white/70 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800/60">
+                <span class="w-5 h-5 rounded-full bg-sky-500 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">1</span>
+                <div>Apri Telegram e cerca <a href="https://t.me/BotFather" target="_blank" class="font-bold underline text-sky-600 dark:text-sky-400 hover:text-sky-700">@BotFather</a> (il bot ufficiale con spunta blu).</div>
+              </div>
+              <div class="flex items-start gap-2.5 p-2 rounded-xl bg-white/70 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800/60">
+                <span class="w-5 h-5 rounded-full bg-sky-500 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">2</span>
+                <div>Invia il comando <code class="bg-sky-100 dark:bg-sky-900/80 text-sky-900 dark:text-sky-200 px-1.5 py-0.5 rounded font-mono font-bold">/newbot</code>, scegli un nome e uno username che finisca con <code class="font-mono font-semibold">bot</code>.</div>
+              </div>
+              <div class="flex items-start gap-2.5 p-2 rounded-xl bg-white/70 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800/60">
+                <span class="w-5 h-5 rounded-full bg-sky-500 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">3</span>
+                <div>BotFather ti risponderà dandoti il <strong>Token HTTP API</strong>. Copialo e incollalo nel campo sotto.</div>
+              </div>
+              <div class="flex items-start gap-2.5 p-2 rounded-xl bg-white/70 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800/60">
+                <span class="w-5 h-5 rounded-full bg-sky-500 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">4</span>
+                <div>Apri la chat col tuo nuovo bot, premi <strong>Avvia</strong> e inviagli un messaggio di prova (es. "ciao").</div>
+              </div>
+              <div class="flex items-start gap-2.5 p-2 rounded-xl bg-white/70 dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800/60">
+                <span class="w-5 h-5 rounded-full bg-sky-500 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">5</span>
+                <div>Per trovare il tuo <strong>Chat ID</strong>, apri nel browser: <code class="bg-sky-100 dark:bg-sky-900/80 text-sky-900 dark:text-sky-200 px-1 py-0.5 rounded break-all font-mono text-[10px]">https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code> e copia il numero in <code class="font-bold font-mono">"chat":{"id": 123456789}</code>.</div>
+              </div>
+            </div>
           </div>
 
           <!-- BOX SIMULATORE 2D SMARTPHONE (ANIMAZIONE TOUCH CELLULARE) -->
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 sm:p-5 shadow-2xl space-y-3 sm:space-y-4">
+          <div class="bg-slate-950/90 border border-slate-800/90 rounded-3xl p-3 sm:p-5 shadow-2xl space-y-3 sm:space-y-4 backdrop-blur-xl">
             <!-- Header con Titolo & Controlli -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
               <div class="flex items-start sm:items-center space-x-2.5">
-                <span class="p-2 bg-indigo-950/80 border border-indigo-700/50 rounded-xl text-base sm:text-lg shrink-0">📱</span>
+                <div class="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center text-lg shrink-0">📱</div>
                 <div>
                   <h4 class="font-bold text-xs sm:text-sm text-white flex flex-wrap items-center gap-1.5">
                     <span>Simulatore Smartphone: Bot & Notifiche</span>
-                    <span class="text-[10px] font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full">Touch</span>
+                    <span class="text-[10px] font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full">Touch Live</span>
                   </h4>
                   <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5">Guarda la simulazione dei tocchi sullo schermo, dall'avvio del bot all'avviso del posto trovato.</p>
                 </div>
@@ -236,15 +341,15 @@
 
               <!-- Controlli Play / Pause / Restart & Switch -->
               <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs shrink-0">
-                <button onclick="switchAppMode('extension')" type="button" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-indigo-300 font-semibold rounded-lg border border-indigo-500/30 flex items-center space-x-1 transition text-[11px] sm:text-xs" title="Guarda la versione Computer">
+                <button onclick="switchAppMode('extension')" type="button" class="px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-indigo-300 font-semibold rounded-xl border border-indigo-500/30 flex items-center space-x-1.5 transition text-[11px] sm:text-xs shadow-sm hover:border-indigo-400/50" title="Guarda la versione Computer">
                   <span>💻</span>
                   <span>Versione PC</span>
                 </button>
-                <button id="phoneSimPlayPauseBtn" onclick="togglePhoneSimPlayback()" type="button" class="px-2.5 sm:px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-lg border border-slate-700 flex items-center space-x-1.5 transition text-[11px] sm:text-xs">
+                <button id="phoneSimPlayPauseBtn" onclick="togglePhoneSimPlayback()" type="button" class="px-2.5 sm:px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold rounded-xl border border-slate-700/80 flex items-center space-x-1.5 transition text-[11px] sm:text-xs shadow-sm">
                   <span id="phoneSimPlayIcon">⏸️</span>
                   <span id="phoneSimPlayText">Pausa</span>
                 </button>
-                <button onclick="restartPhoneSimAnimation()" type="button" class="px-2.5 sm:px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-lg border border-slate-700 flex items-center space-x-1.5 transition text-[11px] sm:text-xs">
+                <button onclick="restartPhoneSimAnimation()" type="button" class="px-2.5 sm:px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold rounded-xl border border-slate-700/80 flex items-center space-x-1.5 transition text-[11px] sm:text-xs shadow-sm">
                   <span>🔄</span>
                   <span>Ricomincia</span>
                 </button>
@@ -252,48 +357,48 @@
             </div>
 
             <!-- Barra di Stato & Avanzamento Step -->
-            <div class="bg-slate-950/70 border border-slate-800 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div class="bg-slate-900/70 border border-slate-800/80 rounded-2xl px-3 sm:px-4 py-2 sm:py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div class="flex items-center space-x-2.5 sm:space-x-3 min-w-0">
-                <span id="phoneSimStepBadge" class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-indigo-600 text-white font-bold text-[11px] sm:text-xs flex items-center justify-center shrink-0">1</span>
+                <span id="phoneSimStepBadge" class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-tr from-indigo-600 to-sky-500 text-white font-bold text-[11px] sm:text-xs flex items-center justify-center shrink-0 shadow-sm shadow-indigo-500/40">1</span>
                 <span id="phoneSimStepDesc" class="text-xs sm:text-sm font-semibold text-slate-200 truncate">1. Apri Telegram sullo smartphone e crea il bot con @BotFather</span>
               </div>
               <div class="flex items-center space-x-1 sm:space-x-1.5 text-xs shrink-0 self-end sm:self-auto">
-                <button onclick="jumpToPhoneSimStep(1)" id="phoneStepDot-1" type="button" class="px-2 py-1 rounded bg-indigo-600 text-white font-mono font-bold text-[10px] sm:text-[11px] ring-2 ring-indigo-400/50 transition">1</button>
-                <button onclick="jumpToPhoneSimStep(2)" id="phoneStepDot-2" type="button" class="px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[10px] sm:text-[11px] transition">2</button>
-                <button onclick="jumpToPhoneSimStep(3)" id="phoneStepDot-3" type="button" class="px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[10px] sm:text-[11px] transition">3</button>
-                <button onclick="jumpToPhoneSimStep(4)" id="phoneStepDot-4" type="button" class="px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[10px] sm:text-[11px] transition">4</button>
-                <button onclick="jumpToPhoneSimStep(5)" id="phoneStepDot-5" type="button" class="px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[10px] sm:text-[11px] transition">5</button>
+                <button onclick="jumpToPhoneSimStep(1)" id="phoneStepDot-1" type="button" class="px-2 py-1 rounded-lg bg-indigo-600 text-white font-mono font-bold text-[10px] sm:text-[11px] ring-2 ring-indigo-400/50 transition">1</button>
+                <button onclick="jumpToPhoneSimStep(2)" id="phoneStepDot-2" type="button" class="px-2 py-1 rounded-lg bg-slate-800/80 text-slate-400 hover:text-white font-mono font-bold text-[10px] sm:text-[11px] transition">2</button>
+                <button onclick="jumpToPhoneSimStep(3)" id="phoneStepDot-3" type="button" class="px-2 py-1 rounded-lg bg-slate-800/80 text-slate-400 hover:text-white font-mono font-bold text-[10px] sm:text-[11px] transition">3</button>
+                <button onclick="jumpToPhoneSimStep(4)" id="phoneStepDot-4" type="button" class="px-2 py-1 rounded-lg bg-slate-800/80 text-slate-400 hover:text-white font-mono font-bold text-[10px] sm:text-[11px] transition">4</button>
+                <button onclick="jumpToPhoneSimStep(5)" id="phoneStepDot-5" type="button" class="px-2 py-1 rounded-lg bg-slate-800/80 text-slate-400 hover:text-white font-mono font-bold text-[10px] sm:text-[11px] transition">5</button>
               </div>
             </div>
 
             <!-- PALCOSCENICO SMARTPHONE 2D MOCKUP -->
-            <div id="phoneSimStageContainer" class="relative bg-slate-950 border border-slate-800 rounded-xl py-4 sm:py-6 px-1 sm:px-2 overflow-hidden shadow-inner select-none flex justify-center items-center">
+            <div id="phoneSimStageContainer" class="relative bg-gradient-to-b from-[#060913] via-slate-950 to-[#060913] border border-slate-800/80 rounded-2xl py-5 sm:py-7 px-1 sm:px-2 overflow-hidden shadow-inner select-none flex justify-center items-center">
               
               <!-- TELAIO CELLULARE (SMARTPHONE FRAME) -->
-              <div class="relative w-full max-w-[260px] sm:max-w-[290px] bg-slate-900 border-4 border-slate-700/80 rounded-[38px] sm:rounded-[42px] shadow-2xl p-2 sm:p-2.5 overflow-hidden ring-1 ring-slate-800/80">
+              <div class="relative w-full max-w-[260px] sm:max-w-[290px] bg-slate-900/90 border-[5px] border-slate-700/80 rounded-[42px] sm:rounded-[46px] p-2 sm:p-2.5 overflow-hidden ring-1 ring-white/10 phone-chassis-shadow">
                 
                 <!-- DISPLAY INTERNO SMARTPHONE -->
-                <div id="phoneInnerScreen" class="relative bg-slate-950 rounded-[30px] sm:rounded-[32px] overflow-hidden border border-slate-800 h-[430px] sm:h-[460px] flex flex-col justify-between">
+                <div id="phoneInnerScreen" class="relative bg-slate-950 rounded-[32px] sm:rounded-[36px] overflow-hidden border border-slate-800/80 h-[430px] sm:h-[460px] flex flex-col justify-between shadow-inner">
                   
                   <!-- DYNAMIC ISLAND & STATUS BAR -->
                   <div class="pt-2 px-3 sm:px-4 flex items-center justify-between text-white text-[10px] font-semibold relative z-30 bg-slate-950/80 backdrop-blur">
                     <span>09:41</span>
                     <!-- Dynamic Island Notch -->
-                    <div class="w-16 sm:w-20 h-3.5 sm:h-4 bg-black rounded-full flex items-center justify-center space-x-1 border border-slate-800/40">
-                      <span class="w-1.5 h-1.5 rounded-full bg-slate-800"></span>
-                      <span class="w-1 h-1 rounded-full bg-emerald-500/80"></span>
+                    <div class="w-18 sm:w-20 h-4 bg-black rounded-full flex items-center justify-center space-x-1.5 border border-slate-800/70 shadow-inner px-2">
+                      <span class="w-2 h-2 rounded-full bg-slate-900 border border-slate-800"></span>
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500/90 animate-pulse"></span>
                     </div>
-                    <div class="flex items-center space-x-1">
-                      <span>5G</span>
+                    <div class="flex items-center space-x-1.5 text-[10px]">
+                      <span class="font-bold text-[9px]">5G</span>
                       <span>📶</span>
                       <span class="text-emerald-400">🔋</span>
                     </div>
                   </div>
 
                   <!-- BANNER NOTIFICA PUSH IN DISCESA (STEP 4 & 5) -->
-                  <div id="phonePushBanner" class="hidden absolute top-6 sm:top-8 left-1.5 right-1.5 sm:left-2 sm:right-2 z-40 bg-slate-900/95 border-2 border-emerald-500/80 rounded-2xl p-2 sm:p-2.5 shadow-2xl backdrop-blur-md transition-all">
-                    <div class="flex items-start space-x-2">
-                      <div class="w-7 h-7 rounded-lg bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-sm shrink-0">
+                  <div id="phonePushBanner" class="hidden absolute top-6 sm:top-8 left-1.5 right-1.5 sm:left-2 sm:right-2 z-40 bg-slate-900/95 border-2 border-emerald-500 rounded-2xl p-2.5 shadow-2xl backdrop-blur-xl transition-all ring-1 ring-emerald-500/30">
+                    <div class="flex items-start space-x-2.5">
+                      <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 text-white flex items-center justify-center text-sm shrink-0 shadow-md">
                         💬
                       </div>
                       <div class="flex-1 min-w-0">
@@ -310,30 +415,30 @@
                   <!-- SCHERMATA STEP 1: Creazione Bot con @BotFather -->
                   <div id="phoneScreen-1" class="flex-1 p-2.5 sm:p-3 flex flex-col justify-between text-xs transition-opacity duration-300">
                     <!-- Telegram Header -->
-                    <div class="bg-sky-900/40 border border-sky-700/40 rounded-xl p-2 flex items-center justify-between mb-2">
+                    <div class="bg-sky-950/60 border border-sky-800/50 rounded-2xl p-2.5 flex items-center justify-between mb-2 shadow-sm backdrop-blur">
                       <div class="flex items-center space-x-2">
-                        <span class="w-6 h-6 rounded-full bg-sky-500 text-white flex items-center justify-center text-xs font-bold">🤖</span>
+                        <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-500 text-white flex items-center justify-center text-xs font-bold shadow-sm">🤖</div>
                         <div>
                           <div class="text-[11px] font-bold text-white flex items-center">
                             BotFather <span class="text-sky-400 ml-1 text-[10px]">☑️</span>
                           </div>
-                          <div class="text-[9px] text-slate-400">bot ufficiale</div>
+                          <div class="text-[9px] text-sky-400/80 font-medium">bot verificato</div>
                         </div>
                       </div>
-                      <span class="text-[10px] text-sky-400 font-mono">Telegram</span>
+                      <span class="text-[10px] text-sky-400 font-mono font-semibold">Telegram</span>
                     </div>
 
                     <!-- Bolle Chat Telegram -->
                     <div class="space-y-2 flex-1 overflow-y-auto pr-1">
                       <div class="flex justify-end">
-                        <div class="bg-sky-600 text-white rounded-xl rounded-tr-none px-2.5 py-1 text-[11px] shadow">
+                        <div class="bg-gradient-to-r from-sky-600 to-indigo-600 text-white rounded-2xl rounded-tr-none px-3 py-1.5 text-[11px] shadow-md font-medium">
                           /newbot
                         </div>
                       </div>
                       <div class="flex justify-start">
-                        <div class="bg-slate-900 border border-slate-800 text-slate-200 rounded-xl rounded-tl-none p-2 text-[10px] space-y-1 shadow">
-                          <p>Ottimo! Come vuoi chiamare il bot?</p>
-                          <div id="phoneTokenPill" class="bg-slate-950 border border-sky-500/40 p-1.5 rounded text-[9px] font-mono text-emerald-400 break-all">
+                        <div class="bg-slate-900/95 border border-slate-800/90 text-slate-200 rounded-2xl rounded-tl-none p-2.5 text-[10px] space-y-1.5 shadow-md">
+                          <p class="font-medium text-slate-100">Ottimo! Come vuoi chiamare il bot?</p>
+                          <div id="phoneTokenPill" class="bg-slate-950/90 border border-sky-500/40 p-2 rounded-xl text-[9px] font-mono text-emerald-400 break-all ring-1 ring-sky-500/20">
                             🔑 Token: 789123456:AAFv...
                           </div>
                           <span class="text-[9px] text-slate-400 block text-right">09:41</span>
@@ -341,38 +446,38 @@
                       </div>
                     </div>
 
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-1.5 flex items-center text-slate-400 text-[10px] mt-1">
-                      <span class="mr-1.5">📎</span>
-                      <span class="flex-1">Messaggio...</span>
-                      <span>➤</span>
+                    <div class="bg-slate-900 border border-slate-800/90 rounded-xl p-2 flex items-center text-slate-400 text-[10px] mt-1 shadow-sm">
+                      <span class="mr-2">📎</span>
+                      <span class="flex-1 text-slate-400">Messaggio...</span>
+                      <span class="text-indigo-400 font-bold">➤</span>
                     </div>
                   </div>
 
                   <!-- SCHERMATA STEP 2: Avvio Chat con CUP Monitor Bot -->
                   <div id="phoneScreen-2" class="hidden flex-1 p-2.5 sm:p-3 flex flex-col justify-between text-xs transition-opacity duration-300">
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-2 flex items-center space-x-2 mb-2">
-                      <span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">🏥</span>
+                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-2.5 flex items-center space-x-2.5 mb-2 shadow-sm">
+                      <div class="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs shadow-sm">🏥</div>
                       <div>
                         <div class="text-[11px] font-bold text-white">CUP Monitor Bot</div>
-                        <div class="text-[9px] text-emerald-400">bot • online</div>
+                        <div class="text-[9px] text-emerald-400 font-medium">bot • online</div>
                       </div>
                     </div>
 
                     <div class="flex-1 flex flex-col items-center justify-center text-center p-2 space-y-3">
-                      <div class="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-2xl shadow">
+                      <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-950 to-slate-900 border border-indigo-500/30 flex items-center justify-center text-2xl shadow-lg ring-1 ring-indigo-500/20">
                         🏥
                       </div>
                       <div>
                         <div class="text-xs font-bold text-white">Cosa può fare questo bot?</div>
-                        <div class="text-[10px] text-slate-400 mt-1">Ti avvisa in tempo reale sul telefono non appena si libera un appuntamento sanitario al CUP.</div>
+                        <div class="text-[10px] text-slate-400 mt-1 max-w-[190px]">Ti avvisa in tempo reale sul telefono non appena si libera un appuntamento sanitario al CUP.</div>
                       </div>
-                      <div id="phoneBotReadyPill" class="hidden bg-emerald-950/70 border border-emerald-500/60 text-emerald-300 px-2.5 py-1 rounded-lg text-[10px] font-semibold animate-pulse">
+                      <div id="phoneBotReadyPill" class="hidden bg-emerald-950/80 border border-emerald-500/70 text-emerald-300 px-3 py-1 rounded-xl text-[10px] font-semibold animate-pulse shadow-md">
                         ✅ Bot avviato e collegato!
                       </div>
                     </div>
 
                     <!-- Pulsante AVVIA -->
-                    <button id="phoneTgStartBtn" type="button" class="w-full py-2 bg-sky-500 hover:bg-sky-400 font-bold rounded-xl text-white text-xs shadow-lg flex items-center justify-center space-x-1.5 transition">
+                    <button id="phoneTgStartBtn" type="button" class="w-full py-2.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 font-bold rounded-xl text-white text-xs shadow-lg flex items-center justify-center space-x-1.5 transition active:scale-95">
                       <span>▶️</span>
                       <span>AVVIA</span>
                     </button>
@@ -387,7 +492,7 @@
                       <div class="text-[10px] sm:text-[11px] text-indigo-300 font-medium">Martedì, 6 Ottobre</div>
                       
                       <!-- Widget di ascolto in background -->
-                      <div class="mt-4 sm:mt-6 bg-slate-900/90 border border-indigo-500/40 rounded-2xl p-2.5 sm:p-3 shadow-xl backdrop-blur-md max-w-[200px] mx-auto text-left space-y-1">
+                      <div class="mt-4 sm:mt-6 bg-slate-900/90 border border-indigo-500/40 rounded-2xl p-2.5 sm:p-3 shadow-xl backdrop-blur-md max-w-[210px] mx-auto text-left space-y-1 ring-1 ring-indigo-500/20">
                         <div class="flex items-center space-x-1.5">
                           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                           <span class="text-[10px] font-bold text-slate-200">CUP Monitor attivo 24/7</span>
@@ -400,7 +505,7 @@
                   <!-- SCHERMATA STEP 4 & 5: Prenotazione CUP Aperta da Notifica -->
                   <div id="phoneScreen-4" class="hidden flex-1 p-2.5 sm:p-3 flex flex-col justify-between text-xs transition-opacity duration-300">
                     <!-- Browser Bar Portale Regionale -->
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 flex items-center justify-between text-[10px] mb-2">
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 flex items-center justify-between text-[10px] mb-2 shadow-sm">
                       <span class="text-emerald-400">🔒</span>
                       <span class="text-slate-300 font-mono truncate">prenotasalute.regione...</span>
                       <span class="text-slate-500">↻</span>
@@ -408,9 +513,9 @@
 
                     <!-- Scheda Appuntamento Rilevato -->
                     <div class="space-y-2 flex-1">
-                      <div class="bg-emerald-950/50 border border-emerald-500/60 rounded-xl p-2.5 space-y-1.5">
+                      <div class="bg-emerald-950/50 border border-emerald-500/60 rounded-2xl p-2.5 space-y-1.5 shadow-md">
                         <div class="flex items-center justify-between">
-                          <span class="text-[9px] font-bold bg-emerald-500/30 text-emerald-300 px-1.5 py-0.5 rounded">DISPONIBILE ORA</span>
+                          <span class="text-[9px] font-bold bg-emerald-500/30 text-emerald-300 px-2 py-0.5 rounded-full">DISPONIBILE ORA</span>
                           <span class="text-[10px] font-bold text-white">Posto Libero</span>
                         </div>
                         <div class="text-[11px] font-bold text-white">Visita Specialistica</div>
@@ -424,7 +529,7 @@
                     </div>
 
                     <!-- Pulsante Conferma Prenotazione -->
-                    <button type="button" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 font-bold rounded-xl text-white text-xs shadow-lg flex items-center justify-center space-x-1.5">
+                    <button type="button" class="w-full py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 font-bold rounded-xl text-white text-xs shadow-lg flex items-center justify-center space-x-1.5 transition active:scale-95">
                       <span>✅</span>
                       <span>Prenota e Blocca Subito</span>
                     </button>
@@ -447,20 +552,26 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Telegram Bot Token *</label>
-              <input type="text" id="tg_bot_token" placeholder="es. 123456789:ABCdefGHIjklMNOpqrs..." class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-1">
+            <div class="space-y-1">
+              <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+                <span>Telegram Bot Token <span class="text-rose-500">*</span></span>
+                <span class="text-[10px] text-slate-400 font-normal">da @BotFather</span>
+              </label>
+              <input type="text" id="tg_bot_token" placeholder="es. 123456789:ABCdefGHIjklMNOpqrs..." class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800/80 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 focus:outline-none font-mono transition shadow-sm placeholder:text-slate-400">
             </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Telegram Chat ID *</label>
-              <input type="text" id="tg_chat_id" placeholder="es. 987654321" class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono">
+            <div class="space-y-1">
+              <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+                <span>Telegram Chat ID <span class="text-rose-500">*</span></span>
+                <span class="text-[10px] text-slate-400 font-normal">il tuo ID numerico</span>
+              </label>
+              <input type="text" id="tg_chat_id" placeholder="es. 987654321" class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800/80 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 focus:outline-none font-mono transition shadow-sm placeholder:text-slate-400">
             </div>
           </div>
         </div>
 
         <!-- GUIDA & CAMPI TELEFONO (WHATSAPP / SMS) -->
-        <div id="section-phone-config" class="hidden space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+        <div id="section-phone-config" class="hidden space-y-4 pt-4 border-t border-slate-200/80 dark:border-slate-800/80">
           <div class="flex flex-wrap gap-3 mb-2">
             <label class="flex items-center text-xs font-bold text-slate-800 dark:text-slate-200 cursor-pointer">
               <input type="radio" name="phone_subtype" value="whatsapp" checked onchange="updatePhoneSubtype()" class="mr-2"> WhatsApp (Gratuito via CallMeBot)
@@ -471,167 +582,193 @@
           </div>
 
           <!-- Sotto-guida WhatsApp -->
-          <div id="sub-whatsapp-guide" class="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl p-3.5 sm:p-4">
+          <div id="sub-whatsapp-guide" class="bg-gradient-to-br from-emerald-50/90 via-teal-50/40 to-white dark:from-emerald-950/30 dark:via-slate-900/60 dark:to-slate-900/80 border border-emerald-200/80 dark:border-emerald-800/60 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
             <h3 class="text-xs sm:text-sm font-bold text-emerald-900 dark:text-emerald-200 flex items-center">
-              <span class="mr-2">💬</span> Procedura Guidata: Attivare Notifiche WhatsApp
+              <span class="mr-2 text-base">💬</span> Procedura Guidata: Attivare Notifiche WhatsApp
             </h3>
             <ol class="text-[11px] sm:text-xs text-emerald-800 dark:text-emerald-300 space-y-1.5 mt-2 list-decimal list-inside leading-relaxed">
               <li>Aggiungi ai contatti del tuo telefono il numero di <strong>CallMeBot</strong>: <code class="font-bold font-mono">+34 644 59 19 86</code></li>
-              <li>Apri WhatsApp e inviagli questo messaggio esatto: <code class="bg-emerald-100 dark:bg-emerald-900 px-1 py-0.5 rounded font-mono font-bold">I allow callmebot to send me messages</code></li>
+              <li>Apri WhatsApp e inviagli questo messaggio esatto: <code class="bg-emerald-100 dark:bg-emerald-900/80 px-1 py-0.5 rounded font-mono font-bold">I allow callmebot to send me messages</code></li>
               <li>Il bot ti risponderà con la tua <strong>API Key personale</strong> gratuita.</li>
             </ol>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-3 sm:mt-4">
               <div>
                 <label class="block text-xs font-bold text-emerald-900 dark:text-emerald-200 mb-1">Numero di Telefono (con prefisso int., es. 393331234567)</label>
-                <input type="text" id="wa_phone" placeholder="393331234567" class="w-full px-3 py-2 text-xs sm:text-sm border border-emerald-300 dark:border-emerald-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none font-mono">
+                <input type="text" id="wa_phone" placeholder="393331234567" class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-emerald-300 dark:border-emerald-700 dark:bg-slate-800/80 dark:text-white rounded-xl focus:ring-2 focus:ring-emerald-500/40 focus:outline-none font-mono">
               </div>
               <div>
                 <label class="block text-xs font-bold text-emerald-900 dark:text-emerald-200 mb-1">CallMeBot API Key</label>
-                <input type="text" id="wa_apikey" placeholder="es. 123456" class="w-full px-3 py-2 text-xs sm:text-sm border border-emerald-300 dark:border-emerald-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none font-mono">
+                <input type="text" id="wa_apikey" placeholder="es. 123456" class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-emerald-300 dark:border-emerald-700 dark:bg-slate-800/80 dark:text-white rounded-xl focus:ring-2 focus:ring-emerald-500/40 focus:outline-none font-mono">
               </div>
             </div>
           </div>
 
           <!-- Sotto-guida SMS Twilio -->
-          <div id="sub-sms-guide" class="hidden bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-3.5 sm:p-4 space-y-3">
+          <div id="sub-sms-guide" class="hidden bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 sm:p-5 space-y-3">
             <p class="text-xs text-slate-600 dark:text-slate-400">Inserisci le chiavi del tuo account Twilio per ricevere SMS:</p>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 text-xs">
-              <input type="text" id="sms_account_sid" placeholder="Account SID Twilio" class="px-3 py-2 border dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg font-mono">
-              <input type="text" id="sms_auth_token" placeholder="Auth Token Twilio" class="px-3 py-2 border dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg font-mono">
-              <input type="text" id="sms_from" placeholder="From Number (+1...)" class="px-3 py-2 border dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg font-mono">
-              <input type="text" id="sms_to" placeholder="Numero Destinatario (+39...)" class="px-3 py-2 border dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg font-mono">
+              <input type="text" id="sms_account_sid" placeholder="Account SID Twilio" class="px-3.5 py-2.5 border dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl font-mono">
+              <input type="text" id="sms_auth_token" placeholder="Auth Token Twilio" class="px-3.5 py-2.5 border dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl font-mono">
+              <input type="text" id="sms_from" placeholder="From Number (+1...)" class="px-3.5 py-2.5 border dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl font-mono">
+              <input type="text" id="sms_to" placeholder="Numero Destinatario (+39...)" class="px-3.5 py-2.5 border dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl font-mono">
             </div>
           </div>
         </div>
 
         <div class="flex justify-end pt-3 sm:pt-4">
-          <button onclick="goToStep(2)" class="w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow transition flex items-center justify-center">
-            <span>Avanti: Scegli Territorio</span> <span class="ml-2">→</span>
+          <button onclick="goToStep(2)" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-indigo-600 via-indigo-500 to-sky-500 hover:from-indigo-500 hover:to-sky-400 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-indigo-500/25 transition-all duration-200 flex items-center justify-center active:scale-95">
+            <span>Avanti: Scegli Territorio</span> <span class="ml-2 text-base">→</span>
           </button>
         </div>
       </section>
 
       <!-- STEP 2: SCELTA TERRITORIO (REGIONI & PROVINCE) -->
-      <!-- STEP 2: SCELTA TERRITORIO (REGIONI & PROVINCE) -->
-      <section id="step-2" class="hidden p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
+      <section id="step-2" class="hidden p-4 sm:p-6 md:p-8 space-y-6">
         <div>
           <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">2. Seleziona le Zone Accettabili</h2>
-          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">In quali province o presidi sei disposto ad andare a fare la visita/esame?</p>
+          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">In quali province o presidi sanitari sei disposto ad andare per visita o esame?</p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-          <div class="sm:col-span-1">
-            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Regione</label>
-            <select id="selected_region" onchange="renderProvinces()" class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 font-medium">
-              <option value="Abruzzo">Abruzzo</option>
-              <option value="Basilicata">Basilicata</option>
-              <option value="Calabria">Calabria</option>
-              <option value="Campania">Campania</option>
-              <option value="Emilia-Romagna">Emilia-Romagna</option>
-              <option value="Friuli-Venezia Giulia">Friuli-Venezia Giulia</option>
-              <option value="Lazio">Lazio</option>
-              <option value="Liguria">Liguria</option>
-              <option value="Lombardia">Lombardia</option>
-              <option value="Marche" selected>Marche</option>
-              <option value="Molise">Molise</option>
-              <option value="Piemonte">Piemonte</option>
-              <option value="Puglia">Puglia</option>
-              <option value="Sardegna">Sardegna</option>
-              <option value="Sicilia">Sicilia</option>
-              <option value="Toscana">Toscana</option>
-              <option value="Trentino-Alto Adige">Trentino-Alto Adige</option>
-              <option value="Umbria">Umbria</option>
-              <option value="Valle d'Aosta">Valle d'Aosta</option>
-              <option value="Veneto">Veneto</option>
-            </select>
-            <div id="regionPortalHint" class="text-[11px] text-indigo-700 dark:text-indigo-400 font-semibold mt-1.5 flex items-center gap-1">
-              <span>🌐</span> <span id="portalLinkText">Portale: MyCup Marche</span>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
+          <div class="sm:col-span-1 space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Regione di Riferimento</label>
+              <div class="relative">
+                <select id="selected_region" onchange="renderProvinces()" class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800/80 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 focus:outline-none font-semibold transition shadow-sm cursor-pointer appearance-none">
+                  <option value="Abruzzo">Abruzzo</option>
+                  <option value="Basilicata">Basilicata</option>
+                  <option value="Calabria">Calabria</option>
+                  <option value="Campania">Campania</option>
+                  <option value="Emilia-Romagna">Emilia-Romagna</option>
+                  <option value="Friuli-Venezia Giulia">Friuli-Venezia Giulia</option>
+                  <option value="Lazio">Lazio</option>
+                  <option value="Liguria">Liguria</option>
+                  <option value="Lombardia">Lombardia</option>
+                  <option value="Marche" selected>Marche</option>
+                  <option value="Molise">Molise</option>
+                  <option value="Piemonte">Piemonte</option>
+                  <option value="Puglia">Puglia</option>
+                  <option value="Sardegna">Sardegna</option>
+                  <option value="Sicilia">Sicilia</option>
+                  <option value="Toscana">Toscana</option>
+                  <option value="Trentino-Alto Adige">Trentino-Alto Adige</option>
+                  <option value="Umbria">Umbria</option>
+                  <option value="Valle d'Aosta">Valle d'Aosta</option>
+                  <option value="Veneto">Veneto</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+                  <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Portale Regionale Ufficiale -->
+            <div id="regionPortalHint" class="p-3 rounded-xl bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-200/80 dark:border-indigo-800/60 text-xs text-indigo-900 dark:text-indigo-200 shadow-sm">
+              <div class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1 flex items-center gap-1">
+                <span>🌐</span> <span>Portale Sanitario Ufficiale</span>
+              </div>
+              <div id="portalLinkText" class="font-semibold text-slate-800 dark:text-slate-200">
+                MyCup Marche
+              </div>
             </div>
           </div>
 
-          <div class="sm:col-span-2">
-            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Province Accettabili</label>
-            <div id="provincesContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2.5 sm:p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 max-h-56 sm:max-h-64 overflow-y-auto">
-              <!-- Checkbox inserite dinamicamente da JS -->
+          <div class="sm:col-span-2 space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">Province Accettabili</label>
+              <div class="flex items-center gap-2 text-xs">
+                <button onclick="toggleAllProvinces(true)" type="button" class="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline px-2 py-0.5 rounded-md hover:bg-indigo-50 dark:hover:bg-indigo-950/50 transition">Seleziona tutte</button>
+                <span class="text-slate-300 dark:text-slate-700">•</span>
+                <button onclick="toggleAllProvinces(false)" type="button" class="text-slate-500 dark:text-slate-400 hover:underline px-2 py-0.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition">Deseleziona tutte</button>
+              </div>
             </div>
-            <div class="flex items-center justify-between mt-2 text-xs text-slate-500 dark:text-slate-400">
-              <button onclick="toggleAllProvinces(true)" type="button" class="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">Seleziona tutte</button>
-              <button onclick="toggleAllProvinces(false)" type="button" class="text-slate-500 dark:text-slate-400 hover:underline">Deseleziona tutte</button>
+
+            <div id="provincesContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-3 bg-slate-50/80 dark:bg-slate-800/40 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 max-h-56 sm:max-h-64 overflow-y-auto">
+              <!-- Checkbox inserite dinamicamente da JS -->
             </div>
           </div>
         </div>
 
         <!-- Elenco presidi coperti in anteprima -->
-        <div class="p-3.5 sm:p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-800/60 rounded-xl text-xs text-emerald-900 dark:text-emerald-200">
-          <span class="font-bold">Presidi e comuni monitorati:</span>
-          <span id="previewKeywords" class="text-emerald-800 dark:text-emerald-300 ml-1">Ancona, Torrette, INRCA, Jesi, Fabriano, Senigallia, Osimo, Loreto...</span>
+        <div class="p-4 bg-gradient-to-r from-emerald-50/90 via-teal-50/60 to-emerald-50/90 dark:from-emerald-950/30 dark:via-slate-900/40 dark:to-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/60 rounded-2xl text-xs text-emerald-950 dark:text-emerald-200 flex items-start gap-2.5 shadow-sm">
+          <span class="text-base shrink-0">📍</span>
+          <div>
+            <span class="font-bold">Presidi e comuni monitorati:</span>
+            <span id="previewKeywords" class="text-emerald-800 dark:text-emerald-300 ml-1 leading-relaxed">Ancona, Torrette, INRCA, Jesi, Fabriano, Senigallia, Osimo, Loreto...</span>
+          </div>
         </div>
 
-        <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2.5 pt-4 border-t border-slate-200 dark:border-slate-800">
-          <button onclick="goToStep(1)" class="w-full sm:w-auto px-5 py-2.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-bold text-xs sm:text-sm text-center">
+        <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2.5 pt-4 border-t border-slate-200/80 dark:border-slate-800/80">
+          <button onclick="goToStep(1)" class="w-full sm:w-auto px-5 py-2.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-bold text-xs sm:text-sm text-center transition">
             ← Indietro
           </button>
-          <button onclick="goToStep(3)" class="w-full sm:w-auto px-6 py-2.5 sm:py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow transition text-center flex items-center justify-center">
-            <span>Avanti: Dati Ricetta</span> <span class="ml-2">→</span>
+          <button onclick="goToStep(3)" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-indigo-600 via-indigo-500 to-sky-500 hover:from-indigo-500 hover:to-sky-400 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-indigo-500/25 transition-all duration-200 text-center flex items-center justify-center active:scale-95">
+            <span>Avanti: Dati Ricetta</span> <span class="ml-2 text-base">→</span>
           </button>
         </div>
       </section>
 
       <!-- STEP 3: DATI RICETTA & OPZIONI -->
-      <section id="step-3" class="hidden p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
+      <section id="step-3" class="hidden p-4 sm:p-6 md:p-8 space-y-6">
         <div>
           <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">3. Inserisci i Dati della Ricetta</h2>
-          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">I dati necessari per consentire al bot di compilare il modulo CUP al posto tuo.</p>
+          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">I dati necessari per consentire al bot di verificare la disponibilità al posto tuo nel portale CUP.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Codice Fiscale dell'assistito *</label>
-            <input type="text" id="user_cf" maxlength="16" placeholder="es. RSSMRA85M01H501Z" class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono uppercase">
-            <span class="text-[11px] text-slate-400">16 caratteri alfanumerici.</span>
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+              <span>Codice Fiscale dell'assistito <span class="text-rose-500">*</span></span>
+              <span class="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-1.5 py-0.5 rounded">16 CARATTERI</span>
+            </label>
+            <input type="text" id="user_cf" maxlength="16" placeholder="es. RSSMRA85M01H501Z" class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800/80 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 focus:outline-none font-mono uppercase transition shadow-sm placeholder:text-slate-400">
+            <span class="text-[11px] text-slate-400 block">Codice fiscale della persona a cui è intestata la ricetta.</span>
           </div>
 
-          <div>
-            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Numero Ricetta Elettronica (NRE) *</label>
-            <input type="text" id="user_nre" maxlength="15" placeholder="es. 1100A1234567890" class="w-full px-3 py-2 text-xs sm:text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono">
-            <span class="text-[11px] text-slate-400">Il codice di 15 cifre/lettere presente sulla ricetta.</span>
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+              <span>Numero Ricetta Elettronica (NRE) <span class="text-rose-500">*</span></span>
+              <span class="text-[10px] font-semibold text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/60 px-1.5 py-0.5 rounded">15 CARATTERI</span>
+            </label>
+            <input type="text" id="user_nre" maxlength="15" placeholder="es. 1100A1234567890" class="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-slate-300 dark:border-slate-700 dark:bg-slate-800/80 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 focus:outline-none font-mono transition shadow-sm placeholder:text-slate-400">
+            <span class="text-[11px] text-slate-400 block">Il codice NRE in alto a destra sul promemoria del medico.</span>
           </div>
         </div>
 
         <!-- Selezione Frequenza Notifiche e Monitoraggio -->
-        <div class="pt-2">
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">Ogni quanto eseguire il controllo e ricevere l'aggiornamento?</label>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5">
-            <label id="card-int-15" class="relative flex flex-col p-2.5 sm:p-3 border rounded-xl cursor-pointer transition text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+        <div class="pt-2 space-y-2">
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">Ogni quanto eseguire il controllo e ricevere l'aggiornamento?</label>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <label id="card-int-15" class="relative flex flex-col p-3 border-2 rounded-2xl cursor-pointer transition-all duration-200 text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 border-slate-200/80 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/60 active:scale-[0.98]">
               <input type="radio" name="check_interval" value="15" onchange="updateIntervalSelection()" class="sr-only">
-              <span class="text-base mb-0.5">⚡</span>
+              <span class="text-xl mb-1">⚡</span>
               <span class="text-xs font-bold text-slate-900 dark:text-white">Ogni 15 min</span>
-              <span class="text-[10px] text-slate-500 dark:text-slate-400">Caccia serrata</span>
+              <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Caccia serrata</span>
             </label>
-            <label id="card-int-30" class="relative flex flex-col p-2.5 sm:p-3 border-2 rounded-xl cursor-pointer transition text-center border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/40">
+            <label id="card-int-30" class="relative flex flex-col p-3 border-2 rounded-2xl cursor-pointer transition-all duration-200 text-center border-indigo-600 dark:border-indigo-500 bg-gradient-to-br from-indigo-500/10 via-white to-sky-500/5 dark:from-indigo-950/50 dark:via-slate-900/90 dark:to-sky-950/20 shadow-md shadow-indigo-500/10 ring-1 ring-indigo-500/20 active:scale-[0.98]">
               <input type="radio" name="check_interval" value="30" checked onchange="updateIntervalSelection()" class="sr-only">
-              <span class="text-base mb-0.5">🎯</span>
+              <span class="text-xl mb-1">🎯</span>
               <span class="text-xs font-bold text-slate-900 dark:text-white">Ogni 30 min</span>
-              <span class="text-[10px] text-indigo-700 dark:text-indigo-400 font-semibold">Consigliato</span>
+              <span class="text-[10px] text-indigo-700 dark:text-indigo-400 font-semibold mt-0.5">Consigliato</span>
             </label>
-            <label id="card-int-60" class="relative flex flex-col p-2.5 sm:p-3 border rounded-xl cursor-pointer transition text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+            <label id="card-int-60" class="relative flex flex-col p-3 border-2 rounded-2xl cursor-pointer transition-all duration-200 text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 border-slate-200/80 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/60 active:scale-[0.98]">
               <input type="radio" name="check_interval" value="60" onchange="updateIntervalSelection()" class="sr-only">
-              <span class="text-base mb-0.5">☕</span>
+              <span class="text-xl mb-1">☕</span>
               <span class="text-xs font-bold text-slate-900 dark:text-white">Ogni 1 ora</span>
-              <span class="text-[10px] text-slate-500 dark:text-slate-400">Moderato</span>
+              <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Moderato</span>
             </label>
-            <label id="card-int-120" class="relative flex flex-col p-2.5 sm:p-3 border rounded-xl cursor-pointer transition text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+            <label id="card-int-120" class="relative flex flex-col p-3 border-2 rounded-2xl cursor-pointer transition-all duration-200 text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 border-slate-200/80 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/60 active:scale-[0.98]">
               <input type="radio" name="check_interval" value="120" onchange="updateIntervalSelection()" class="sr-only">
-              <span class="text-base mb-0.5">🛋️</span>
+              <span class="text-xl mb-1">🛋️</span>
               <span class="text-xs font-bold text-slate-900 dark:text-white">Ogni 2 ore</span>
-              <span class="text-[10px] text-slate-500 dark:text-slate-400">Basso impatto</span>
+              <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Basso impatto</span>
             </label>
           </div>
         </div>
 
-        <div class="space-y-3 pt-2">
+        <div class="p-3.5 bg-slate-50/80 dark:bg-slate-800/40 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
           <label class="flex items-start space-x-3 cursor-pointer">
-            <input type="checkbox" id="send_no_match_toggle" checked class="mt-0.5 w-4 h-4 text-indigo-600 rounded shrink-0">
+            <input type="checkbox" id="send_no_match_toggle" checked class="mt-0.5 w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500/30 shrink-0">
             <div>
               <span class="text-xs font-bold text-slate-800 dark:text-slate-200 block">Invia aggiornamento anche se NON trova posti</span>
               <span class="text-[11px] text-slate-500 dark:text-slate-400">Ti invia i simpatici meme satirici per rassicurarti che il controllo è avvenuto regolarmente.</span>
@@ -639,98 +776,126 @@
           </label>
         </div>
 
-        <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2.5 pt-4 border-t border-slate-200 dark:border-slate-800">
-          <button onclick="goToStep(2)" class="w-full sm:w-auto px-5 py-2.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-bold text-xs sm:text-sm text-center">
+        <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2.5 pt-4 border-t border-slate-200/80 dark:border-slate-800/80">
+          <button onclick="goToStep(2)" class="w-full sm:w-auto px-5 py-2.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-bold text-xs sm:text-sm text-center transition">
             ← Indietro
           </button>
-          <button onclick="generateConfig(); goToStep(4);" class="w-full sm:w-auto px-6 py-2.5 sm:py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow transition text-center flex items-center justify-center">
-            <span>Genera Configurazione</span> <span class="ml-2">→</span>
+          <button onclick="generateConfig(); goToStep(4);" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-indigo-600 via-indigo-500 to-sky-500 hover:from-indigo-500 hover:to-sky-400 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-indigo-500/25 transition-all duration-200 text-center flex items-center justify-center active:scale-95">
+            <span>Genera Configurazione</span> <span class="ml-2 text-base">→</span>
           </button>
         </div>
       </section>
 
       <!-- STEP 4: GENERAZIONE CONFIG & AVVIO -->
-      <section id="step-4" class="hidden p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
+      <section id="step-4" class="hidden p-4 sm:p-6 md:p-8 space-y-6">
         <div>
           <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">4. Configurazione Pronta & Istruzioni</h2>
           <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Ecco il tuo file personalizzato. Scaricalo e avvia il monitoraggio con notifiche su smartphone.</p>
         </div>
 
         <!-- Azioni Server Locale (Se attivo) -->
-        <div id="localActionsBox" class="hidden p-3.5 sm:p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl space-y-3">
+        <div id="localActionsBox" class="hidden p-4 sm:p-5 bg-gradient-to-br from-emerald-50/90 to-teal-50/50 dark:from-emerald-950/40 dark:to-slate-900/60 border border-emerald-200/80 dark:border-emerald-800/60 rounded-2xl space-y-3 shadow-sm">
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-emerald-900 dark:text-emerald-200 flex items-center">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse mr-2"></span>
-              Pannello Locale Connesso
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse mr-2"></span>
+              Pannello Server Locale Connesso
             </span>
-            <span class="text-[11px] text-emerald-700 dark:text-emerald-300 font-semibold bg-emerald-100 dark:bg-emerald-900/60 px-2 py-0.5 rounded">Pronto all'uso</span>
+            <span class="text-[11px] text-emerald-700 dark:text-emerald-300 font-semibold bg-emerald-100 dark:bg-emerald-900/60 px-2.5 py-0.5 rounded-full border border-emerald-500/20">Pronto all'uso</span>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
-            <button onclick="saveConfigToServer()" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition shadow-sm">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+            <button onclick="saveConfigToServer()" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition shadow-sm active:scale-95">
               💾 Salva in config.yaml
             </button>
-            <button onclick="triggerTestNotification()" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition shadow-sm">
+            <button onclick="triggerTestNotification()" class="px-3.5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-sm active:scale-95">
               🧪 Testa Notifica Ora
             </button>
-            <button onclick="triggerLogin()" class="px-3 py-2 bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 dark:hover:bg-slate-600 text-white text-xs font-bold rounded-lg transition shadow-sm">
+            <button onclick="triggerLogin()" class="px-3.5 py-2.5 bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 dark:hover:bg-slate-600 text-white text-xs font-bold rounded-xl transition shadow-sm active:scale-95">
               🔑 Fai Login SPID
             </button>
           </div>
-          <div id="localActionResult" class="text-xs text-slate-700 dark:text-slate-300 hidden"></div>
+          <div id="localActionResult" class="text-xs text-slate-700 dark:text-slate-300 hidden font-medium"></div>
         </div>
 
-        <!-- Box Anteprima YAML -->
-        <div class="relative">
-          <div class="flex items-center justify-between bg-slate-800 text-slate-200 px-3.5 sm:px-4 py-2 rounded-t-xl text-xs font-mono">
-            <span>config.yaml</span>
-            <div class="flex space-x-2">
-              <button onclick="copyYaml()" class="hover:text-white underline">Copia</button>
-              <button onclick="downloadYaml()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-sans px-2.5 py-0.5 rounded text-xs font-semibold">Scarica File</button>
+        <!-- Box Anteprima YAML macOS Style -->
+        <div class="rounded-2xl overflow-hidden border border-slate-800/90 shadow-2xl bg-slate-950">
+          <div class="flex items-center justify-between bg-slate-900/90 px-3.5 sm:px-4 py-2.5 border-b border-slate-800/80 text-xs">
+            <div class="flex items-center space-x-2">
+              <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+              <span class="font-mono text-[11px] text-slate-300 ml-2 font-semibold">config.yaml</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button onclick="copyYaml()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition active:scale-95">
+                📋 Copia
+              </button>
+              <button onclick="downloadYaml()" class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow transition active:scale-95">
+                📥 Scarica File
+              </button>
             </div>
           </div>
-          <textarea id="yamlOutput" readonly rows="10" class="w-full bg-slate-900 text-emerald-400 p-3 sm:p-4 rounded-b-xl font-mono text-[11px] sm:text-xs focus:outline-none"></textarea>
+          <textarea id="yamlOutput" readonly rows="10" class="w-full bg-[#0a0e17] text-emerald-400 p-4 font-mono text-[11px] sm:text-xs focus:outline-none resize-none leading-relaxed selection:bg-emerald-500/30"></textarea>
         </div>
 
         <!-- Guida all'avvio locale -->
-        <div class="p-4 sm:p-5 bg-slate-100 dark:bg-slate-800/60 rounded-xl space-y-3 text-xs text-slate-700 dark:text-slate-300 leading-relaxed border border-slate-200 dark:border-slate-700">
-          <h3 class="font-bold text-slate-900 dark:text-white text-xs sm:text-sm">🚀 Come avviare il monitoraggio sul tuo computer:</h3>
-          <ol class="list-decimal list-inside space-y-2">
-            <li>Clona o scarica il repository da GitHub:
-              <pre class="bg-slate-900 dark:bg-slate-950 text-slate-100 p-2 rounded mt-1 font-mono text-[10px] sm:text-[11px] overflow-x-auto whitespace-pre">git clone https://github.com/edik17/CUP-Monitor.git
+        <div class="p-4 sm:p-5 bg-slate-100/80 dark:bg-slate-800/60 rounded-2xl space-y-3.5 text-xs text-slate-700 dark:text-slate-300 leading-relaxed border border-slate-200/80 dark:border-slate-700/80 shadow-sm">
+          <h3 class="font-bold text-slate-900 dark:text-white text-xs sm:text-sm flex items-center gap-2">
+            <span>🚀</span> <span>Come avviare il monitoraggio sul tuo computer:</span>
+          </h3>
+          <ol class="space-y-3">
+            <li class="flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-indigo-600 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">1</span>
+              <div class="flex-1 min-w-0">
+                <span>Clona o scarica il repository da GitHub:</span>
+                <pre class="bg-slate-900 dark:bg-slate-950 text-slate-100 p-2.5 rounded-xl mt-1.5 font-mono text-[10px] sm:text-[11px] overflow-x-auto whitespace-pre border border-slate-800">git clone https://github.com/edik17/CUP-Monitor.git
 cd CUP-Monitor</pre>
+              </div>
             </li>
-            <li>Inserisci il file scaricato <code class="font-mono bg-white dark:bg-slate-700 px-1.5 py-0.5 rounded border dark:border-slate-600 text-slate-900 dark:text-slate-100">config.yaml</code> nella cartella principale del progetto.</li>
-            <li>Installa i requisiti ed effettua il primo accesso SPID una tantum:
-              <pre class="bg-slate-900 dark:bg-slate-950 text-slate-100 p-2 rounded mt-1 font-mono text-[10px] sm:text-[11px] overflow-x-auto whitespace-pre">pip install -r requirements.txt
+            <li class="flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-indigo-600 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">2</span>
+              <div class="flex-1 min-w-0">
+                <span>Inserisci il file scaricato <code class="font-mono bg-white dark:bg-slate-700 px-1.5 py-0.5 rounded border dark:border-slate-600 text-slate-900 dark:text-slate-100 font-bold">config.yaml</code> nella cartella principale del progetto.</span>
+              </div>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-indigo-600 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">3</span>
+              <div class="flex-1 min-w-0">
+                <span>Installa i requisiti ed effettua il primo accesso SPID una tantum:</span>
+                <pre class="bg-slate-900 dark:bg-slate-950 text-slate-100 p-2.5 rounded-xl mt-1.5 font-mono text-[10px] sm:text-[11px] overflow-x-auto whitespace-pre border border-slate-800">pip install -r requirements.txt
 playwright install chromium
 python src/main.py --login</pre>
+              </div>
             </li>
-            <li>Automatizza l'esecuzione e l'invio notifiche ogni <span id="summaryIntervalLabel" class="font-bold text-indigo-700 dark:text-indigo-400">30 minuti</span> con <strong>Task Scheduler di Windows</strong>:
-              <pre id="schedCommandSnippet" class="bg-slate-900 dark:bg-slate-950 text-slate-100 p-2.5 rounded mt-1 font-mono text-[10px] sm:text-[11px] overflow-x-auto whitespace-pre leading-relaxed">$action = New-ScheduledTaskAction -Execute "$PWD\run_bot.bat"
+            <li class="flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-indigo-600 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">4</span>
+              <div class="flex-1 min-w-0">
+                <span>Automatizza l'esecuzione e l'invio notifiche ogni <span id="summaryIntervalLabel" class="font-bold text-indigo-700 dark:text-indigo-400">30 minuti</span> con <strong>Task Scheduler di Windows</strong>:</span>
+                <pre id="schedCommandSnippet" class="bg-slate-900 dark:bg-slate-950 text-slate-100 p-3 rounded-xl mt-1.5 font-mono text-[10px] sm:text-[11px] overflow-x-auto whitespace-pre leading-relaxed border border-slate-800">$action = New-ScheduledTaskAction -Execute "$PWD\run_bot.bat"
 $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 30)
 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
 Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -TaskName "CUP Marche Monitor" -Force</pre>
+              </div>
             </li>
           </ol>
         </div>
 
         <!-- Sezione: Vuoi spegnere il PC? Monitoraggio Cloud Gratuito -->
-        <div class="p-4 sm:p-5 bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 rounded-xl space-y-2.5 text-xs text-indigo-950 dark:text-indigo-200">
-          <div class="flex items-center space-x-2">
+        <div class="p-4 sm:p-5 bg-gradient-to-br from-indigo-50/90 to-sky-50/50 dark:from-indigo-950/40 dark:to-slate-900/60 border border-indigo-200/80 dark:border-indigo-800/60 rounded-2xl space-y-2.5 text-xs text-indigo-950 dark:text-indigo-200 shadow-sm">
+          <div class="flex items-center space-x-2.5">
             <span class="text-xl">☁️</span>
             <h4 class="font-bold text-xs sm:text-sm text-indigo-950 dark:text-indigo-200">Vuoi spegnere il PC? Come monitorare a computer spento</h4>
           </div>
           <p class="leading-relaxed text-[11px] sm:text-xs text-slate-700 dark:text-slate-300">
             Per ricevere le notifiche sul telefono anche a computer spento senza lasciarlo acceso a casa, hai 2 opzioni semplici e gratuite:
           </p>
-          <ul class="list-disc list-inside space-y-1 text-[11px] sm:text-xs text-slate-700 dark:text-slate-300">
+          <ul class="list-disc list-inside space-y-1.5 text-[11px] sm:text-xs text-slate-700 dark:text-slate-300">
             <li><strong>GitHub Actions (Cloud Gratuito):</strong> puoi configurare un'automazione programmata direttamente sul tuo account GitHub che lancia il bot in cloud ogni X minuti e ti manda la notifica su Telegram ovunque tu sia.</li>
             <li><strong>Mini PC / Raspberry Pi / Serverino domestico:</strong> consuma pochissima corrente e rimane attivo 24/7 in silenzio.</li>
           </ul>
         </div>
 
         <!-- Didascalia: Come Annullare o Fermare il Monitoraggio -->
-        <div class="p-3.5 sm:p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-xl space-y-2 text-xs text-amber-900 dark:text-amber-200">
+        <div class="p-4 sm:p-5 bg-gradient-to-br from-amber-50/90 to-yellow-50/50 dark:from-amber-950/30 dark:to-slate-900/60 border border-amber-200/80 dark:border-amber-900/50 rounded-2xl space-y-2.5 text-xs text-amber-900 dark:text-amber-200 shadow-sm">
           <h4 class="font-bold flex items-center text-amber-950 dark:text-amber-300 text-xs sm:text-sm">
             <span class="mr-2 text-base">🛑</span> Come annullare o fermare il monitoraggio:
           </h4>
@@ -739,8 +904,8 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
           </p>
           <div class="space-y-2 pt-1 text-[11px] sm:text-xs">
             <div>
-              <span class="font-bold text-amber-950 dark:text-amber-200 block mb-0.5">• Su Windows (PowerShell):</span>
-              <pre class="bg-amber-900/90 dark:bg-slate-950 text-amber-50 dark:text-amber-200 p-2 rounded font-mono text-[10px] sm:text-[11px] overflow-x-auto whitespace-pre">Unregister-ScheduledTask -TaskName "CUP Marche Monitor" -Confirm:$false</pre>
+              <span class="font-bold text-amber-950 dark:text-amber-200 block mb-1">• Su Windows (PowerShell):</span>
+              <pre class="bg-amber-950/90 dark:bg-slate-950 text-amber-200 dark:text-amber-200 p-2.5 rounded-xl font-mono text-[10px] sm:text-[11px] overflow-x-auto whitespace-pre border border-amber-900/50">Unregister-ScheduledTask -TaskName "CUP Marche Monitor" -Confirm:$false</pre>
             </div>
             <div>
               <span class="font-bold text-amber-950 dark:text-amber-200 block mb-0.5">• Su Linux / Mac:</span>
@@ -749,11 +914,11 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
           </div>
         </div>
 
-        <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2.5 pt-4 border-t border-slate-200 dark:border-slate-800">
-          <button onclick="goToStep(3)" class="w-full sm:w-auto px-5 py-2.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-bold text-xs sm:text-sm text-center">
+        <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2.5 pt-4 border-t border-slate-200/80 dark:border-slate-800/80">
+          <button onclick="goToStep(3)" class="w-full sm:w-auto px-5 py-2.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-bold text-xs sm:text-sm text-center transition">
             ← Modifica Dati
           </button>
-          <button onclick="downloadYaml()" class="w-full sm:w-auto px-6 py-2.5 sm:py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow transition text-center flex items-center justify-center">
+          <button onclick="downloadYaml()" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-emerald-600/25 transition-all duration-200 text-center flex items-center justify-center active:scale-95">
             <span>📥 Scarica config.yaml</span>
           </button>
         </div>
@@ -763,39 +928,40 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
 
   <!-- CONTENITORE MODALITÀ ESTENSIONE WEB BROWSER -->
   <div id="mode-extension-container" class="hidden space-y-6">
-    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6 transition-colors">
+    <div class="bg-white/90 dark:bg-slate-900/80 backdrop-blur-2xl rounded-3xl shadow-2xl border border-slate-200/80 dark:border-slate-800/80 p-4 sm:p-6 md:p-8 space-y-6 transition-all duration-200">
       <div>
-        <div class="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 mb-2">
-          ✨ Zero Terminale • 100% nel Browser
+        <div class="inline-flex items-center text-xs font-semibold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 mb-2.5 shadow-sm">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-2 animate-pulse"></span>
+          <span>Zero Terminale • 100% nel Browser</span>
         </div>
-        <h2 class="text-lg sm:text-2xl font-bold text-slate-900 dark:text-white">Estensione Web Browser per Chrome & Edge</h2>
-        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Nessun file da configurare, nessun comando da lanciare. Monitora il CUP direttamente mentre navighi sul web.</p>
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Estensione Web Browser per Chrome & Edge</h2>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-xl">Nessun file da configurare, nessun comando da lanciare. Monitora il CUP direttamente mentre navighi sul web.</p>
       </div>
 
       <!-- 3 Semplici Passaggi -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-        <div class="p-3.5 sm:p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1.5 sm:space-y-2">
-          <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center">1</span>
+        <div class="p-4 sm:p-5 bg-gradient-to-br from-emerald-50/60 to-white dark:from-emerald-950/20 dark:to-slate-900/60 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 space-y-2 shadow-sm">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white font-bold text-xs flex items-center justify-center shadow-md shadow-emerald-500/25">1</div>
           <h3 class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">1. Scarica l'Estensione</h3>
           <p class="text-[11px] sm:text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Scarica il file ZIP col pulsante qui sotto ed <strong>estrailo</strong> in una cartella a tua scelta sul tuo PC.</p>
         </div>
 
-        <div class="p-3.5 sm:p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1.5 sm:space-y-2">
-          <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">2</span>
+        <div class="p-4 sm:p-5 bg-gradient-to-br from-indigo-50/60 to-white dark:from-indigo-950/20 dark:to-slate-900/60 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 space-y-2 shadow-sm">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-sky-500 text-white font-bold text-xs flex items-center justify-center shadow-md shadow-indigo-500/25">2</div>
           <h3 class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">2. Carica in Chrome/Edge</h3>
-          <p class="text-[11px] sm:text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Apri <code class="font-mono bg-white dark:bg-slate-700 px-1 rounded border dark:border-slate-600 text-slate-800 dark:text-slate-200">chrome://extensions</code>, attiva la <strong>"Modalità sviluppatore"</strong> e clicca su <strong>"Carica estensione non pacchettizzata"</strong> selezionando la cartella estratta.</p>
+          <p class="text-[11px] sm:text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Apri <code class="font-mono bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">chrome://extensions</code>, attiva la <strong>"Modalità sviluppatore"</strong> e clicca su <strong>"Carica estensione non pacchettizzata"</strong>.</p>
         </div>
 
-        <div class="p-3.5 sm:p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1.5 sm:space-y-2">
-          <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">3</span>
+        <div class="p-4 sm:p-5 bg-gradient-to-br from-sky-50/60 to-white dark:from-sky-950/20 dark:to-slate-900/60 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 space-y-2 shadow-sm">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-sky-600 to-cyan-500 text-white font-bold text-xs flex items-center justify-center shadow-md shadow-sky-500/25">3</div>
           <h3 class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">3. Avvia il Monitoraggio</h3>
           <p class="text-[11px] sm:text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Clicca sull'icona dell'estensione in alto a destra, inserisci NRE e Codice Fiscale, ed effettua il login SPID normalmente nel browser.</p>
         </div>
       </div>
 
       <!-- SIMULATORE 2D INTERATTIVO CON MOUSE ANIMATO -->
-      <div class="bg-slate-900 text-white rounded-2xl p-3 sm:p-5 md:p-6 shadow-2xl border border-slate-800 overflow-hidden relative">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3 sm:mb-4 pb-3 sm:pb-4 border-b border-slate-800">
+      <div class="bg-slate-950/90 text-white rounded-3xl p-3 sm:p-5 md:p-6 shadow-2xl border border-slate-800/90 overflow-hidden relative backdrop-blur-xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3 sm:mb-4 pb-3 sm:pb-4 border-b border-slate-800/80">
           <div>
             <div class="flex flex-wrap items-center gap-1.5 sm:gap-2.5 mb-1">
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
@@ -806,15 +972,15 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
           </div>
           
           <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs shrink-0">
-            <button onclick="switchAppMode('script')" type="button" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-emerald-300 font-semibold rounded-lg border border-emerald-500/30 flex items-center space-x-1 transition text-[11px] sm:text-xs" title="Guarda la versione Telefono">
+            <button onclick="switchAppMode('script')" type="button" class="px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-emerald-300 font-semibold rounded-xl border border-emerald-500/30 flex items-center space-x-1.5 transition text-[11px] sm:text-xs shadow-sm hover:border-emerald-400/50" title="Guarda la versione Telefono">
               <span>📱</span>
               <span>Versione Telefono</span>
             </button>
-            <button id="simPlayPauseBtn" onclick="toggleSimPlayback()" type="button" class="px-2.5 sm:px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-lg border border-slate-700 flex items-center space-x-1.5 transition text-[11px] sm:text-xs">
+            <button id="simPlayPauseBtn" onclick="toggleSimPlayback()" type="button" class="px-2.5 sm:px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold rounded-xl border border-slate-700/80 flex items-center space-x-1.5 transition text-[11px] sm:text-xs shadow-sm">
               <span id="simPlayIcon">⏸️</span>
               <span id="simPlayText">Pausa</span>
             </button>
-            <button onclick="restartSimAnimation()" type="button" class="px-2.5 sm:px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-lg border border-slate-700 flex items-center space-x-1.5 transition text-[11px] sm:text-xs">
+            <button onclick="restartSimAnimation()" type="button" class="px-2.5 sm:px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold rounded-xl border border-slate-700/80 flex items-center space-x-1.5 transition text-[11px] sm:text-xs shadow-sm">
               <span>🔄</span>
               <span>Ricomincia</span>
             </button>
@@ -822,30 +988,30 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
         </div>
 
         <!-- Barra di Stato & Avanzamento Step -->
-        <div class="bg-slate-950/70 border border-slate-800 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 mb-3 sm:mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div class="bg-slate-900/70 border border-slate-800/80 rounded-2xl px-3 sm:px-4 py-2 sm:py-2.5 mb-3 sm:mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div class="flex items-center space-x-2.5 sm:space-x-3 min-w-0">
-            <span id="simStepBadge" class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-indigo-600 text-white font-bold text-[11px] sm:text-xs flex items-center justify-center shrink-0">1</span>
+            <span id="simStepBadge" class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-tr from-indigo-600 to-sky-500 text-white font-bold text-[11px] sm:text-xs flex items-center justify-center shrink-0 shadow-sm shadow-indigo-500/40">1</span>
             <span id="simStepDesc" class="text-xs sm:text-sm font-semibold text-slate-200 truncate">1. Sposta il mouse in alto a destra e attiva la "Modalità sviluppatore"</span>
           </div>
           <div class="flex items-center space-x-1 sm:space-x-1.5 text-xs shrink-0 self-end sm:self-auto">
-            <button onclick="jumpToSimStep(1)" id="stepDot-1" type="button" class="px-2 py-1 rounded bg-indigo-600 text-white font-mono font-bold text-[10px] sm:text-[11px] ring-2 ring-indigo-400/50 transition">1</button>
-            <button onclick="jumpToSimStep(2)" id="stepDot-2" type="button" class="px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[10px] sm:text-[11px] transition">2</button>
-            <button onclick="jumpToSimStep(3)" id="stepDot-3" type="button" class="px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[10px] sm:text-[11px] transition">3</button>
-            <button onclick="jumpToSimStep(4)" id="stepDot-4" type="button" class="px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[10px] sm:text-[11px] transition">4</button>
-            <button onclick="jumpToSimStep(5)" id="stepDot-5" type="button" class="px-2 py-1 rounded bg-slate-800 text-slate-400 hover:text-white font-mono font-bold text-[10px] sm:text-[11px] transition">5</button>
+            <button onclick="jumpToSimStep(1)" id="stepDot-1" type="button" class="px-2 py-1 rounded-lg bg-indigo-600 text-white font-mono font-bold text-[10px] sm:text-[11px] ring-2 ring-indigo-400/50 transition">1</button>
+            <button onclick="jumpToSimStep(2)" id="stepDot-2" type="button" class="px-2 py-1 rounded-lg bg-slate-800/80 text-slate-400 hover:text-white font-mono font-bold text-[10px] sm:text-[11px] transition">2</button>
+            <button onclick="jumpToSimStep(3)" id="stepDot-3" type="button" class="px-2 py-1 rounded-lg bg-slate-800/80 text-slate-400 hover:text-white font-mono font-bold text-[10px] sm:text-[11px] transition">3</button>
+            <button onclick="jumpToSimStep(4)" id="stepDot-4" type="button" class="px-2 py-1 rounded-lg bg-slate-800/80 text-slate-400 hover:text-white font-mono font-bold text-[10px] sm:text-[11px] transition">4</button>
+            <button onclick="jumpToSimStep(5)" id="stepDot-5" type="button" class="px-2 py-1 rounded-lg bg-slate-800/80 text-slate-400 hover:text-white font-mono font-bold text-[10px] sm:text-[11px] transition">5</button>
           </div>
         </div>
 
         <!-- Palcoscenico Finestra Browser 2D Mockup -->
-        <div id="simStageContainer" class="relative bg-slate-950 border border-slate-800 rounded-xl overflow-hidden shadow-inner select-none min-h-[360px] sm:min-h-[420px]">
+        <div id="simStageContainer" class="relative bg-slate-950 border border-slate-800/90 rounded-2xl overflow-hidden shadow-2xl browser-chassis-shadow select-none min-h-[360px] sm:min-h-[420px]">
           
-          <!-- Barra Superiore Browser (Titlebar & Tabs) -->
-          <div class="bg-slate-900 border-b border-slate-800 px-2.5 sm:px-3 py-2 flex items-center justify-between">
+          <!-- Barra Superiore Browser (Titlebar & Tabs macOS Style) -->
+          <div class="bg-slate-900/90 border-b border-slate-800/80 px-3 sm:px-4 py-2.5 flex items-center justify-between">
             <div class="flex items-center space-x-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-red-500/80 inline-block"></span>
-              <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block"></span>
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block"></span>
-              <div class="ml-2 px-2.5 sm:px-3 py-1 bg-slate-950 rounded-t-lg border-t border-x border-slate-800 text-[10px] sm:text-[11px] text-slate-300 font-medium flex items-center space-x-1.5">
+              <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+              <div class="ml-2.5 px-3 py-1 bg-slate-950 rounded-t-xl border-t border-x border-slate-800 text-[10px] sm:text-[11px] text-slate-200 font-medium flex items-center space-x-1.5 shadow-sm">
                 <span>🧩</span>
                 <span id="simTabTitle">Estensioni</span>
               </div>
@@ -854,14 +1020,14 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
           </div>
 
           <!-- Barra degli Indirizzi & Toolbar Estensioni -->
-          <div class="bg-slate-900/80 border-b border-slate-800 px-2.5 sm:px-3 py-1.5 flex items-center justify-between gap-2 sm:gap-3">
+          <div class="bg-slate-900/80 border-b border-slate-800/80 px-2.5 sm:px-3 py-1.5 flex items-center justify-between gap-2 sm:gap-3">
             <div class="flex items-center space-x-1.5 sm:space-x-2 text-slate-400 text-xs shrink-0">
-              <span>←</span>
-              <span>→</span>
-              <span class="text-slate-300">↻</span>
+              <span class="p-1 hover:text-white transition">←</span>
+              <span class="p-1 hover:text-white transition">→</span>
+              <span class="p-1 hover:text-white transition">↻</span>
             </div>
-            <div class="flex-1 min-w-0 bg-slate-950 border border-slate-800 rounded-lg px-2.5 sm:px-3 py-1 text-xs font-mono text-slate-300 flex items-center space-x-1.5 truncate">
-              <span class="text-emerald-500 text-[10px] shrink-0">🔒</span>
+            <div class="flex-1 min-w-0 bg-slate-950 border border-slate-800 rounded-xl px-2.5 sm:px-3 py-1 text-xs font-mono text-slate-300 flex items-center space-x-1.5 truncate shadow-inner">
+              <span class="text-emerald-400 text-[10px] shrink-0">🔒</span>
               <span id="simUrlBar" class="text-slate-200 truncate text-[11px] sm:text-xs">chrome://extensions</span>
             </div>
             
@@ -870,13 +1036,13 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
               <span class="p-1 text-slate-400 text-xs sm:text-sm">🧩</span>
               
               <!-- Icona CUP Monitor nella Barra del Browser -->
-              <div id="simToolbarExtIcon" class="p-1 px-1.5 bg-slate-800 hover:bg-slate-700 rounded-md border border-slate-700 cursor-pointer flex items-center justify-center transition">
+              <div id="simToolbarExtIcon" class="p-1 px-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 cursor-pointer flex items-center justify-center transition shadow-sm">
                 <span class="text-xs sm:text-sm">🏥</span>
                 <span id="simExtBadgeDot" class="w-1.5 h-1.5 rounded-full bg-emerald-400 ml-1"></span>
               </div>
 
               <!-- POPUP ESTENSIONE DROP DOWN (COMPATTO & RESPONSIVE) -->
-              <div id="simPopupCard" class="hidden absolute right-1 sm:right-2 top-10 w-[calc(100%-12px)] sm:w-72 max-w-[270px] bg-slate-900 border border-indigo-500/50 rounded-xl shadow-2xl p-2.5 sm:p-3 z-30 transition-all">
+              <div id="simPopupCard" class="hidden absolute right-1 sm:right-2 top-10 w-[calc(100%-12px)] sm:w-72 max-w-[270px] bg-slate-900/95 border border-indigo-500/50 rounded-2xl shadow-2xl p-3 z-30 transition-all backdrop-blur-xl ring-1 ring-indigo-500/20">
                 <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
                   <div class="flex items-center space-x-1.5">
                     <span class="text-xs sm:text-sm">🏥</span>
@@ -888,31 +1054,31 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
                 <div class="space-y-1.5 sm:space-y-2 text-[10px] sm:text-[11px]">
                   <div>
                     <label class="text-slate-400 block text-[9px] sm:text-[10px] mb-0.5">Numero Ricetta (NRE)</label>
-                    <input type="text" value="4257489435" readonly class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-slate-200 font-mono text-[10px]">
+                    <input type="text" value="4257489435" readonly class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-slate-200 font-mono text-[10px]">
                   </div>
                   <div>
                     <label class="text-slate-400 block text-[9px] sm:text-[10px] mb-0.5">Codice Fiscale</label>
-                    <input type="text" value="DTTDRD00R17E388P" readonly class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-slate-200 font-mono text-[10px]">
+                    <input type="text" value="DTTDRD00R17E388P" readonly class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-slate-200 font-mono text-[10px]">
                   </div>
                   <div class="grid grid-cols-2 gap-1.5">
                     <div>
                       <label class="text-slate-400 block text-[9px] sm:text-[10px] mb-0.5">Regione</label>
-                      <div class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-slate-200 text-[10px]">Marche</div>
+                      <div class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-slate-200 text-[10px]">Marche</div>
                     </div>
                     <div>
                       <label class="text-slate-400 block text-[9px] sm:text-[10px] mb-0.5">Provincia</label>
-                      <div class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-slate-200 text-[10px]">Ancona</div>
+                      <div class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-slate-200 text-[10px]">Ancona</div>
                     </div>
                   </div>
 
                   <!-- Countdown nel Popup -->
-                  <div id="simCountdownBox" class="hidden justify-between items-center bg-indigo-950/60 border border-indigo-800/80 rounded px-2 py-1 text-[10px]">
+                  <div id="simCountdownBox" class="hidden justify-between items-center bg-indigo-950/60 border border-indigo-800/80 rounded-xl px-2.5 py-1 text-[10px]">
                     <span class="text-indigo-300 font-medium">⏳ Prossimo:</span>
                     <span id="simCountdownDigits" class="font-mono font-bold text-indigo-200">29m 59s</span>
                   </div>
 
                   <!-- Pulsante Avvia nel Popup -->
-                  <button id="simPopupToggleBtn" type="button" class="w-full py-1.5 px-3 bg-indigo-600 font-bold rounded-lg text-white text-xs shadow flex items-center justify-center space-x-1 transition">
+                  <button id="simPopupToggleBtn" type="button" class="w-full py-2 px-3 bg-gradient-to-r from-indigo-600 to-sky-600 font-bold rounded-xl text-white text-xs shadow-md flex items-center justify-center space-x-1 transition active:scale-95">
                     <span>▶️</span>
                     <span id="simPopupToggleBtnText">Avvia Monitoraggio</span>
                   </button>
@@ -930,26 +1096,26 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
               </h4>
               
               <!-- Switch Modalità Sviluppatore -->
-              <div id="simDevSwitchBox" class="flex items-center space-x-2 bg-slate-900 border border-slate-800 px-2.5 sm:px-3 py-1.5 rounded-lg shrink-0 self-start sm:self-auto">
+              <div id="simDevSwitchBox" class="flex items-center space-x-2 bg-slate-900 border border-slate-800 px-2.5 sm:px-3 py-1.5 rounded-xl shrink-0 self-start sm:self-auto shadow-sm">
                 <span class="text-[11px] sm:text-xs text-slate-300 font-medium">Modalità sviluppatore</span>
                 <div id="simDevToggle" class="w-9 h-5 bg-slate-700 rounded-full p-0.5 transition-colors cursor-pointer flex items-center">
-                  <div id="simDevKnob" class="w-4 h-4 rounded-full bg-white transition-transform"></div>
+                  <div id="simDevKnob" class="w-4 h-4 rounded-full bg-white transition-transform shadow"></div>
                 </div>
               </div>
             </div>
 
             <!-- Pulsanti di Azione (Carica pacchettizzata) -->
             <div id="simActionsBar" class="opacity-40 transition-opacity flex flex-wrap gap-1.5 sm:gap-2 text-xs">
-              <button id="simLoadUnpackedBtn" type="button" class="px-2.5 sm:px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-indigo-300 font-semibold rounded-lg border border-indigo-500/30 flex items-center space-x-1.5 transition text-[11px] sm:text-xs">
+              <button id="simLoadUnpackedBtn" type="button" class="px-2.5 sm:px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-indigo-300 font-semibold rounded-xl border border-indigo-500/30 flex items-center space-x-1.5 transition text-[11px] sm:text-xs shadow-sm">
                 <span>📂</span>
                 <span>Carica estensione non pacchettizzata</span>
               </button>
-              <button type="button" class="px-3 py-1.5 bg-slate-900 text-slate-500 rounded-lg border border-slate-800 hidden sm:inline-block">Comprimi estensione</button>
-              <button type="button" class="px-3 py-1.5 bg-slate-900 text-slate-500 rounded-lg border border-slate-800 hidden sm:inline-block">Aggiorna</button>
+              <button type="button" class="px-3 py-1.5 bg-slate-900 text-slate-500 rounded-xl border border-slate-800 hidden sm:inline-block">Comprimi estensione</button>
+              <button type="button" class="px-3 py-1.5 bg-slate-900 text-slate-500 rounded-xl border border-slate-800 hidden sm:inline-block">Aggiorna</button>
             </div>
 
             <!-- Card Estensione CUP Monitor -->
-            <div id="simInstalledCard" class="hidden bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 shadow-lg transition-all max-w-md">
+            <div id="simInstalledCard" class="hidden bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 sm:p-4 shadow-xl transition-all max-w-md ring-1 ring-slate-800">
               <div class="flex items-start justify-between">
                 <div class="flex space-x-2.5 sm:space-x-3">
                   <span class="text-xl sm:text-2xl p-1.5 sm:p-2 bg-slate-950 rounded-xl border border-slate-800">🏥</span>
@@ -959,7 +1125,7 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
                     <p class="text-[10px] sm:text-[11px] text-slate-300 mt-1">Monitora automaticamente le disponibilità direttamente dal browser.</p>
                   </div>
                 </div>
-                <div class="w-7 sm:w-8 h-4 bg-indigo-600 rounded-full p-0.5 flex items-center justify-end">
+                <div class="w-7 sm:w-8 h-4 bg-indigo-600 rounded-full p-0.5 flex items-center justify-end shadow">
                   <div class="w-3 h-3 rounded-full bg-white"></div>
                 </div>
               </div>
@@ -967,9 +1133,9 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
           </div>
 
           <!-- Toast Notifica Windows / Chrome (Simulata) -->
-          <div id="simNotificationToast" class="hidden absolute top-3 sm:top-4 left-2 right-2 sm:left-auto sm:right-4 bg-slate-900 border-2 border-emerald-500/80 rounded-xl p-2.5 sm:p-3 shadow-2xl z-40 max-w-xs transition-all">
-            <div class="flex items-start space-x-2 sm:space-x-2.5">
-              <span class="text-lg sm:text-xl shrink-0">🎉</span>
+          <div id="simNotificationToast" class="hidden absolute top-3 sm:top-4 left-2 right-2 sm:left-auto sm:right-4 bg-slate-900/95 border-2 border-emerald-500 rounded-2xl p-3 shadow-2xl z-40 max-w-xs transition-all backdrop-blur-xl ring-1 ring-emerald-500/30">
+            <div class="flex items-start space-x-2.5">
+              <span class="text-xl shrink-0">🎉</span>
               <div>
                 <div class="text-[9px] sm:text-[10px] font-bold text-emerald-400 uppercase tracking-wider">CUP Monitor • Notifica Desktop</div>
                 <div class="text-xs font-bold text-white mt-0.5">Posto Trovato in provincia di Ancona!</div>
@@ -989,23 +1155,25 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
       </div>
 
       <!-- Download & Repository Links -->
-      <div class="p-4 sm:p-5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 rounded-xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
+      <div class="p-4 sm:p-5 bg-gradient-to-r from-emerald-50/90 via-teal-50/50 to-emerald-50/90 dark:from-emerald-950/40 dark:via-slate-900/60 dark:to-emerald-950/40 border border-emerald-200/80 dark:border-emerald-900/60 rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 shadow-sm">
         <div>
-          <h4 class="font-bold text-xs sm:text-sm text-emerald-950 dark:text-emerald-200">Scarica l'estensione per PC</h4>
+          <h4 class="font-bold text-xs sm:text-sm text-emerald-950 dark:text-emerald-200 flex items-center gap-1.5">
+            <span>📦</span> <span>Scarica l'estensione per PC</span>
+          </h4>
           <p class="text-[11px] sm:text-xs text-emerald-700 dark:text-emerald-400 mt-0.5">Pacchetto pronto: scarica lo ZIP, estrailo e caricalo direttamente nel tuo browser.</p>
         </div>
         <div class="flex flex-col sm:flex-row gap-2 sm:gap-2.5 shrink-0">
-          <a href="cup-monitor-extension.zip" download="cup-monitor-extension.zip" class="w-full sm:w-auto px-4 sm:px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition text-center flex items-center justify-center">
+          <a href="cup-monitor-extension.zip" download="cup-monitor-extension.zip" class="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-emerald-600/25 transition-all duration-200 text-center flex items-center justify-center active:scale-95">
             <span class="mr-1.5 text-sm">📥</span> Scarica Estensione (.zip)
           </a>
-          <a href="https://github.com/edik17/CUP-Monitor/tree/main/extension" target="_blank" class="w-full sm:w-auto px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl shadow transition text-center flex items-center justify-center">
+          <a href="https://github.com/edik17/CUP-Monitor/tree/main/extension" target="_blank" class="w-full sm:w-auto px-4 py-2.5 bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow transition text-center flex items-center justify-center active:scale-95 border border-slate-700/60">
             📂 Codice su GitHub
           </a>
         </div>
       </div>
 
       <!-- Guida Uso su Smartphone quando sei fuori casa / in giro -->
-      <div class="p-4 sm:p-5 bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 rounded-xl space-y-3">
+      <div class="p-4 sm:p-5 bg-gradient-to-br from-indigo-50/80 to-sky-50/50 dark:from-indigo-950/40 dark:to-slate-900/60 border border-indigo-200/80 dark:border-indigo-800/60 rounded-2xl space-y-3.5 shadow-sm">
         <div class="flex items-center space-x-2.5">
           <span class="text-xl sm:text-2xl shrink-0">📱</span>
           <div>
@@ -1016,11 +1184,11 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
           <!-- Metodo iPhone & Android Bot Telegram -->
-          <div class="p-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl space-y-2 text-xs">
+          <div class="p-4 bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl space-y-2 text-xs shadow-sm">
             <div class="flex items-center space-x-2 font-bold text-slate-900 dark:text-white">
               <span>💬</span>
               <span>Notifiche Push Telegram (Consigliato)</span>
-              <span class="text-[9px] bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded font-semibold shrink-0">Zero App Extra</span>
+              <span class="text-[9px] bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded-full font-semibold shrink-0">Zero App Extra</span>
             </div>
             <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
               Il metodo migliore sia su <strong>Android</strong> che su <strong>iPhone</strong>: non richiede app o browser particolari.
@@ -1037,11 +1205,11 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
           </div>
 
           <!-- Metodo Navigazione Web Mobile -->
-          <div class="p-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl space-y-2 text-xs">
+          <div class="p-4 bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl space-y-2 text-xs shadow-sm">
             <div class="flex items-center space-x-2 font-bold text-slate-900 dark:text-white">
               <span>🌐</span>
               <span>Configurazione 100% Mobile</span>
-              <span class="text-[9px] bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 px-1.5 py-0.5 rounded font-semibold shrink-0">Tutti i Browser</span>
+              <span class="text-[9px] bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 px-1.5 py-0.5 rounded-full font-semibold shrink-0">Tutti i Browser</span>
             </div>
             <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
               Questo sito web è completamente ottimizzato per touchscreen e responsive:
@@ -1055,7 +1223,7 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
       </div>
 
       <!-- Didascalia Come Annullare nell'Estensione -->
-      <div class="p-3.5 sm:p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-xl space-y-2 text-xs text-amber-900 dark:text-amber-200">
+      <div class="p-4 sm:p-5 bg-gradient-to-br from-amber-50/90 to-yellow-50/50 dark:from-amber-950/30 dark:to-slate-900/60 border border-amber-200/80 dark:border-amber-900/50 rounded-2xl space-y-2.5 text-xs text-amber-900 dark:text-amber-200 shadow-sm">
         <h4 class="font-bold flex items-center text-amber-950 dark:text-amber-300 text-xs sm:text-sm">
           <span class="mr-2 text-base">🛑</span> Come annullare o fermare il monitoraggio:
         </h4>
@@ -1071,9 +1239,15 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
   </div>
 </main>
 
-  <!-- Footer con Copyright e Licenza Proprietaria -->
-  <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 mt-12 text-center text-xs text-slate-500 dark:text-slate-400 transition-colors">
-    <div class="max-w-4xl mx-auto px-4 space-y-1.5">
+  <!-- Footer Frosted Glass con Copyright e Licenza Proprietaria -->
+  <footer class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-slate-200/80 dark:border-slate-800/80 py-8 mt-14 text-center text-xs text-slate-500 dark:text-slate-400 transition-colors">
+    <div class="max-w-4xl mx-auto px-4 space-y-2">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span class="font-bold text-slate-900 dark:text-white text-xs">CUP Monitor Open Initiative</span>
+        <span class="text-slate-400">•</span>
+        <span class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">Privacy First</span>
+      </div>
       <p class="font-bold text-slate-800 dark:text-slate-200">
         © 2026 Edoardo Dottori (Edik1700). Tutti i diritti riservati (All Rights Reserved).
       </p>
@@ -1307,8 +1481,8 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
       if (mode === 'script') {
         scriptCont.classList.remove('hidden');
         extCont.classList.add('hidden');
-        tabScript.className = "p-3.5 sm:p-4 rounded-2xl border-2 text-left transition relative bg-indigo-50/70 dark:bg-indigo-950/40 border-indigo-600 dark:border-indigo-500 shadow-sm";
-        tabExt.className = "p-3.5 sm:p-4 rounded-2xl border-2 text-left transition relative bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700";
+        tabScript.className = "p-4 sm:p-5 rounded-2xl border-2 text-left transition-all duration-300 relative bg-gradient-to-b from-indigo-50/90 to-white dark:from-indigo-950/40 dark:to-slate-900/90 border-indigo-600 dark:border-indigo-500 shadow-xl shadow-indigo-500/10 dark:shadow-indigo-500/5 ring-1 ring-indigo-500/20 active:scale-[0.99]";
+        tabExt.className = "p-4 sm:p-5 rounded-2xl border-2 text-left transition-all duration-300 relative bg-white/80 dark:bg-slate-900/60 border-slate-200/80 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-md backdrop-blur active:scale-[0.99]";
         if (typeof simTimer !== 'undefined') clearTimeout(simTimer);
         setTimeout(() => {
           if (typeof restartPhoneSimAnimation === 'function') {
@@ -1318,8 +1492,8 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
       } else {
         scriptCont.classList.add('hidden');
         extCont.classList.remove('hidden');
-        tabExt.className = "p-3.5 sm:p-4 rounded-2xl border-2 text-left transition relative bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-600 dark:border-emerald-500 shadow-sm";
-        tabScript.className = "p-3.5 sm:p-4 rounded-2xl border-2 text-left transition relative bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700";
+        tabExt.className = "p-4 sm:p-5 rounded-2xl border-2 text-left transition-all duration-300 relative bg-gradient-to-b from-emerald-50/90 to-white dark:from-emerald-950/40 dark:to-slate-900/90 border-emerald-600 dark:border-emerald-500 shadow-xl shadow-emerald-500/10 dark:shadow-emerald-500/5 ring-1 ring-emerald-500/20 active:scale-[0.99]";
+        tabScript.className = "p-4 sm:p-5 rounded-2xl border-2 text-left transition-all duration-300 relative bg-white/80 dark:bg-slate-900/60 border-slate-200/80 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-md backdrop-blur active:scale-[0.99]";
         if (typeof phoneSimTimer !== 'undefined') clearTimeout(phoneSimTimer);
         setTimeout(() => {
           if (typeof restartSimAnimation === 'function') {
@@ -1338,13 +1512,13 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
         const btn = document.getElementById(`stepBtn-${i}`);
         if (i === step) {
           sec.classList.remove('hidden');
-          btn.className = "relative z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full font-bold text-xs sm:text-sm flex items-center justify-center bg-indigo-600 text-white shadow";
+          btn.className = "relative z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white shadow-lg shadow-indigo-600/30 ring-4 ring-indigo-500/20 scale-105 transition-all";
         } else {
           sec.classList.add('hidden');
           if (i < step) {
-            btn.className = "relative z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full font-bold text-xs sm:text-sm flex items-center justify-center bg-emerald-600 text-white shadow";
+            btn.className = "relative z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-md shadow-emerald-600/20 transition-all";
           } else {
-            btn.className = "relative z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full font-bold text-xs sm:text-sm flex items-center justify-center bg-white dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 shadow";
+            btn.className = "relative z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 shadow-sm transition-all";
           }
         }
       }
@@ -1362,13 +1536,13 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
       const secPhone = document.getElementById('section-phone-config');
 
       if (channel === 'telegram') {
-        cardTg.className = "relative flex flex-col p-3.5 sm:p-4 border-2 rounded-xl cursor-pointer transition border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/40";
-        cardPhone.className = "relative flex flex-col p-3.5 sm:p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900";
+        cardTg.className = "relative flex flex-col p-4 sm:p-5 border-2 rounded-2xl cursor-pointer transition-all duration-300 border-indigo-600 dark:border-indigo-500 bg-gradient-to-br from-indigo-500/10 via-white to-sky-500/5 dark:from-indigo-950/50 dark:via-slate-900/90 dark:to-sky-950/20 shadow-lg shadow-indigo-500/10 ring-1 ring-indigo-500/20 active:scale-[0.99]";
+        cardPhone.className = "relative flex flex-col p-4 sm:p-5 border-2 rounded-2xl cursor-pointer transition-all duration-300 border-slate-200/80 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700 bg-white/80 dark:bg-slate-900/60 hover:shadow-md backdrop-blur active:scale-[0.99]";
         secTg.classList.remove('hidden');
         secPhone.classList.add('hidden');
       } else {
-        cardPhone.className = "relative flex flex-col p-3.5 sm:p-4 border-2 rounded-xl cursor-pointer transition border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/40";
-        cardTg.className = "relative flex flex-col p-3.5 sm:p-4 border-2 rounded-xl cursor-pointer transition border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900";
+        cardPhone.className = "relative flex flex-col p-4 sm:p-5 border-2 rounded-2xl cursor-pointer transition-all duration-300 border-indigo-600 dark:border-indigo-500 bg-gradient-to-br from-indigo-500/10 via-white to-sky-500/5 dark:from-indigo-950/50 dark:via-slate-900/90 dark:to-sky-950/20 shadow-lg shadow-indigo-500/10 ring-1 ring-indigo-500/20 active:scale-[0.99]";
+        cardTg.className = "relative flex flex-col p-4 sm:p-5 border-2 rounded-2xl cursor-pointer transition-all duration-300 border-slate-200/80 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700 bg-white/80 dark:bg-slate-900/60 hover:shadow-md backdrop-blur active:scale-[0.99]";
         secTg.classList.add('hidden');
         secPhone.classList.remove('hidden');
       }
@@ -1393,9 +1567,9 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
         const card = document.getElementById(`card-int-${val}`);
         if (!card) return;
         if (String(val) === String(selected)) {
-          card.className = "relative flex flex-col p-2.5 sm:p-3 border-2 rounded-xl cursor-pointer transition text-center border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/40";
+          card.className = "relative flex flex-col p-3 border-2 rounded-2xl cursor-pointer transition-all duration-200 text-center border-indigo-600 dark:border-indigo-500 bg-gradient-to-br from-indigo-500/10 via-white to-sky-500/5 dark:from-indigo-950/50 dark:via-slate-900/90 dark:to-sky-950/20 shadow-md shadow-indigo-500/10 ring-1 ring-indigo-500/20 active:scale-[0.98]";
         } else {
-          card.className = "relative flex flex-col p-2.5 sm:p-3 border rounded-xl cursor-pointer transition text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900";
+          card.className = "relative flex flex-col p-3 border-2 rounded-2xl cursor-pointer transition-all duration-200 text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 border-slate-200/80 dark:border-slate-700/80 bg-white/80 dark:bg-slate-900/60 active:scale-[0.98]";
         }
       });
 
@@ -1419,15 +1593,15 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
       const portalInfo = REGIONAL_PORTALS[reg];
       const portalHint = document.getElementById('portalLinkText');
       if (portalHint && portalInfo) {
-        portalHint.innerHTML = `Portale: <a href="${portalInfo.url}" target="_blank" class="underline hover:text-indigo-400 font-bold">${portalInfo.name}</a>`;
+        portalHint.innerHTML = `<a href="${portalInfo.url}" target="_blank" class="inline-flex items-center gap-1 underline hover:text-indigo-600 dark:hover:text-indigo-400 font-bold transition"><span>${portalInfo.name}</span> <span class="text-[10px]">↗</span></a>`;
       }
 
       Object.keys(provs).forEach((provName, idx) => {
         const label = document.createElement('label');
-        label.className = "flex items-center text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer p-1.5 hover:bg-white dark:hover:bg-slate-800 rounded transition";
+        label.className = "flex items-center text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer p-2.5 bg-white/90 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-700/80 hover:border-indigo-400 dark:hover:border-indigo-500/50 rounded-xl transition shadow-xs select-none";
         label.innerHTML = `
-          <input type="checkbox" name="selected_provinces" value="${provName}" checked onchange="updatePreviewKeywords()" class="mr-2 w-4 h-4 text-indigo-600 rounded">
-          <span>${provName}</span>
+          <input type="checkbox" name="selected_provinces" value="${provName}" checked onchange="updatePreviewKeywords()" class="mr-2.5 w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500/30 shrink-0">
+          <span class="truncate">${provName}</span>
         `;
         container.appendChild(label);
       });
