@@ -146,7 +146,7 @@
 
   <!-- Banner Privacy Assoluta -->
   <div class="bg-gradient-to-r from-indigo-50/90 via-sky-50/90 to-indigo-50/90 dark:from-indigo-950/40 dark:via-slate-900/40 dark:to-indigo-950/40 border-b border-indigo-100/70 dark:border-indigo-900/30 py-2 sm:py-2.5 px-3 sm:px-4 text-[11px] sm:text-xs text-indigo-950 dark:text-indigo-200 text-center font-medium transition-colors leading-relaxed">
-    🔒 <span class="font-bold">Zero Dati Salvati Online:</span> Questo configuratore opera al 100% all'interno del tuo browser. Nessun Codice Fiscale, NRE o credenziale viene mai inviato a server esterni.
+    🔒 <span class="font-bold">Zero Dati Salvati Online:</span> Questo configuratore opera al 100% all'interno del tuo browser. Nessun dato personale viene mai inviato a server esterni. <button onclick="openPrivacyModal()" type="button" class="underline hover:text-indigo-600 dark:hover:text-indigo-300 font-bold ml-1 cursor-pointer">Leggi la clausola privacy e disclaimer →</button>
   </div>
 
   <!-- Contenitore Principale -->
@@ -1241,12 +1241,16 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
 
   <!-- Footer Frosted Glass con Copyright e Licenza Proprietaria -->
   <footer class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-slate-200/80 dark:border-slate-800/80 py-8 mt-14 text-center text-xs text-slate-500 dark:text-slate-400 transition-colors">
-    <div class="max-w-4xl mx-auto px-4 space-y-2">
-      <div class="flex items-center justify-center gap-2 mb-2">
+    <div class="max-w-4xl mx-auto px-4 space-y-3">
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-1">
         <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
         <span class="font-bold text-slate-900 dark:text-white text-xs">CUP Monitor Open Initiative</span>
         <span class="text-slate-400">•</span>
-        <span class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">Privacy First</span>
+        <span class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">Privacy First (GDPR)</span>
+        <span class="text-slate-400">•</span>
+        <button onclick="openPrivacyModal()" type="button" class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline inline-flex items-center gap-1 cursor-pointer">
+          <span>📜 Informativa Privacy & Note Legali</span>
+        </button>
       </div>
       <p class="font-bold text-slate-800 dark:text-slate-200">
         © 2026 Edoardo Dottori (Edik1700). Tutti i diritti riservati (All Rights Reserved).
@@ -1257,11 +1261,125 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
       <p class="text-[11px] text-slate-400 dark:text-slate-500">
         È severamente vietata la modifica, la decompilazione, la duplicazione o la ridistribuzione non autorizzata su store o repository terzi.
       </p>
-      <p class="text-[10px] text-slate-400 dark:text-slate-500 mt-2">
+      <p class="text-[10px] text-slate-400 dark:text-slate-500">
         Non affiliato con il Servizio Sanitario Nazionale, ASUR, Regioni o enti governativi. 100% Privacy locale e conforme al GDPR.
       </p>
+      <div class="pt-1">
+        <button onclick="openPrivacyModal()" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-indigo-600 dark:text-indigo-400 font-bold text-[11px] border border-slate-200 dark:border-slate-700 transition shadow-xs active:scale-95 cursor-pointer">
+          <span>🛡️ Consulta Clausola Privacy, GDPR & Manleva di Responsabilità</span>
+        </button>
+      </div>
     </div>
   </footer>
+
+  <!-- MODALE PRIVACY, GDPR & NOTE LEGALI -->
+  <div id="privacyModal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="privacyModalTitle">
+    <div class="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl max-w-2xl w-full max-h-[88vh] flex flex-col overflow-hidden text-left">
+      
+      <!-- Header Modale -->
+      <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50/80 dark:bg-slate-950/50">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-lg border border-indigo-500/20 shrink-0">
+            🛡️
+          </div>
+          <div>
+            <h3 id="privacyModalTitle" class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white leading-tight">
+              Informativa sulla Privacy & Condizioni Legali
+            </h3>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400">Trasparenza, conformità GDPR & Tutela dell'utente</p>
+          </div>
+        </div>
+        <button onclick="closePrivacyModal()" type="button" aria-label="Chiudi finestra privacy" class="w-8 h-8 rounded-xl bg-slate-200/70 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center text-sm font-bold transition active:scale-95 cursor-pointer">
+          ✕
+        </button>
+      </div>
+
+      <!-- Corpo del Testo (Scrollabile) -->
+      <div class="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+        
+        <!-- Art. 1 -->
+        <div class="p-3.5 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/40 space-y-1.5">
+          <h4 class="font-bold text-indigo-950 dark:text-indigo-200 text-xs sm:text-sm flex items-center gap-1.5">
+            <span>1.</span> Architettura "Zero-Knowledge" & Assenza di Server Centrali
+          </h4>
+          <p>
+            Questo sito web, il generatore di configurazione, lo script Python e l'estensione browser funzionano al <strong>100% in modalità locale (Client-Side)</strong>. Nessun dato inserito (inclusi <strong>Codice Fiscale</strong>, <strong>Numero Ricetta Elettronica NRE</strong>, recapiti telefonici o token personali) viene mai inviato, raccolto o archiviato su server, database o piattaforme cloud di terze parti o gestiti dall'autore del software.
+          </p>
+        </div>
+
+        <!-- Art. 2 -->
+        <div class="space-y-1.5">
+          <h4 class="font-bold text-slate-900 dark:text-white text-xs sm:text-sm flex items-center gap-1.5">
+            <span>2.</span> Inquadramento ai sensi del Regolamento UE 2016/679 (GDPR)
+          </h4>
+          <p>
+            Ai sensi dell'<strong>Art. 2, par. 2, lett. c del GDPR</strong>, l'elaborazione dei dati effettuata tramite questo strumento si qualifica come trattamento eseguito da persona fisica per l'esercizio di <em>attività a carattere esclusivamente personale o domestico</em> (c.d. <em>Household Exemption</em>).
+          </p>
+          <p class="text-slate-500 dark:text-slate-400 text-[11px]">
+            L'autore del software (Edoardo Dottori) non riveste in alcun caso il ruolo di "Titolare del Trattamento" (Data Controller) né di "Responsabile del Trattamento" (Data Processor) ai sensi del GDPR, non avendo alcuna facoltà né accesso materiale ai dati trattati direttamente dai dispositivi degli utenti.
+          </p>
+        </div>
+
+        <!-- Art. 3 -->
+        <div class="space-y-1.5">
+          <h4 class="font-bold text-slate-900 dark:text-white text-xs sm:text-sm flex items-center gap-1.5">
+            <span>3.</span> Gestione delle Credenziali di Accesso (SPID / CIE)
+          </h4>
+          <p>
+            Il software <strong>non intercetta, non memorizza e non gestisce in alcun modo credenziali di accesso SPID, password personali o codici OTP</strong>. Qualsiasi autenticazione richiesta per la prenotazione finale avviene esclusivamente all'interno del browser dell'utente direttamente sui server ufficiali e certificati dell'Identity Provider prescelto (es. Poste, SpidItalia, Aruba, Namirial) e del portale regionale CUP di competenza.
+          </p>
+        </div>
+
+        <!-- Art. 4 -->
+        <div class="p-3.5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-900/50 space-y-1.5 text-amber-950 dark:text-amber-200">
+          <h4 class="font-bold text-xs sm:text-sm flex items-center gap-1.5 text-amber-950 dark:text-amber-300">
+            <span>4.</span> Clausola di Manleva ed Esonero Totale di Responsabilità
+          </h4>
+          <p class="text-[11px] leading-relaxed">
+            Il software e le relative istruzioni sono distribuiti a mero titolo didattico e per utilità personale <strong>"così come sono" (AS IS)</strong>, senza garanzie di alcun tipo, esplicite o implicite. L'autore declina espressamente ogni responsabilità per:
+          </p>
+          <ul class="list-disc list-inside space-y-1 text-[11px] pl-1">
+            <li>Mancata disponibilità di visite, esami o ritardi nell'acquisizione di appuntamenti sanitari;</li>
+            <li>Modifiche tecniche, disservizi o blocchi di rete dei portali regionali CUP;</li>
+            <li>Ritardi o mancata consegna delle notifiche dovuti a piattaforme terze (Telegram, CallMeBot, Twilio o gestori telefonici);</li>
+            <li>Eventuale custodia inadeguata da parte dell'utente del proprio file <code class="font-mono bg-white/80 dark:bg-slate-900 px-1 rounded">config.yaml</code> o delle chiavi API sul proprio computer o dispositivo mobile.</li>
+          </ul>
+        </div>
+
+        <!-- Art. 5 -->
+        <div class="space-y-1.5">
+          <h4 class="font-bold text-slate-900 dark:text-white text-xs sm:text-sm flex items-center gap-1.5">
+            <span>5.</span> Assenza di Affiliazione Istituzionale
+          </h4>
+          <p>
+            CUP Monitor è un'opera di ingegno indipendente. Non è in alcun modo affiliato, sponsorizzato, controllato né approvato dal Servizio Sanitario Nazionale (SSN), dal Ministero della Salute, da ASUR Marche, dalle Regioni o da qualsivoglia Azienda Sanitaria o ente governativo italiano.
+          </p>
+        </div>
+
+        <!-- Art. 6 -->
+        <div class="space-y-1.5">
+          <h4 class="font-bold text-slate-900 dark:text-white text-xs sm:text-sm flex items-center gap-1.5">
+            <span>6.</span> Uso Personale & Divieto Assoluto di Scopo di Lucro
+          </h4>
+          <p>
+            L'uso del configuratore e degli script è concesso <strong>esclusivamente per finalità personali e familiari</strong>. È severamente vietato qualsiasi impiego a fini di lucro, di intermediazione sanitaria professionale, di rivendita di visite o appuntamenti (c.d. <em>bagarinaggio sanitario</em>) o di sovraccarico intenzionale delle infrastrutture pubbliche.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Footer Modale -->
+      <div class="p-3.5 sm:p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/50 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+        <span class="text-[11px] text-slate-500 dark:text-slate-400 text-center sm:text-left">
+          Ultimo aggiornamento: Ottobre 2026 • GDPR Compliant
+        </span>
+        <button onclick="closePrivacyModal()" type="button" class="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white font-bold text-xs rounded-xl shadow-md transition active:scale-95 cursor-pointer">
+          Ho compreso e accetto
+        </button>
+      </div>
+
+    </div>
+  </div>
 
   <!-- LOGICA JAVASCRIPT DEL WIZARD & TEMA -->
   <script>
@@ -1471,6 +1589,31 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
         }
       }
     }
+
+    function openPrivacyModal() {
+      const modal = document.getElementById('privacyModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+      }
+    }
+
+    function closePrivacyModal() {
+      const modal = document.getElementById('privacyModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }
+    }
+
+    // Gestione chiusura modale con tasto Esc o click sullo sfondo
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closePrivacyModal();
+    });
+    document.addEventListener('click', (e) => {
+      const modal = document.getElementById('privacyModal');
+      if (modal && e.target === modal) closePrivacyModal();
+    });
 
     function switchAppMode(mode) {
       const scriptCont = document.getElementById('mode-script-container');
