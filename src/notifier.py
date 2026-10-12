@@ -43,9 +43,9 @@ NO_MATCH_MEMES = [
 ]
 
 SESSION_EXPIRED_MEMES = [
-    "🛋️ *Bot in stand-by (fine sessione SPID)* ☕\n\nNessun errore e nessun server da riavviare: per motivi di sicurezza lo SPID dura solo poche ore.\nIl bot resta attivo e funzionante in background; quando hai tempo per riagganciare la sessione, basta lanciare:\n`python src/main.py --login`",
-    "🛡️ *Pausa tecnica SPID (normativa regionale)* 📋\n\nIl portale regionale ha chiuso l'accesso per limite di tempo (tutto regolare, nessun blocco!). Lo script è sempre pronto in background.\nQuando vuoi riprendere le ricerche, ricollegalo con:\n`python src/main.py --login`",
-    "🪪 *Rinnovo SPID periodico* ⏳\n\nLa sessione temporanea è terminata per sicurezza. Nessun crash: il bot continua a vegliare!\nPer sbloccare di nuovo le interrogazioni quando sei comodo:\n`python src/main.py --login`",
+    "🛋️ *Bot in stand-by (fine sessione SPID)* ☕\n\nNessun errore: per motivi di sicurezza AgID lo SPID scade periodicamente.\nIl bot resta pronto in background: quando vuoi riattivare i controlli per le prossime giornate, fai doppio click su:\n`rinnova_sessione.bat`",
+    "🛡️ *Pausa tecnica SPID (normativa regionale)* 📋\n\nIl portale della Regione ha chiuso la sessione per limite di tempo (tutto regolare!).\nPer ricollegare la sessione in 15 secondi dal tuo PC, fai doppio click su:\n`rinnova_sessione.bat`",
+    "🪪 *Rinnovo SPID periodico* ⏳\n\nLa sessione temporanea è terminata per sicurezza dal server regionale.\nPer riavviare le ricerche quando sei comodo, fai doppio click su:\n`rinnova_sessione.bat`",
 ]
 
 MATCH_MEMES = [
