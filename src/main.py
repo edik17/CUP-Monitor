@@ -148,12 +148,14 @@ def main() -> int:
                 logger.error("❌ Errore durante il login interattivo.")
                 return 1
 
+        send_session_expired = config.get('notifications', {}).get('send_session_expired', False)
+
         # ── 5. Verifica sessione ──
         if not session_manager.session_exists():
             logger.error(
                 "Nessuna sessione trovata. Esegui: python src/main.py --login"
             )
-            if not args.dry_run:
+            if not args.dry_run and send_session_expired:
                 notifier.notify_session_expired()
             return 2
 
@@ -203,7 +205,7 @@ def main() -> int:
                         "Sessione scaduta (redirect al login rilevato). "
                         "Esegui: python src/main.py --login"
                     )
-                    if not args.dry_run:
+                    if not args.dry_run and send_session_expired:
                         notifier.notify_session_expired()
                     return 2
 

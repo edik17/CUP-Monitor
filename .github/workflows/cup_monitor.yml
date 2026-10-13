@@ -1,10 +1,10 @@
 name: CUP Monitor Cloud 24/7
 
 on:
-  schedule:
-    # Esegue ogni 30 minuti tra le 05:00 e le 21:00 UTC (07:00 - 23:00 italiane)
-    - cron: '*/30 5-21 * * *'
-  workflow_dispatch: # Permette di avviare il controllo manualmente con 1 click anche da smartphone
+  # Pianificazione automatica disattivata (per evitare esecuzioni e notifiche ripetute in background)
+  # schedule:
+  #   - cron: '*/30 5-21 * * *'
+  workflow_dispatch: # Avvio su richiesta manuale con 1 click da smartphone o PC
 
 concurrency:
   group: cup-monitor-cloud
@@ -76,8 +76,7 @@ jobs:
               echo "$SESSION_CONTENT" > session/state.json
               echo "✅ File session/state.json inizializzato dal secret iniziale."
             else
-              echo "⚠️ ATTENZIONE: Nessun file di sessione trovato (né in cache né nei secrets)."
-              echo "Il monitor avviserà su Telegram della necessità di login."
+              echo "ℹ️ Nessuna sessione presente. Il monitor terminerà in silenzio."
             fi
           else
             echo "✅ Sessione SPID ripristinata con successo dalla cache delle esecuzioni precedenti."
@@ -93,12 +92,8 @@ jobs:
             echo "✅ Controllo completato con successo."
             exit 0
           elif [ $EXIT_CODE -eq 2 ]; then
-            echo "::warning::⚠️ Sessione SPID scaduta sul portale regionale. È necessario rinnovare la sessione."
-            echo "### ⚠️ Sessione SPID Scaduta" >> $GITHUB_STEP_SUMMARY
-            echo "Il portale regionale ha chiuso la sessione per scadenza temporale (normale procedura di sicurezza)." >> $GITHUB_STEP_SUMMARY
-            echo "La notifica di promemoria è stata inviata su Telegram." >> $GITHUB_STEP_SUMMARY
-            echo "Per rinnovare la sessione dal tuo PC, fai doppio click su \`rinnova_sessione.bat\`." >> $GITHUB_STEP_SUMMARY
-            exit 2
+            echo "ℹ️ Sessione non attiva. Monitoraggio completato in silenzio senza inviare notifiche."
+            exit 0
           else
             echo "❌ Errore durante l'esecuzione del monitor (codice uscita: $EXIT_CODE)."
             exit $EXIT_CODE
