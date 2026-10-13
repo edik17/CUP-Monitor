@@ -173,7 +173,7 @@ def main() -> int:
         province = filter_cfg.get('province') or filter_cfg.get('provincia', ['Ancona'])
         raw_keywords = filter_cfg.get('keywords', [])
         keywords = get_keywords_for_selection(regione, province, raw_keywords)
-        send_no_match = config.get('notifications', {}).get('send_no_match', telegram_cfg.get('send_no_match', True))
+        send_no_match = config.get('notifications', {}).get('send_no_match', telegram_cfg.get('send_no_match', False))
 
         if not nre or nre == 'INSERIRE_NRE':
             logger.error("NRE non configurato in config.yaml. Inserire il numero di ricetta.")

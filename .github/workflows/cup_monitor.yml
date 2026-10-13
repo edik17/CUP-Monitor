@@ -1,9 +1,9 @@
 name: CUP Monitor Cloud 24/7
 
 on:
-  # Pianificazione automatica disattivata (per evitare esecuzioni e notifiche ripetute in background)
-  # schedule:
-  #   - cron: '*/30 5-21 * * *'
+  schedule:
+    # Monitoraggio automatico ogni 30 minuti tra le 05:00 e le 21:00 UTC (07:00 - 23:00 italiane)
+    - cron: '*/30 5-21 * * *'
   workflow_dispatch: # Avvio su richiesta manuale con 1 click da smartphone o PC
 
 concurrency:
